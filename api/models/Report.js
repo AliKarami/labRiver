@@ -30,6 +30,9 @@ module.exports = {
     files : [
       {model : 'File'}
     ],
+    relatedArticles : [
+      {model : 'Article'}
+    ],
     tags : [
       {type : 'string'}
     ],

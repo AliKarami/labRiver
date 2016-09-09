@@ -38,6 +38,9 @@ module.exports = {
     sourceCodes : [
       {model : 'File'}
     ],
+    relatedReports : [
+      {model : 'Report'}
+    ],
     tags: [
       {type : 'string'}
     ],
