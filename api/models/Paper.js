@@ -18,8 +18,13 @@ module.exports = {
       required : true
     },
     author : {
-      type : 'string',
-      required : true
+      name : {
+        type : 'string',
+        required : true
+      },
+      student : {
+        model : 'Student'
+      }
     },
     year : {
       type: 'integer',
@@ -56,7 +61,7 @@ module.exports = {
         },
         vote : {
           type : 'integer',
-          enum : [-1,1],
+          enum : [0,1,2,3,4,5],
           required : true
         }
       }

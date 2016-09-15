@@ -8,13 +8,6 @@
 module.exports = {
 
   attributes: {
-    assignedBy : {
-      manager : {model : 'Manager'},
-      student : {model : 'Student'}
-    },
-    assignedTo : {
-      model : 'Student'
-    },
     deadline : {
       type : 'date'
     },
@@ -30,14 +23,23 @@ module.exports = {
     files : [
       {model : 'File'}
     ],
-    relatedArticles : [
-      {model : 'Article'}
+    relatedPapers : [
+      {model : 'Paper'}
     ],
     tags : [
       {type : 'string'}
     ],
-    comments : [
-      {model : 'Comment'}
+    feedbacks : [
+      {
+        author : {
+          model : 'Student',
+          required : true
+        },
+        body : {
+          type : 'String',
+          required : true
+        }
+      }
     ],
     votes : [
       {
@@ -48,7 +50,7 @@ module.exports = {
         },
         vote : {
           type : 'integer',
-          enum : [-1,1],
+          enum : [0,1,2,3,4,5],
           required : true
         }
       }

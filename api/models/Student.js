@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    userRef : {
+      model : 'User',
+      required : true
+    },
     roles : [
       {type: 'string'}
     ],
@@ -39,8 +43,8 @@ module.exports = {
     reports : [
       {model : 'Report'}
     ],
-    articles : [
-      {model : 'Article'}
+    papers : [
+      {model : 'Paper'}
     ],
     thesis : {
       model : 'Thesis'

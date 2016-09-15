@@ -10,10 +10,12 @@ var bcrypt = require ( 'bcrypt' );
 module.exports = {
 
   attributes: {
-    userRef : {
-      student : {model : 'Student'},
-      manager : {model : 'Manager'}
+    studentRef : {
+      model : 'Student'
     },
+    dossierRef : [
+      {model : 'Student'}
+    ],
     fname : {
       type : 'string',
       required : true
