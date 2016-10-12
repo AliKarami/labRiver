@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+  <title><%=typeof title == 'undefined' ? 'Login' : title%></title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="boxed">
+    <h1>Login:</h1>
+    <form id="loginFrom" method="post" action="login">
+      <table align="center">
+        <tr>
+          <td>Email:</td>
+          <td> <input name="email" type="email"></td>
+        </tr>
+        <tr>
+          <td>password:</td>
+          <td><input name="password" type="password"></td>
+        </tr>
+      </table>
+      <input type="submit" value="Login">
+    </form>
+  </div>
+  <div class="boxed">
+    <h1>Signup:</h1>
+    <form id="signupFrom" method="post" action="signup">
+      <table align="center">
+        <tr>
+          <td>Email:</td>
+          <td><input name="email" type="email"> </td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td><input name="password" type="password"> </td>
+        </tr>
+        <tr>
+          <td>First Name:</td>
+          <td><input name="firstname" type="text"> </td>
+        </tr>
+        <tr>
+          <td>Last Name:</td>
+          <td> <input name="lastname" type="text"> </td>
+        </tr>
+        <tr>
+          <td>Nickname:</td>
+          <td><input name="nickname" type="text"></td>
+        </tr>
+        <tr>
+          <td>Gender:</td>
+          <td><input type="radio" name="gender" value="m" checked> Male
+            <input type="radio" name="gender" value="f"> Female</td>
+        </tr>
+      </table>
+      <input type="submit" value="Signup">
+    </form>
+  </div>
+</body>

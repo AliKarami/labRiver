@@ -1,0 +1,16 @@
+.boxed {
+  align: center;
+  width: auto;
+  border: 5px solid green;
+  padding: 5px;
+  margin: 5px;
+  text-align: center;
+}
+.window{
+  align: center;
+  width: auto;
+  border: 2px solid salmon;
+  padding: 2px;
+  margin: 2px;
+  text-align: center;
+}

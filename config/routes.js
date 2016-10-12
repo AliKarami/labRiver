@@ -32,11 +32,14 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {view: 'homepage'},
+  '/'                                 :   'ViewLoginController.main',
   /***************************************************************************/
-  'post /article/create' : 'ArticleController.create'
+  'post /login'                       :   'UserController.login',
+  '/logout'                           :   'UserController.logout',
+  'post /signup'                      :   'UserController.signup',
   /***************************************************************************/
-
+  '/panel'                            :   'ViewPanelController.main',
+  '/admin'                            :   'ViewAdminPanel.main',
   /***************************************************************************/
 
   /***************************************************************************/

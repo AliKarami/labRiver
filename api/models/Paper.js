@@ -17,15 +17,17 @@ module.exports = {
       type : 'string',
       required : true
     },
-    author : {
-      name : {
+    authors : [
+      {
+        name : {
         type : 'string',
         required : true
-      },
-      student : {
-        model : 'Student'
+        },
+        student : {
+          model : 'Student'
+        }
       }
-    },
+    ],
     year : {
       type: 'integer',
       required : true

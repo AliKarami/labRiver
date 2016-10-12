@@ -34,7 +34,7 @@ module.exports = {
       minLength : 6,
       required : true
     },
-    nickName : {
+    nickname : {
       type : 'string',
       required : true,
       unique : true
@@ -46,6 +46,11 @@ module.exports = {
       type : 'string',
       enum : ['m','f'],
       required : true
+    },
+    toJSON: function() {
+      var obj = this.toObject();
+      delete obj.password;
+      return obj;
     }
   },
   beforeCreate : function ( user, cb ) {
@@ -60,7 +65,7 @@ module.exports = {
         }
       } );
     } );
-  },
+  }
 };
 
 

@@ -1,4 +1,8 @@
-/**
+/**  _config : {
+    actions : false,
+    shortcuts : false,
+    rest : false
+  }
  * FileController
  *
  * @description :: Server-side logic for managing Files
@@ -6,6 +10,10 @@
  */
 
 module.exports = {
-	
+  _config : {
+    actions : false,
+    shortcuts : false,
+    rest : false
+  }
 };
 

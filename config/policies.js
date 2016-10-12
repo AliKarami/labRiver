@@ -34,6 +34,34 @@ module.exports.policies = {
   * and its actions                                                          *
   *                                                                          *
   ***************************************************************************/
+  ViewLoginController : {
+    '*' : 'noAuthenticated'
+  },
+  ViewPanelController : {
+    '*' : 'isAuthenticated'
+  },
+  ViewAdminPanelController : {
+    '*' : 'isAdmin'
+  },
+  CommentController : {
+    '*' : 'isAuthenticated'
+  },
+  FileController : {
+    '*' : 'isAuthenticated'
+  },
+  PaperController : {
+    '*' : 'isAuthenticated'
+  },
+  ProposalController : {
+    '*' : 'isAuthenticated'
+  },
+  ReportController : {
+    '*' : 'isAuthenticated'
+  },
+  ThesisController : {
+    '*' : 'isAuthenticated'
+  }
+
 	// RabbitController: {
 
 		// Apply the `false` policy as the default for all of RabbitController's actions
