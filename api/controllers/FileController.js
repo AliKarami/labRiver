@@ -15,5 +15,6 @@ module.exports = {
     shortcuts : false,
     rest : false
   }
+
 };
 

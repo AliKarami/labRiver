@@ -43,6 +43,9 @@ module.exports.policies = {
   ViewAdminPanelController : {
     '*' : 'isAdmin'
   },
+  UserController : {
+    'uploadAvatar' : 'isAuthenticated'
+  },
   CommentController : {
     '*' : 'isAuthenticated'
   },

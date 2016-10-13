@@ -12,8 +12,14 @@ module.exports = {
     rest : false
   },
   main : function (req,res) {
-    var ret = {};
-    return res.view("panel", ret)
+    FileService.getAvatar(req.user.id,function (avFd) {
+      var ret = {
+        title: 'Panel',
+        userid: req.user.id,
+        avatarFd: avFd
+      };
+      return res.view("panel", ret)
+    });
   }
 };
 

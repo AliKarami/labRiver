@@ -12,9 +12,10 @@ module.exports = {
       model : 'User',
       required : true
     },
-    roles : [
-      {type: 'string'}
-    ],
+    studentNumber : {
+      type : 'integer',
+      required : true
+    },
     supervisors : [
       {model : 'Student'}
     ],

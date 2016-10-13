@@ -39,8 +39,11 @@ module.exports = {
       required : true,
       unique : true
     },
-    avatar : {
-      model : 'File'
+    avatarFd : {
+      type : 'string'
+    },
+    avatarUrl : {
+      type : 'string'
     },
     gender : {
       type : 'string',

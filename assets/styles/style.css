@@ -5,6 +5,7 @@
   padding: 5px;
   margin: 5px;
   text-align: center;
+  background-color: seashell;
 }
 .window{
   align: center;
@@ -13,4 +14,15 @@
   padding: 2px;
   margin: 2px;
   text-align: center;
+  background-color: #eeeeee;
+}
+
+.part {
+  align: center;
+  width: auto;
+  border: 2px solid slateblue;
+  padding: 2px;
+  margin: 2px;
+  text-align: center;
+  background-color: khaki;
 }

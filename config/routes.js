@@ -41,6 +41,8 @@ module.exports.routes = {
   '/panel'                            :   'ViewPanelController.main',
   '/admin'                            :   'ViewAdminPanel.main',
   /***************************************************************************/
+  'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
+  'get /user/downloadAvatar'          :   'UserController.avatar'
 
   /***************************************************************************/
 
