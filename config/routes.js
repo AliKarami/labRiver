@@ -41,7 +41,9 @@ module.exports.routes = {
   '/panel'                            :   'ViewPanelController.main',
   '/panel/workflow'                   :   'ViewPanelController.workflow',
   '/panel/resources'                  :   'ViewPanelController.resources',
-  '/admin'                            :   'ViewAdminPanel.main',
+  '/admin'                            :   'ViewAdminPanelController.main',
+  'post /admin/makeNotifiaction'      :   'ViewAdminPanelController.makeNotif',
+  'post /admin/broadcastNotifiaction' :   'ViewAdminPanelController.broadcastNotif',
   /***************************************************************************/
   'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
   '/user/removeAvatar'                :   'UserController.removeAvatar',

@@ -18,7 +18,7 @@ module.exports = {
       NotificationService.getNotifs(req.user.id).then(function (notifs) {
         var ret = {
           title: 'Panel',
-          userid: req.user.id,
+          user: req.user,
           avatarFd: avUrl,
           notifs: notifs,
           date: moment().format('jYYYY/jM/jD dddd'),

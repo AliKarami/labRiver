@@ -15,8 +15,45 @@
 
   </div>
   <div class="window">
-    <h2>Make Notification:</h2>
-
+    <h2>Notification Center:</h2>
+    <form method="post" action="/admin/broadcastNotification" class="part">
+      <table align="center">
+        <tr>
+          <td>notification Type:</td>
+          <td> <input name="type" type="text"></td>
+        </tr>
+        <tr>
+          <td>notification Title:</td>
+          <td><input name="title" type="text"></td>
+        </tr>
+        <tr>
+          <td>notification Link:</td>
+          <td><input name="link" type="url"></td>
+        </tr>
+      </table>
+      <input type="submit" value="Broadcast">
+    </form>
+    <form method="post" action="/admin/makeNotification" class="part">
+      <table align="center">
+        <tr>
+          <td>target Nickname:</td>
+          <td> <input name="nickname" type="text"></td>
+        </tr>
+        <tr>
+          <td>notification Type:</td>
+          <td> <input name="type" type="text"></td>
+        </tr>
+        <tr>
+          <td>notification Title:</td>
+          <td><input name="title" type="text"></td>
+        </tr>
+        <tr>
+          <td>notification Link:</td>
+          <td><input name="link" type="url"></td>
+        </tr>
+      </table>
+      <input type="submit" value="Make Notification">
+    </form>
   </div>
   <div class="window">
     <h2>User Registration Approval:</h2>

@@ -11,9 +11,25 @@ module.exports = {
     shortcuts : false,
     rest : false
   },
-  main : function (req,res) {
+  main : function (req, res) {
     var ret = {};
     return res.view("adminPanel", ret)
+  },
+  makeNotif : function (req, res) {
+    NotificationService.makeNotif([req.param("nickname")],{
+      type : req.param("type"),
+      title : req.param("title"),
+      link : req.param("link"),
+      date : new Date().toISOString(),
+    }).then(res.redirect("/admin")).catch(function () {sails.log("makeNotif error.")})
+  },
+  broadcastNotif : function (req, res) {
+    NotificationService.broadcastNotif({
+      type : req.param("type"),
+      title : req.param("title"),
+      link : req.param("link"),
+      date : new Date().toISOString(),
+    }).then(res.redirect("/admin")).catch(function () {sails.log("broadcastNotif error.")})
   }
 };
 

@@ -11,5 +11,49 @@ module.exports = {
         }
       })
     });
+  },
+  broadcastNotif : function (notif) {
+    return new Promise(function (resolve, reject) {
+      User.find({}).exec(function (err, users) {
+        if (err) return reject(err);
+        else {
+          users.forEach(function (user) {
+            user.notifications.push({
+              type : notif.type,
+              title : notif.title,
+              link : notif.link,
+              date : notif.date
+            });
+            user.save(function (err) {
+              if (err) return reject(err);
+            })
+          });
+          return resolve();
+        }
+      })
+    })
+  },
+  makeNotif : function (nicknames, notif) {
+    return new Promise(function (resolve, reject) {
+      nicknames.forEach(function (nickname) {
+        User.findOne({nickname: nickname}).exec(function (err, users) {
+          if (err) return reject(err);
+          else {
+            users.forEach(function (user) {
+              user.notifications.push({
+                type : notif.type,
+                title : notif.title,
+                link : notif.link,
+                date : notif.date
+              });
+              user.save(function (err) {
+                if (err) return reject(err);
+              })
+            });
+          }
+        })
+      });
+      resolve();
+    })
   }
 };
