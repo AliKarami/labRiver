@@ -11,22 +11,10 @@ module.exports = {
     shortcuts : false,
     rest : false
   },
-  create: function (req, res) {
+  edit: function (req, res) {
 
   },
-  find: function (req, res) {
-
-  },
-  delete: function (req, res) {
-
-  },
-  addComment: function (req, res) {
-
-  },
-  addVote: function (req, res) {
-
-  },
-  update: function (req, res) {
+  view : function (req, res) {
 
   }
 };

@@ -6,6 +6,7 @@
  */
 
 var bcrypt = require ( 'bcrypt' );
+var fs = require('fs');
 
 module.exports = {
 
@@ -40,16 +41,37 @@ module.exports = {
       unique : true
     },
     avatarFd : {
-      type : 'string'
+      type : 'string',
+      defaultsTo : require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'
     },
     avatarUrl : {
-      type : 'string'
+      type : 'string',
+      defaultsTo : require('util').format('%s/images/avatars/%s', sails.getBaseUrl(), 'default.png')
     },
     gender : {
       type : 'string',
       enum : ['m','f'],
       required : true
     },
+    notifications : [
+      {
+        type : {
+          type : 'string',
+          defaultsTo : 'general'
+        },
+        title : {
+          type : 'string',
+          required : true
+        },
+        link : {
+          type : 'string'
+        },
+        date : {
+          type : 'datetime',
+          defaultsTo: new Date().toISOString()
+        }
+      }
+    ],
     toJSON: function() {
       var obj = this.toObject();
       delete obj.password;
@@ -68,6 +90,25 @@ module.exports = {
         }
       } );
     } );
+  },
+  beforeUpdate : function (newUser, cb) {
+    User.findOne(newUser.id).exec(function (err, originalUser) {
+      if (err || !originalUser) {
+        return cb();
+      }
+      //if avatar changed
+      if ((newUser.avatarFd != originalUser.avatarFd) && (originalUser.avatarFd != (require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'))) {
+        fs.unlink(originalUser.avatarFd, function(err) {
+          if (err) {
+            return console.error(err);
+          }
+          cb();
+        });
+      }
+      else {
+        cb();
+      }
+    })
   }
 };
 

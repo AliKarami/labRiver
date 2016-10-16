@@ -86,8 +86,8 @@ module.exports = {
       var filename = _fd[_fd.length-1];
 
       // Save the "fd" and the url where the avatar for a user can be accessed
-      User.update(req.session.me, {
-
+      User.update(req.user.id, {
+        id: req.user.id,
         // Generate a unique URL where the avatar can be downloaded.
         avatarUrl: require('util').format('%s/images/avatars/%s', sails.getBaseUrl(), filename),
 
@@ -96,9 +96,23 @@ module.exports = {
       })
         .exec(function (err){
           if (err) return res.negotiate(err);
-          return res.ok();
+          return res.redirect("panel");
         });
     });
+  },
+  removeAvatar: function (req, res) {
+    User.update(req.user.id, {
+      id: req.user.id,
+      // Generate a unique URL where the avatar can be downloaded.
+      avatarUrl: require('util').format('%s/images/avatars/%s', sails.getBaseUrl(), 'default.png'),
+
+      // Grab the first file and use it's `fd` (file descriptor)
+      avatarFd: require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'
+    })
+      .exec(function (err){
+        if (err) return res.negotiate(err);
+        return res.redirect("panel");
+      });
   }
 };
 

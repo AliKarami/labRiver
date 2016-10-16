@@ -4,46 +4,58 @@
   <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
+<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1></div>
   <div class="boxed">
     <div class="window">
       <h2>profile:</h2>
       Upload Avatar: <br>
-      <form id="uploadAvatar" class="part"
+      <form class="part"
             enctype="multipart/form-data"
             action="/user/uploadAvatar"
             method="post">
         <input type="file" name="avatar" />
         <input type="submit" value="upload"/>
       </form>
+      <form class="part" action="/user/removeAvatar">
+        <input type="submit" value="Remove">
+      </form>
       Current Avatar: <br>
-      <img src="<%=avatarFd%>" alt="Avatar">
+      <img src="<%=avatarFd%>" alt="Avatar" width="200px" height="200px">
     </div>
     <div class="window">
-      <h2>news:</h2>
-
+      <h2>notifications:</h2>
+      <div class="notifbox" align="center">
+        <ul>
+          <%for(var i=0;i<notifs.length;i++) {%>
+          <li><a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a> <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span> </li>
+          <% } %>
+        </ul>
+      </div>
     </div>
     <div class="window">
       <h2>calendar:</h2>
-
+      Today: <%= date %>
     </div>
     <div class="window">
       <h2>workflow:</h2>
-
+      <form action="/Panel/workflow">
+        <input type="submit" value="Workflow" />
+      </form>
     </div>
     <div class="window">
       <h2>resources:</h2>
-
-    </div>
-    <div class="window">
-      <h2>search:</h2>
-
+      <form action="/panel/resources">
+        <input type="submit" value="Resources" />
+      </form>
     </div>
     <div class="window">
       <h2>supervisor:</h2>
 
     </div>
-    <form id="logouter" method="post" action="logout">
-      <input type="submit" value="Logout">
-    </form>
+    <div class="notifbox" style="padding: 5px">
+      <form action="logout">
+        <input type="submit" value="Logout">
+      </form>
+    </div>
   </div>
 </body>

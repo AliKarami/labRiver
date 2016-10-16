@@ -10,6 +10,12 @@ module.exports = {
     actions : false,
     shortcuts : false,
     rest : false
+  },
+  new : function (req, res) {
+
+  },
+  view : function (req, res) {
+    
   }
 };
 

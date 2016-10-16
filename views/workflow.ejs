@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+  <title><%=typeof title == 'undefined' ? 'Workflow' : title%></title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="colmask">
+    <div class="header">
+      <div class="boxed">
+        Welcome! Today is <%= moment().format('jYYYY/jM/jD') %>
+      </div>
+    </div>
+    <div class="colmid">
+      <div class="colin">
+        <div class="colleft">
+          <div class="col1">
+            <h2>Proposal:</h2>
+            <div>
+              <form action="\proposal\edit">
+                <input type="submit" value="Edit">
+              </form>
+            </div>
+          </div>
+          <div class="col2">
+            <h2>Paper:</h2>
+            <div>
+              <form action="\paper\new">
+                <input type="submit" value="Add New">
+              </form>
+            </div>
+            <div>
+              <h4>uploads:</h4>
+            </div>
+          </div>
+          <div class="col3">
+            <h2>Thesis:</h2>
+            <div>
+              <form action="\thesis\edit">
+                <input type="submit" value="Edit">
+              </form>
+            </div>
+          </div>
+          <div class="col4">
+            <h2>Report:</h2>
+            <div>
+              <form action="\report\new">
+                <input type="submit" value="Submit Week Report">
+              </form>
+            </div>
+            <div>
+              <h4>Past Reports:</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="boxed" style="padding: 5px">
+        <form action="\panel">
+          <input type="submit" value="Panel">
+        </form>
+        <form action="\logout">
+          <input type="submit" value="Logout">
+        </form>
+      </div>
+    </div>
+  </div>
+</body>

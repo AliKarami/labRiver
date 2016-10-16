@@ -39,13 +39,21 @@ module.exports.routes = {
   'post /signup'                      :   'UserController.signup',
   /***************************************************************************/
   '/panel'                            :   'ViewPanelController.main',
+  '/panel/workflow'                   :   'ViewPanelController.workflow',
+  '/panel/resources'                  :   'ViewPanelController.resources',
   '/admin'                            :   'ViewAdminPanel.main',
   /***************************************************************************/
   'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
-  'get /user/downloadAvatar'          :   'UserController.avatar'
-
+  '/user/removeAvatar'                :   'UserController.removeAvatar',
   /***************************************************************************/
-
+  '/paper/new'                        :   'PaperController.new',
+  '/paper/:paperId'                   :   'PaperController.view',
+  '/proposal/edit'                    :   'ProposalController.edit',
+  '/proposal/:proposalId'             :   'ProposalController.view',
+  '/thesis/edit'                      :   'ThesisController.edit',
+  '/thesis/:thesisId'                 :   'ThesisController.view',
+  '/report/new'                       :   'ReportController.new',
+  '/report/:reportId'                 :   'ReportController.view',
   /***************************************************************************/
 
   /***************************************************************************
