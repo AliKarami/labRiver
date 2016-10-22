@@ -16,8 +16,8 @@ module.exports = {
     return res.view("adminPanel", ret)
   },
   makeNotif : function (req, res) {
-    NotificationService.makeNotif([req.param("nickname")],{
-      type : req.param("type"),
+    NotificationService.makeNotif(req.param("nickname").split(','),{
+      cat : req.param("cat"),
       title : req.param("title"),
       link : req.param("link"),
       date : new Date().toISOString(),
@@ -25,7 +25,7 @@ module.exports = {
   },
   broadcastNotif : function (req, res) {
     NotificationService.broadcastNotif({
-      type : req.param("type"),
+      cat : req.param("cat"),
       title : req.param("title"),
       link : req.param("link"),
       date : new Date().toISOString(),

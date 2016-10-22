@@ -53,25 +53,9 @@ module.exports = {
       enum : ['m','f'],
       required : true
     },
-    notifications : [
-      {
-        type : {
-          type : 'string',
-          defaultsTo : 'general'
-        },
-        title : {
-          type : 'string',
-          required : true
-        },
-        link : {
-          type : 'string'
-        },
-        date : {
-          type : 'datetime',
-          defaultsTo: new Date().toISOString()
-        }
-      }
-    ],
+    notifications : {
+      type : 'array'
+    },
     toJSON: function() {
       var obj = this.toObject();
       delete obj.password;
@@ -79,6 +63,7 @@ module.exports = {
     }
   },
   beforeCreate : function ( user, cb ) {
+    user.notifications = [];
     bcrypt.genSalt ( 10, function ( err, salt ) {
       bcrypt.hash ( user.password, salt, function ( err, hash ) {
         if ( err ) {

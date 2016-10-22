@@ -1,6 +1,6 @@
 module.exports = {
   getNotifs: function (uid) {
-    return new Promise(function (resolve,reject) {
+    return new Promise(function (resolve, reject) {
       User.findOne(uid).exec(function (err, user) {
         if (err) reject(err);
         else {
@@ -12,22 +12,19 @@ module.exports = {
       })
     });
   },
-  broadcastNotif : function (notif) {
+  broadcastNotif: function (notif) {
     return new Promise(function (resolve, reject) {
       User.find().exec(function (err, users) {
         if (err) return reject(err);
         else {
-          while (users.length>0) {
+          while (users.length > 0) {
             var user = users.pop();
-            if (user.notifications==undefined)
-              user.notifications=[];
             user.notifications.push({
-              type : notif.type,
-              title : notif.title,
-              link : notif.link,
-              date : notif.date
+              cat: notif.cat,
+              title: notif.title,
+              link: notif.link,
+              date: notif.date
             });
-            sails.log(user);
             user.save(function (err) {
               if (err) return reject(err);
             })
@@ -37,27 +34,25 @@ module.exports = {
       })
     })
   },
-  makeNotif : function (nicknames, notif) {
+  makeNotif: function (nicknames, notif) {
     return new Promise(function (resolve, reject) {
-      nicknames.forEach(function (nickname) {
-        User.findOne({nickname: nickname}).exec(function (err, users) {
-          if (err) return reject(err);
+      nicknames.forEach(function (nick) {
+        User.findOne({nickname: nick}).exec(function (err, user) {
+          if (err) reject(err);
           else {
-            users.forEach(function (user) {
-              user.notifications.push({
-                type : notif.type,
-                title : notif.title,
-                link : notif.link,
-                date : notif.date
-              });
-              user.save(function (err) {
-                if (err) return reject(err);
-              })
+            user.notifications.push({
+              cat: notif.cat,
+              title: notif.title,
+              link: notif.link,
+              date: notif.date
+            });
+            user.save(function (err) {
+              if (err) return reject(err);
             });
           }
         })
-      });
-      resolve();
+      })
+      return resolve();
     })
   }
-};
+}
