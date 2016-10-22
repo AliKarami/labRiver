@@ -30,6 +30,28 @@ module.exports = {
       link : req.param("link"),
       date : new Date().toISOString(),
     }).then(res.redirect("/admin")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
+  },
+  setSupervisor : function (req, res) {
+    var whoSID,whomSID;
+    User.findOne({nickname:req.param("who")}).exec(function (err, user) {
+      if (err) return err;
+      else {
+        whoSID = user.studentRef;
+        User.findOne({nickname:req.param("whom")}).exec(function (err, user) {
+          if (err) return err;
+          else {
+            whomSID = user.studentRef;
+            Student.update(whoSID,{supervisorOf:whomSID}).exec(function (err, updated) {
+              if (err) return err;
+            })
+            Student.update(whomSID,{supervisor:whoSID}).exec(function (err, updated) {
+              if (err) return err;
+            })
+          }
+        });
+      }
+    });
+    return res.redirect("/admin")
   }
 };
 

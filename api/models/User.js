@@ -14,9 +14,9 @@ module.exports = {
     studentRef : {
       model : 'Student'
     },
-    dossierRef : [
-      {model : 'Student'}
-    ],
+    dossierRef : {
+      model : 'Student'
+    },
     fname : {
       type : 'string',
       required : true

@@ -8,7 +8,21 @@
 <div class="boxed">
   <div class="window">
     <h2>Supervisor Management:</h2>
-
+    <form method="post" action="/admin/setSupervisor" class="part">
+      Enter Nicknames:
+      <table align="center">
+        <tr>
+          <td> <input name="who" type="text"></td>
+        </tr>
+        <tr>
+          <td>is Supervisor of</td>
+        </tr>
+        <tr>
+          <td><input name="whom" type="text"></td>
+        </tr>
+      </table>
+      <input type="submit" value="set Supervisor">
+    </form>
   </div>
   <div class="window">
     <h2>Calendar Editor:</h2>

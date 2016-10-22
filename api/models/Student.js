@@ -16,12 +16,14 @@ module.exports = {
       type : 'integer',
       required : true
     },
-    supervisors : [
-      {model : 'Student'}
-    ],
-    supervisorOf : [
-      {model : 'Student'}
-    ],
+    supervisor :
+    {
+      model : 'Student'
+    },
+    supervisorOf :
+    {
+      model : 'Student'
+    },
     enteringYear : {
       type : 'integer',
       required : true
