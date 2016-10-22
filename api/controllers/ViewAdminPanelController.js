@@ -12,7 +12,7 @@ module.exports = {
     rest : false
   },
   main : function (req, res) {
-    var ret = {};
+    var ret = {title: 'Admin'};
     return res.view("adminPanel", ret)
   },
   makeNotif : function (req, res) {
@@ -29,7 +29,7 @@ module.exports = {
       title : req.param("title"),
       link : req.param("link"),
       date : new Date().toISOString(),
-    }).then(res.redirect("/admin")).catch(function () {sails.log("broadcastNotif error.")})
+    }).then(res.redirect("/admin")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
   }
 };
 

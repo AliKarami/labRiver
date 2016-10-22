@@ -14,20 +14,24 @@ module.exports = {
   },
   broadcastNotif : function (notif) {
     return new Promise(function (resolve, reject) {
-      User.find({}).exec(function (err, users) {
+      User.find().exec(function (err, users) {
         if (err) return reject(err);
         else {
-          users.forEach(function (user) {
+          while (users.length>0) {
+            var user = users.pop();
+            if (user.notifications==undefined)
+              user.notifications=[];
             user.notifications.push({
               type : notif.type,
               title : notif.title,
               link : notif.link,
               date : notif.date
             });
+            sails.log(user);
             user.save(function (err) {
               if (err) return reject(err);
             })
-          });
+          }
           return resolve();
         }
       })
