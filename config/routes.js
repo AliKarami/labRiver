@@ -45,6 +45,7 @@ module.exports.routes = {
   'post /admin/makeNotification'      :   'ViewAdminPanelController.makeNotif',
   'post /admin/broadcastNotification' :   'ViewAdminPanelController.broadcastNotif',
   'post /admin/setSupervisor'         :   'ViewAdminPanelController.setSupervisor',
+  'post /admin/approve'               :   'ViewAdminPanelController.approveUser',
   /***************************************************************************/
   'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
   '/user/removeAvatar'                :   'UserController.removeAvatar',

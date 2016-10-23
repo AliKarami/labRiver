@@ -11,6 +11,10 @@ var fs = require('fs');
 module.exports = {
 
   attributes: {
+    approved : {
+      type : 'boolean',
+      defaultsTo : false
+    },
     studentRef : {
       model : 'Student'
     },

@@ -13,7 +13,8 @@ module.exports = {
       required : true
     },
     studentNumber : {
-      type : 'integer',
+      type : 'string',
+      unique : true,
       required : true
     },
     supervisor :

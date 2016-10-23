@@ -38,31 +38,31 @@ module.exports.policies = {
     '*' : 'noAuthenticated'
   },
   ViewPanelController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   },
   ViewAdminPanelController : {
     '*' : 'isAdmin'
   },
   UserController : {
-    'uploadAvatar' : 'isAuthenticated'
+    'uploadAvatar' : 'isApproved'
   },
   CommentController : {
     '*' : 'isAuthenticated'
   },
   FileController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   },
   PaperController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   },
   ProposalController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   },
   ReportController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   },
   ThesisController : {
-    '*' : 'isAuthenticated'
+    '*' : 'isApproved'
   }
 
 	// RabbitController: {

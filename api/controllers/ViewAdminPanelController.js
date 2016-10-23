@@ -12,8 +12,16 @@ module.exports = {
     rest : false
   },
   main : function (req, res) {
-    var ret = {title: 'Admin'};
-    return res.view("adminPanel", ret)
+    User.find({approved: false}).exec(function (err, users) {
+      if (err) return err;
+      else {
+        var ret = {
+          title: 'Admin',
+          users: users
+        };
+        return res.view("adminPanel", ret)
+      }
+    })
   },
   makeNotif : function (req, res) {
     NotificationService.makeNotif(req.param("nickname").split(','),{
@@ -52,6 +60,14 @@ module.exports = {
       }
     });
     return res.redirect("/admin")
+  },
+  approveUser : function (req, res) {
+    User.update(req.param("uid"),{approved : true}).exec(function (err, approvedUser) {
+      if (err) return err;
+      else {
+        return res.redirect('/admin');
+      }
+    })
   }
 };
 

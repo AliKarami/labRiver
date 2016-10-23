@@ -71,7 +71,22 @@
   </div>
   <div class="window">
     <h2>User Registration Approval:</h2>
-
+    <div align="center">
+      <table align="center" class="part">
+        <% for (var i=0;i<users.length;i++)  { %>
+        <tr>
+          <td><h3>name:</h3> <%= users[i].fname %> <%=users[i].lname %></td>
+          <td><h3>email:</h3> <%= users[i].email  %></td>
+          <td>
+            <form method="post" action="/admin/approve">
+              <input name="uid" type="hidden" value="<%= users[i].id %>">
+              <input type="submit" value="Approve">
+            </form>
+          </td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
   </div>
   <form id="logouter" method="post" action="logout">
     <input type="submit" value="Logout">
