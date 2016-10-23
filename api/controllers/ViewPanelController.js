@@ -34,7 +34,7 @@ function viewSupervisor(uid) {
             }
             else return resolve([,]);
           }
-        })
+        });
         else return resolve([,]);
       }
     })

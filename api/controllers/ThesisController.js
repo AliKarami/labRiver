@@ -12,7 +12,15 @@ module.exports = {
     rest : false
   },
   edit: function (req, res) {
-
+    if (req.method=='GET') {
+      var ret = {
+        title : 'Edit Thesis'
+      }
+      return res.view("Resources/Thesis",ret)
+    }
+    else if (req.method=='POST') {
+      //create or update thesis
+    }
   },
   view : function (req, res) {
 

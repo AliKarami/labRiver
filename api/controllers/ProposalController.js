@@ -12,7 +12,15 @@ module.exports = {
     rest : false
   },
   edit: function (req, res) {
-
+    if (req.method=='GET') {
+      var ret = {
+        title : 'Edit Proposal'
+      }
+      return res.view("Resources/Proposal",ret)
+    }
+    else if (req.method=='POST') {
+      //create proposal or update
+    }
   },
   view : function (req, res) {
 

@@ -4,7 +4,103 @@
   <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <div class="boxed">
-
+  <div class="boxed" align="center">
+    <form method="post" action="\paper\new" id="newPaper">
+      <table align="center">
+        <tr>
+          <td>
+            <h3>type:</h3>
+          </td>
+          <td>
+            <input name="type" type="radio" checked="checked"> Submit
+            <input name="type" type="radio" value="conferenceAccepted"> Conference Accepted
+            <input name="type" type="radio" value="journalAccepted"> Journal Accepted
+            <input name="type" type="radio" value="published"> Published
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Title:</h3>
+          </td>
+          <td>
+            <input name="title" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Authors:</h3>
+          </td>
+          <td>
+            <input name="authors" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Year:</h3>
+          </td>
+          <td>
+            <input name="year" type="number">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Abstract:</h3>
+          </td>
+          <td>
+            <textarea name="abstract" form="newPaper" rows="4" cols="50"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>PDF:</h3>
+          </td>
+          <td>
+            <input name="pdf" type="file">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Dataset:</h3>
+          </td>
+          <td>
+            <input name="dataset" type="file">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Source Code:</h3>
+          </td>
+          <td>
+            <input name="sourceCode" type="file">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>Tags:</h3>
+          </td>
+          <td>
+            <input name="tags" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <input type="submit" value="Sumbit">
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <div class="boxed" style="padding: 5px">
+    <form action="\panel">
+      <input type="submit" value="Panel">
+    </form>
+    <form action="\panel\workflow">
+      <input type="submit" value="Workflow">
+    </form>
+    <form action="\logout">
+      <input type="submit" value="Logout">
+    </form>
   </div>
 </body>

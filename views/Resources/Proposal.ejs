@@ -1,10 +1,80 @@
 <!DOCTYPE html>
 <head>
-  <title><%=typeof title == 'undefined' ? 'Paper' : title%></title>
+  <title><%=typeof title == 'undefined' ? 'Proposal' : title%></title>
   <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
 <div class="boxed">
-
+  <form method="post" action="\proposal\edit" id="editProposal">
+    <table align="center">
+      <tr>
+        <td>
+          <h3>Title:</h3>
+        </td>
+        <td>
+          <input name="title" type="text">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Authors:</h3>
+        </td>
+        <td>
+          <input name="authors" type="text">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>degree:</h3>
+        </td>
+        <td>
+          <input name="degree" type="radio" value="master" checked="checked"> Master
+          <input name="degree" type="radio" value="phd"> PhD
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Abstract:</h3>
+        </td>
+        <td>
+          <textarea name="abstract" form="editProposal" rows="4" cols="50"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>PDF:</h3>
+        </td>
+        <td>
+          <input name="pdf" type="file">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Tags:</h3>
+        </td>
+        <td>
+          <input name="tags" type="text">
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <input type="submit" value="Sumbit">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div class="boxed" style="padding: 5px">
+  <form action="\panel">
+    <input type="submit" value="Panel">
+  </form>
+  <form action="\panel\workflow">
+    <input type="submit" value="Workflow">
+  </form>
+  <form action="\logout">
+    <input type="submit" value="Logout">
+  </form>
 </div>
 </body>

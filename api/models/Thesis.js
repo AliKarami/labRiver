@@ -19,6 +19,9 @@ module.exports = {
     author : {
       model : 'Student'
     },
+    files : [
+      {model : 'File'}
+    ],
     tags : [
       {type : 'string'}
     ],
