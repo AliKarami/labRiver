@@ -22,7 +22,6 @@ function viewSupervisor(uid) {
               Student.findOne(student.supervisor).exec(function (err, supe) {
                 if (err) return reject(err);
                 else sup = supe;
-                sails.log("1" + JSON.stringify(sup));
                 return resolve([sup.studentNumber,]);
               })
             }
@@ -30,20 +29,13 @@ function viewSupervisor(uid) {
               Student.findOne(student.supervisorOf).exec(function (err, supeOf) {
                 if (err) return reject(err);
                 else supOf = supeOf;
-                sails.log("2");
                 return resolve([,supOf.studentNumber]);
               })
             }
-            else {
-              sails.log("3");
-              return resolve([,]);
-            }
+            else return resolve([,]);
           }
         })
-        else {
-          sails.log("4");
-          return resolve([,]);
-        }
+        else return resolve([,]);
       }
     })
   })
