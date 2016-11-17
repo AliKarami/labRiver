@@ -2,11 +2,18 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Admin Panel' : title%></title>
   <link rel="stylesheet" href="styles/style.css">
+  <script src="js/dependencies/jquery.blockUI.js"></script>
+  <script src="js/dependencies/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('div.blocked').block({ message: null });
+    });
+  </script>
 </head>
 <body>
 <div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1></div>
 <div class="boxed">
-  <div class="window">
+  <div class="window blocked">
     <h2>Supervisor Management:</h2>
     <form method="post" action="/admin/setSupervisor" class="part">
       Enter Nicknames:
@@ -24,7 +31,7 @@
       <input type="submit" value="set Supervisor">
     </form>
   </div>
-  <div class="window">
+  <div class="window blocked">
     <h2>Calendar Editor:</h2>
 
   </div>

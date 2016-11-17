@@ -2,9 +2,16 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
   <link rel="stylesheet" href="styles/style.css">
+  <script src="js/dependencies/jquery.blockUI.js"></script>
+  <script src="js/dependencies/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('div.blocked').block({ message: null });
+    });
+  </script>
 </head>
 <body>
-<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1> Welcome <%=user.fname%> <%=user.lname%>!</div>
+<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1> Welcome <%=user.fname%> <%=user.lname%>! <br> @<%=user.nickname%></div>
   <div class="boxed">
     <div class="window">
       <h2>profile:</h2>
@@ -42,13 +49,13 @@
         <input type="submit" value="Workflow" />
       </form>
     </div>
-    <div class="window">
+    <div class="window blocked">
       <h2>resources:</h2>
       <form action="/panel/resources">
         <input type="submit" value="Resources" />
       </form>
     </div>
-    <div class="window">
+    <div class="window blocked">
       <h2>supervisor:</h2>
       <% if (supervisorOf!=undefined) { %>
         you are supervisor of: <%= supervisorOf %>
