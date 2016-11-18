@@ -80,11 +80,17 @@
   <div class="window">
     <h2>User Registration Approval:</h2>
     <div align="center">
+      <% if (users.length>0) { %>
       <table align="center" class="part">
         <% for (var i=0;i<users.length;i++)  { %>
         <tr>
-          <td><h3>name:</h3> <%= users[i].fname %> <%=users[i].lname %></td>
-          <td><h3>email:</h3> <%= users[i].email  %></td>
+          <td>Name</td>
+          <td>Email</td>
+          <td>Approve</td>
+        </tr>
+        <tr>
+          <td><%= users[i].fname %> <%=users[i].lname %></td>
+          <td><%= users[i].email  %></td>
           <td>
             <form method="post" action="/admin/approve">
               <input name="uid" type="hidden" value="<%= users[i].id %>">
@@ -93,10 +99,10 @@
           </td>
         </tr>
         <% } %>
-        <% if (users.length==0)  { %>
-        No User For Approval :)
-        <% } %>
       </table>
+      <% } else { %>
+      No User For Approval :)
+      <% } %>
     </div>
   </div>
   <form id="logouter" method="post" action="logout">
