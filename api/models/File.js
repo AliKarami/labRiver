@@ -13,7 +13,11 @@ module.exports = {
       enum : ['document','dataset','source','image','other'],
       required : true
     },
-    address : {
+    fileFd : {
+      type : 'string',
+      required : true
+    },
+    fileUrl : {
       type : 'string',
       required : true
     },

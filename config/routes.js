@@ -50,7 +50,8 @@ module.exports.routes = {
   'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
   '/user/removeAvatar'                :   'UserController.removeAvatar',
   /***************************************************************************/
-  '/paper/new'                        :   'PaperController.new',
+  'get /paper/new'                    :   'PaperController.new',
+  'post /paper/new'                   :   'PaperController.createNew',
   '/paper/:paperId'                   :   'PaperController.view',
   '/proposal/edit'                    :   'ProposalController.edit',
   '/proposal/:proposalId'             :   'ProposalController.view',

@@ -14,6 +14,18 @@ module.exports = {
     actions : false,
     shortcuts : false,
     rest : false
+  },
+
+  uploadFile: function (req, res) {
+
+  },
+
+  replaceFile: function (req, res) {
+
+  },
+
+  removeFile: function (req, res) {
+
   }
 
 };

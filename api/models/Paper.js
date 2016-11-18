@@ -17,17 +17,9 @@ module.exports = {
       type : 'string',
       required : true
     },
-    authors : [
-      {
-        name : {
-        type : 'string',
-        required : true
-        },
-        student : {
-          model : 'Student'
-        }
-      }
-    ],
+    authors : {
+        type: 'array'
+    },
     year : {
       type: 'integer',
       required : true
@@ -36,24 +28,24 @@ module.exports = {
       type : 'string',
       required : true
     },
-    files : [
-      {model : 'File'}
-    ],
-    datasets : [
-      {model : 'File'}
-    ],
-    sourceCodes : [
-      {model : 'File'}
-    ],
-    relatedReports : [
-      {model : 'Report'}
-    ],
-    tags: [
-      {type : 'string'}
-    ],
-    comments : [
-      {model : 'Comment'}
-    ],
+    document : {
+      model : 'File'
+    },
+    dataset : {
+      model : 'File'
+    },
+    sourceCode : {
+      model : 'File'
+    },
+    relatedReports : {
+      type: 'array'
+    },
+    tags: {
+      type : 'array'
+    },
+    comments : {
+      type : 'array'
+    },
     votes : [
       {
         author : {
