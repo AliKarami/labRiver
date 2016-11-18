@@ -25,7 +25,7 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 80,
+  port: 80,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -35,5 +35,5 @@ module.exports = {
   //   level: "silent"
   // }
 
-  appUrl: "192.168.1.104:1337"
+  appUrl: "192.168.1.104"
 };
