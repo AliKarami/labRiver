@@ -89,7 +89,7 @@ module.exports = {
       User.update(req.user.id, {
         id: req.user.id,
         // Generate a unique URL where the avatar can be downloaded.
-        avatarUrl: require('util').format('%s/images/avatars/%s', sails.getBaseUrl(), filename),
+        avatarUrl: require('util').format('%s/images/avatars/%s', sails.config.appUrl, filename),
 
         // Grab the first file and use it's `fd` (file descriptor)
         avatarFd: uploadedFiles[0].fd
@@ -104,7 +104,7 @@ module.exports = {
     User.update(req.user.id, {
       id: req.user.id,
       // Generate a unique URL where the avatar can be downloaded.
-      avatarUrl: require('util').format('%s/images/avatars/%s', sails.getBaseUrl(), 'default.png'),
+      avatarUrl: require('util').format('%s/images/avatars/%s', sails.config.appUrl, 'default.png'),
 
       // Grab the first file and use it's `fd` (file descriptor)
       avatarFd: require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'

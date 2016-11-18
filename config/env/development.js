@@ -21,4 +21,5 @@ module.exports = {
   //   connection: 'someMongodbServer'
   // }
 
+  appUrl: "localhost:1337"
 };

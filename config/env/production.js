@@ -35,4 +35,5 @@ module.exports = {
   //   level: "silent"
   // }
 
+  appUrl: "192.168.1.104:1337"
 };
