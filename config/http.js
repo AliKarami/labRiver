@@ -50,7 +50,7 @@ module.exports.http = {
       'favicon',
       '404',
       '500'
-    ]
+    ],
 
   /****************************************************************************
   *                                                                           *
@@ -79,7 +79,7 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // bodyParser: require('skipper')({strict: true})
+    bodyParser: require('skipper')({strict: true})
 
   },
 

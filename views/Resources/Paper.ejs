@@ -5,7 +5,7 @@
 </head>
 <body>
   <div class="boxed" align="center">
-    <form method="post" action="\paper\new" id="newPaper">
+    <form method="post" action="\paper\new" id="newPaper" enctype="multipart/form-data">
       <table align="center">
         <tr>
           <td>
@@ -52,10 +52,18 @@
         </tr>
         <tr>
           <td>
+            <h3>Tags:</h3>
+          </td>
+          <td>
+            <input name="tags" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>
             <h3>Document:</h3>
           </td>
           <td>
-            <input name="document" type="file">
+            <input type="file" name="document" />
           </td>
         </tr>
         <tr>
@@ -63,7 +71,7 @@
             <h3>Dataset:</h3>
           </td>
           <td>
-            <input name="dataset" type="file">
+            <input type="file" name="dataset" />
           </td>
         </tr>
         <tr>
@@ -71,15 +79,7 @@
             <h3>Source Code:</h3>
           </td>
           <td>
-            <input name="sourceCode" type="file">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h3>Tags:</h3>
-          </td>
-          <td>
-            <input name="tags" type="text">
+            <input type="file" name="sourceCode" />
           </td>
         </tr>
         <tr>

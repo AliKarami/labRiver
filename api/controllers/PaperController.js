@@ -31,6 +31,10 @@ module.exports = {
     return res.view("Resources/Paper",ret)
   },
   createNew : function (req, res) {
+
+    var paper = {
+
+    };
       var documentId, datasetId, sourceCodeId;
       req.file('document').upload({
         // don't allow the total upload size to exceed ~25MB
@@ -39,7 +43,6 @@ module.exports = {
       },function whenDone(err, uploadedFiles) {
         if (err) return res.negotiate(err);
         // If any files uploaded, add it to db.
-        sails.log('uploaded files: ' + uploadedFiles.length);
         if (uploadedFiles.length > 0) {
           var _fd = uploadedFiles[0].fd.split('/');
           var filename = _fd[_fd.length-1];
@@ -55,8 +58,8 @@ module.exports = {
         }
       });
       Paper.create({
-        type: req.param("type"),
-        title: req.param("title"),
+        type: req.param('type'),
+        title: req.param('title'),
         authors: req.param("authors").split(','),
         year: req.param("year"),
         abstract: req.param("abstract"),
