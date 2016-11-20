@@ -39,14 +39,15 @@ module.exports = {
       },function whenDone(err, uploadedFiles) {
         if (err) return res.negotiate(err);
         // If any files uploaded, add it to db.
-        if (uploadedFiles.length > 0){
+        sails.log('uploaded files: ' + uploadedFiles.length);
+        if (uploadedFiles.length > 0) {
           var _fd = uploadedFiles[0].fd.split('/');
           var filename = _fd[_fd.length-1];
           File.create({
             type: 'document',
             fileFd: uploadedFiles[0].fd,
             fileUrl: require('util').format('%s/files/document/%s', sails.config.appUrl, filename),
-            author: req.user.id
+            author: req.user.id,
           }).exec(function (err,document) {
             if (err) return res.negotiate(err);
             else documentId = document.id;
