@@ -21,7 +21,7 @@ module.exports = {
       type : 'string',
       required : true
     },
-    author : {
+    uploader : {
       model : 'User'
     },
     comments : [

@@ -29,13 +29,16 @@ module.exports = {
       required : true
     },
     document : {
-      model : 'File'
+      model : 'File',
+      unique : true
     },
     dataset : {
-      model : 'File'
+      model : 'File',
+      unique : true
     },
     sourceCode : {
-      model : 'File'
+      model : 'File',
+      unique : true
     },
     relatedReports : {
       type: 'array'
