@@ -5,31 +5,14 @@
 </head>
 <body>
 <div class="boxed">
-  <form method="post" action="\proposal\edit" id="editProposal">
+  <form method="post" action="\proposal\edit" id="editProposal" enctype="multipart/form-data">
     <table align="center">
       <tr>
         <td>
           <h3>Title:</h3>
         </td>
         <td>
-          <input name="title" type="text">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>Authors:</h3>
-        </td>
-        <td>
-          <input name="authors" type="text">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>degree:</h3>
-        </td>
-        <td>
-          <input name="degree" type="radio" value="master" checked="checked"> Master
-          <input name="degree" type="radio" value="phd"> PhD
+          <input name="title" type="text" value="<%= proposal.title %>">
         </td>
       </tr>
       <tr>
@@ -37,7 +20,15 @@
           <h3>Abstract:</h3>
         </td>
         <td>
-          <textarea name="abstract" form="editProposal" rows="4" cols="50"></textarea>
+          <textarea name="abstract" form="editProposal" rows="4" cols="50"><%= proposal.abstract %></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Tags:</h3>
+        </td>
+        <td>
+          <input name="tags" type="text" value="<%= proposal.tags?proposal.tags.join():'' %>">
         </td>
       </tr>
       <tr>
@@ -46,14 +37,6 @@
         </td>
         <td>
           <input name="pdf" type="file">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>Tags:</h3>
-        </td>
-        <td>
-          <input name="tags" type="text">
         </td>
       </tr>
       <tr>

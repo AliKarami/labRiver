@@ -9,10 +9,12 @@ module.exports = {
 
   attributes: {
     title : {
-      type : 'string'
+      type : 'string',
+      defaultsTo: ''
     },
     abstract : {
-      type : 'string'
+      type : 'string',
+      defaultsTo: ''
     },
     author : {
       model : 'Student'
@@ -21,7 +23,12 @@ module.exports = {
       {model : 'File'}
     ],
     tags : {
-      type : 'array'
+      type : 'array',
+      defaultsTo: []
+    },
+    freeze : {
+      type : 'boolean',
+      defaultsTo : false
     }
   }
 };

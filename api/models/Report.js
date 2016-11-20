@@ -9,16 +9,19 @@ module.exports = {
 
   attributes: {
     deadline : {
-      type : 'date'
-    },
-    uploadedAt : {
-      type : 'date'
+      type : 'datetime',
+      required : true
     },
     lastModified : {
-      type : 'date'
+      type : 'datetime'
+    },
+    author: {
+      model : 'Student',
+      required : true
     },
     body : {
-      type : 'string'
+      type : 'string',
+      defaultsTo: ''
     },
     files : [
       {model : 'File'}
@@ -27,7 +30,8 @@ module.exports = {
       {model : 'Paper'}
     ],
     tags : {
-      type : 'array'
+      type : 'array',
+      defaultsTo: []
     }
   }
 };

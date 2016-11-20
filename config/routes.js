@@ -53,11 +53,14 @@ module.exports.routes = {
   'get /paper/new'                    :   'PaperController.new',
   'post /paper/new'                   :   'PaperController.createNew',
   '/paper/:paperId'                   :   'PaperController.view',
-  '/proposal/edit'                    :   'ProposalController.edit',
+  'get /proposal/edit'                :   'ProposalController.editPage',
+  'post /proposal/edit'               :   'ProposalController.edit',
   '/proposal/:proposalId'             :   'ProposalController.view',
-  '/thesis/edit'                      :   'ThesisController.edit',
+  'get /thesis/edit'                  :   'ThesisController.editPage',
+  'post /thesis/edit'                 :   'ThesisController.edit',
   '/thesis/:thesisId'                 :   'ThesisController.view',
-  '/report/new'                       :   'ReportController.new',
+  'get /report/edit'                  :   'ReportController.editPage',
+  'post /report/edit'                 :   'ReportController.edit',
   '/report/:reportId'                 :   'ReportController.view',
   /***************************************************************************/
 

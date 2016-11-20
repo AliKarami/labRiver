@@ -4,6 +4,8 @@
  * @description :: Server-side logic for managing Proposals
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var moment = require('moment-jalaali');
+moment.loadPersian();
 
 module.exports = {
   _config : {
@@ -11,16 +13,36 @@ module.exports = {
     shortcuts : false,
     rest : false
   },
+  editPage: function (req, res) {
+    StudentService.studentByUser(req.user.id).exec(function (err, student) {
+      if (err) return res.negotiate(err);
+      Proposal.findOne({author:student.id}).exec(function (err, proposal) {
+        if (err) return res.negotiate(err);
+        var ret = {
+          title : 'Edit Proposal',
+          proposal : proposal,
+        }
+        return res.view("Resources/Proposal",ret)
+      });
+    })
+  },
   edit: function (req, res) {
-    if (req.method=='GET') {
-      var ret = {
-        title : 'Edit Proposal'
-      }
-      return res.view("Resources/Proposal",ret)
-    }
-    else if (req.method=='POST') {
-      //create proposal or update
-    }
+    StudentService.studentByUser(req.user.id).exec(function (err, student) {
+      if (err) return res.negotiate(err);
+
+      Proposal.update({author:student.id},{
+        title: req.param("title")?req.param("title"):'',
+        abstract: req.param("abstract")?req.param("abstract"):'',
+        tags: req.param("tags")?req.param("tags").split(','):[]
+      }).exec(function (err, updatedProposal) {
+        if (err) return res.negotiate(err);
+        var ret = {
+          title: "WorkFlow",
+          moment: moment
+        };
+        return res.view("workflow", ret);
+      })
+    })
   },
   view : function (req, res) {
 

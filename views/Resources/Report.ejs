@@ -5,22 +5,14 @@
 </head>
 <body>
 <div class="boxed" align="center">
-  <form method="post" action="\report\new" id="newReport">
+  <form method="post" action="\report\edit" id="newReport" enctype="multipart/form-data">
     <table align="center">
       <tr>
         <td>
           <h3>Body:</h3>
         </td>
         <td>
-          <textarea name="body" form="newPaper" rows="4" cols="50"></textarea>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>PDF:</h3>
-        </td>
-        <td>
-          <input name="pdf" type="file">
+          <textarea name="body" form="newReport" rows="4" cols="50"><%= report.body %></textarea>
         </td>
       </tr>
       <tr>
@@ -36,7 +28,15 @@
           <h3>Tags:</h3>
         </td>
         <td>
-          <input name="tags" type="text">
+          <input name="tags" type="text" value="<%= report.tags?report.tags.join():'' %>">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>PDF:</h3>
+        </td>
+        <td>
+          <input name="pdf" type="file">
         </td>
       </tr>
       <tr>
@@ -57,22 +57,6 @@
       </td>
       <td>
         <%= deadline %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <h4>Deadline:</h4>
-      </td>
-      <td>
-        <%= deadline %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <h4>Uploaded At:</h4>
-      </td>
-      <td>
-        <%= uploadedAt %>
       </td>
     </tr>
     <tr>

@@ -45,7 +45,10 @@ module.exports = {
       type : 'integer',
       defaultsTo: 0
     },
-    reports : [
+    currentReport : {
+      model : 'Report'
+    },
+    pastReports : [
       {model : 'Report'}
     ],
     papers : [
@@ -57,11 +60,9 @@ module.exports = {
     proposal : {
       model : 'Proposal'
     },
-    datasets : {
-      model : 'File'
-    },
-    sourceFiles : {
-      model : 'File'
+    weeklyReporter : {
+      type : 'boolean',
+      defaultsTo: true
     }
   },
   afterCreate: function (newStudent, cb) {

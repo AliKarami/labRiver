@@ -5,22 +5,14 @@
 </head>
 <body>
 <div class="boxed">
-  <form method="post" action="\thesis\edit" id="editThesis">
+  <form method="post" action="\thesis\edit" id="editThesis" enctype="multipart/form-data">
     <table align="center">
       <tr>
         <td>
           <h3>Title:</h3>
         </td>
         <td>
-          <input name="title" type="text">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>Author:</h3>
-        </td>
-        <td>
-          <input name="authors" type="text">
+          <input name="title" type="text" value="<%= thesis.title %>">
         </td>
       </tr>
       <tr>
@@ -28,7 +20,15 @@
           <h3>Abstract:</h3>
         </td>
         <td>
-          <textarea name="abstract" form="editThesis" rows="4" cols="50"></textarea>
+          <textarea name="abstract" form="editThesis" rows="4" cols="50"><%= thesis.abstract %></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Tags:</h3>
+        </td>
+        <td>
+          <input name="tags" type="text" value="<%= thesis.tags?thesis.tags.join():'' %>">
         </td>
       </tr>
       <tr>
@@ -37,14 +37,6 @@
         </td>
         <td>
           <input name="pdf" type="file">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <h3>Tags:</h3>
-        </td>
-        <td>
-          <input name="tags" type="text">
         </td>
       </tr>
       <tr>
