@@ -74,11 +74,33 @@ module.exports = {
     });
   },
   workflow : function (req, res) {
-    var ret = {
-      title: "WorkFlow",
-      moment: moment
-    };
-    return res.view("workflow", ret);
+    var pastPapers = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Paper.find({author:student.id}).exec(function (err, papers) {
+          if (err) reject(err);
+          resolve(papers);
+        })
+      })
+    });
+    var pastReports = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Report.find({author:student.id}).exec(function (err, reports) {
+          if (err) reject(err);
+          resolve(reports);
+        })
+      })
+    });
+    Promise.all([pastPapers,pastReports]).then(function (pastData) {
+      var ret = {
+        title: "WorkFlow",
+        moment: moment,
+        pastPapers: pastData[0],
+        pastReports: pastData[1]
+      };
+      return res.view("workflow", ret);
+    })
   },
   resources : function (req, res) {
     var ret = {

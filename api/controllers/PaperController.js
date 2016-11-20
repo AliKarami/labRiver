@@ -21,10 +21,17 @@ module.exports = {
     var documentId = FileService.uploadFile(req,'paper', 'document');
     var datasetId = FileService.uploadFile(req,'paper', 'dataset');
     var sourceCodeId = FileService.uploadFile(req,'paper', 'source');
-      Promise.all([documentId,datasetId,sourceCodeId]).then(function (fileIds) {
+    var student = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        resolve(student);
+      })
+    });
+      Promise.all([documentId,datasetId,sourceCodeId,student]).then(function (fileIds) {
         Paper.create({
           type: req.param('type'),
           title: req.param('title'),
+          author: fileIds[3].id,
           authors: req.param("authors").split(','),
           year: req.param("year"),
           abstract: req.param("abstract"),

@@ -17,6 +17,10 @@ module.exports = {
       type : 'string',
       required : true
     },
+    author : {
+      model : 'Student',
+      required : true
+    },
     authors : {
         type: 'array'
     },

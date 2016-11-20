@@ -29,7 +29,19 @@
               </form>
             </div>
             <div>
-              <h4>uploads:</h4>
+              <h3>Past Papers:</h3>
+              <table border="1">
+                <tr>
+                  <td><h4>Row</h4></td>
+                  <td><h4>Title</h4></td>
+                </tr>
+                <% for (var i=0,len=pastPapers.length;i<len;i++) { %>
+                <tr>
+                  <td> <%= i+1 %> </td>
+                  <td> <%= pastPapers[i].title %> </td>
+                </tr>
+                <% } %>
+              </table>
             </div>
           </div>
           <div class="col3">
@@ -48,7 +60,19 @@
               </form>
             </div>
             <div>
-              <h4>Past Reports:</h4>
+              <h3>Past Papers:</h3>
+              <table border="1">
+                <tr>
+                  <td><h4>Row</h4></td>
+                  <td><h4>Deadline</h4></td>
+                </tr>
+                <% for (var i=0,len=pastReports.length;i<len;i++) { %>
+                <tr>
+                  <td> <%= i+1 %> </td>
+                  <td> <%= moment(pastReports[i].deadline).format('jYYYY/jM/jD') %> </td>
+                </tr>
+                <% } %>
+              </table>
             </div>
           </div>
         </div>
