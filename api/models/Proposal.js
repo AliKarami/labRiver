@@ -19,9 +19,9 @@ module.exports = {
     author : {
       model : 'Student'
     },
-    files : [
-      {model : 'File'}
-    ],
+    document : {
+      model: 'File'
+    },
     tags : {
       type : 'array',
       defaultsTo: []
@@ -30,5 +30,22 @@ module.exports = {
       type : 'boolean',
       defaultsTo : false
     }
+  },
+  beforeUpdate : function (newProposal, cb) {
+    Proposal.findOne(newProposal.id).exec(function (err, originalProposal) {
+      if (err || !originalProposal) {
+        return cb();
+      }
+      //if document changed
+      if (newProposal.document != originalProposal.document && originalProposal.document != null && originalProposal.document != undefined) {
+        File.destroy(originalProposal.document).exec(function (err) {
+          if (err)
+            return err;
+          cb();
+        })
+      } else {
+        cb();
+      }
+    })
   }
 };

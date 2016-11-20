@@ -29,18 +29,29 @@ module.exports = {
   edit: function (req, res) {
     StudentService.studentByUser(req.user.id).exec(function (err, student) {
       if (err) return res.negotiate(err);
-
-      Proposal.update({author:student.id},{
-        title: req.param("title")?req.param("title"):'',
-        abstract: req.param("abstract")?req.param("abstract"):'',
-        tags: req.param("tags")?req.param("tags").split(','):[]
-      }).exec(function (err, updatedProposal) {
-        if (err) return res.negotiate(err);
-        var ret = {
-          title: "WorkFlow",
-          moment: moment
+      var documentId = FileService.uploadFile(req,'proposal','document');
+      Promise.all([documentId]).then(function (fileIds) {
+        var newProposal = {
+          title: req.param("title")?req.param("title"):'',
+          abstract: req.param("abstract")?req.param("abstract"):'',
+          tags: req.param("tags")?req.param("tags").split(','):[],
         };
-        return res.view("workflow", ret);
+        if (fileIds[0]!=undefined) {
+          newProposal = {
+            title: req.param("title")?req.param("title"):'',
+            abstract: req.param("abstract")?req.param("abstract"):'',
+            tags: req.param("tags")?req.param("tags").split(','):[],
+            document: fileIds[0]
+          };
+        }
+        Proposal.update({author:student.id},newProposal).exec(function (err, updatedProposal) {
+          if (err) return res.negotiate(err);
+          var ret = {
+            title: "WorkFlow",
+            moment: moment
+          };
+          return res.view("workflow", ret);
+        })
       })
     })
   },

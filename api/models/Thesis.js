@@ -19,9 +19,9 @@ module.exports = {
     author : {
       model : 'Student'
     },
-    files : [
-      {model : 'File'}
-    ],
+    document : {
+      model : 'File'
+    },
     tags : {
       type : 'array',
       defaultsTo: []
@@ -30,6 +30,23 @@ module.exports = {
       type : 'boolean',
       defaultsTo : false
     }
+  },
+  beforeUpdate : function (newThesis, cb) {
+    Thesis.findOne(newThesis.id).exec(function (err, originalThesis) {
+      if (err || !originalThesis) {
+        return cb();
+      }
+      //if document changed
+      if (newThesis.document != originalThesis.document && originalThesis.document != null && originalThesis.document != undefined) {
+        File.destroy(originalThesis.document).exec(function (err) {
+          if (err)
+            return err;
+            cb();
+        })
+      } else {
+        cb();
+      }
+    })
   }
 };
 

@@ -9,18 +9,18 @@ module.exports = {
       })
     });
   },
-  uploadFile: function (req, type) {
+  uploadFile: function (req, section, type) {
   return new Promise(function (resolve, reject) {
     req.file(type).upload({
       maxBytes: 50000000,
       dirname: require('path').resolve(sails.config.appPath, 'assets/files/' + type),
       saveAs: function (__newFileStream, cb) {
-        cb(null, 'paper-' + new Date().getTime() + require('path').extname(__newFileStream.filename));
+        cb(null, section + '-' + new Date().getTime() + require('path').extname(__newFileStream.filename));
       }
     },function whenDone(err, uploadedFiles) {
       if (err) {
-        reject(err);
-        return res.negotiate(err);
+        reject('uploading:'+err);
+        return reject(err);
       }
       if (uploadedFiles.length > 0) {
         var _fd = uploadedFiles[0].fd.split('/');
@@ -32,8 +32,8 @@ module.exports = {
           uploader: req.user.id,
         }).exec(function (err,file) {
           if (err) {
-            reject(err);
-            return res.negotiate(err);
+            reject('creating File:'+err);
+            return reject(err);
           }
           else resolve(file.id);
         });

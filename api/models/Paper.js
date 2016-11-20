@@ -43,6 +43,52 @@ module.exports = {
     tags: {
       type : 'array'
     }
+  },beforeUpdate : function (newPaper, cb) {
+    Paper.findOne(newPaper.id).exec(function (err, originalPaper) {
+      if (err || !originalPaper) {
+        return cb();
+      }
+      //if document changed
+      var docPromise = new Promise(function (resolve, reject) {
+        if (newPaper.document != originalPaper.document && originalPaper.document != null && originalPaper.document != undefined) {
+          File.destroy(originalPaper.document).exec(function (err) {
+            if (err)
+              return reject(err);
+            resolve()
+          })
+        } else {
+          resolve();
+        }
+      });
+      //if dataset changed
+      var dsPromise = new Promise(function (resolve, reject) {
+        if (newPaper.document != originalPaper.dataset && originalPaper.dataset != null && originalPaper.dataset != undefined) {
+          File.destroy(originalPaper.dataset).exec(function (err) {
+            if (err)
+              return reject(err);
+            resolve()
+          })
+        } else {
+          resolve();
+        }
+      });
+      //if sourceCode changed
+      var scPromise = new Promise(function (resolve, reject) {
+        if (newPaper.source != originalPaper.source && originalPaper.source != null && originalPaper.source != undefined) {
+          File.destroy(originalPaper.source).exec(function (err) {
+            if (err)
+              return reject(err);
+            resolve()
+          })
+        } else {
+          resolve();
+        }
+      });
+
+      Promise.all([docPromise,dsPromise,scPromise]).then(function (promises) {
+        cb();
+      })
+    })
   }
 };
 

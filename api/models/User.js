@@ -89,7 +89,7 @@ module.exports = {
       if ((newUser.avatarFd != originalUser.avatarFd) && (originalUser.avatarFd != (require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'))) {
         fs.unlink(originalUser.avatarFd, function(err) {
           if (err) {
-            return console.error(err);
+            return err;
           }
           cb();
         });

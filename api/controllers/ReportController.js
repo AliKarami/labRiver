@@ -35,18 +35,27 @@ module.exports = {
   edit : function (req, res) {
     StudentService.studentByUser(req.user.id).exec(function (err, student) {
       if (err) return res.negotiate(err);
-
-      Report.update(student.currentReport,{
-        lastModified: new Date(),
-        body: req.param("body")?req.param("body"):'',
-        tags: req.param("tags")?req.param("tags").split(','):[]
-      }).exec(function (err, updatedReport) {
-        if (err) return res.negotiate(err);
-        var ret = {
-          title: "WorkFlow",
-          moment: moment
+      var documentId = FileService.uploadFile(req,'report','document');
+      Promise.all([documentId]).then(function (fileIds) {
+        var newReport = {
+          body: req.param("body")?req.param("body"):'',
+          tags: req.param("tags")?req.param("tags").split(','):[],
         };
-        return res.view("workflow", ret);
+        if (fileIds[0]!=undefined) {
+          newReport= {
+            body: req.param("body")?req.param("body"):'',
+            tags: req.param("tags")?req.param("tags").split(','):[],
+            document: fileIds[0]
+          };
+        }
+        Report.update({author:student.id},newReport).exec(function (err, updatedReport) {
+          if (err) return res.negotiate(err);
+          var ret = {
+            title: "WorkFlow",
+            moment: moment
+          };
+          return res.view("workflow", ret);
+        })
       })
     })
   },

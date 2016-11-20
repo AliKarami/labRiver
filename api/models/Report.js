@@ -23,9 +23,9 @@ module.exports = {
       type : 'string',
       defaultsTo: ''
     },
-    files : [
-      {model : 'File'}
-    ],
+    document : {
+      model : 'File'
+    },
     relatedPapers : [
       {model : 'Paper'}
     ],
@@ -33,6 +33,23 @@ module.exports = {
       type : 'array',
       defaultsTo: []
     }
+  },
+  beforeUpdate : function (newReport, cb) {
+    Report.findOne(newReport.id).exec(function (err, originalReport) {
+      if (err || !originalReport) {
+        return cb();
+      }
+      //if document changed
+      if (newReport.document != originalReport.document && originalReport.document != null && originalReport.document != undefined) {
+        File.destroy(originalReport.document).exec(function (err) {
+          if (err)
+            return err;
+          cb();
+        })
+      } else {
+        cb();
+      }
+    })
   }
 };
 

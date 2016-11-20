@@ -5,6 +5,8 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+var fs = require('fs');
+
 module.exports = {
 
   attributes: {
@@ -24,6 +26,15 @@ module.exports = {
     uploader : {
       model : 'User'
     }
+  },
+  afterDestroy: function (destroyedRecords, cb) {
+    for (var i=0,len=destroyedRecords.length;i<len;i++) {
+      fs.unlink(destroyedRecords[i].fileFd,function (err) {
+        if (err)
+          return err;
+      })
+    }
+    cb();
   }
 };
 

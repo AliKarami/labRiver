@@ -18,9 +18,9 @@ module.exports = {
     return res.view("Resources/Paper",ret)
   },
   createNew : function (req, res) {
-    var documentId = FileService.uploadFile(req, 'document');
-    var datasetId = FileService.uploadFile(req, 'dataset');
-    var sourceCodeId = FileService.uploadFile(req, 'source')
+    var documentId = FileService.uploadFile(req,'paper', 'document');
+    var datasetId = FileService.uploadFile(req,'paper', 'dataset');
+    var sourceCodeId = FileService.uploadFile(req,'paper', 'source');
       Promise.all([documentId,datasetId,sourceCodeId]).then(function (fileIds) {
         Paper.create({
           type: req.param('type'),
