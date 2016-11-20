@@ -54,5 +54,18 @@ module.exports = {
       })
       return resolve();
     })
+  },
+  deleteNotif: function (userid, title, date) {
+    StudentService.studentByUser(userid).exec(function (err, student) {
+        if (err) return err;
+        var notifs = student.notifications;
+        for (var i=0,len=notifs.length;i<len;i++) {
+          if (notifs[i].title==title && notifs[i].date==date) {
+            notifs.splice(i,1);
+            break;
+          }
+        }
+        Student.update(student.id,{notifications: notifs})
+    })
   }
 }

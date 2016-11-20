@@ -16,8 +16,8 @@ module.exports.crontab = {
   crons:function()
   {
     var jsonArray = [];
-    //run every saturday 23:55:00
-    jsonArray.push({interval:'00 55 23 * * 6',method:'createReports'});
+    //run every friday 23:55:00
+    jsonArray.push({interval:'00 55 23 * * 5',method:'createReports'});
     // jsonArray.push({interval:'*/5 * * * * *',method:'createReports'});
 
     // add more cronjobs if you want like below

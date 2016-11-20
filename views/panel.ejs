@@ -9,6 +9,10 @@
       $.blockUI.defaults.applyPlatformOpacityRules = false;
       $('div.blocked').block({ message: null });
     });
+    var delNotif = function delNotif(notifTitle,notifDate) {
+      deleteNotifiaction(req.user.id,notifTitle,notifDate);
+      console.log("salam!");
+    }
   </script>
 </head>
 <body>
@@ -35,7 +39,13 @@
       <div class="notifbox" align="center">
         <ul>
           <%for(var i=0;i<notifs.length;i++) {%>
-          <li><a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a> <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span> </li>
+          <li>
+            <a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a>
+            <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span>
+            <span style="margin-left:2em">
+              <img src="/images/delete.png" alt="delete"/>
+            </span>
+          </li>
           <% } %>
         </ul>
       </div>

@@ -30,7 +30,6 @@ module.exports = {
   edit: function (req, res) {
     StudentService.studentByUser(req.user.id).exec(function (err, student) {
       if (err) return res.negotiate(err);
-
       Thesis.update({author:student.id},{
         title: req.param("title")?req.param("title"):'',
         abstract: req.param("abstract")?req.param("abstract"):'',

@@ -7,7 +7,7 @@
 
 function nextWeek(){
   var today = new Date();
-  var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+(7-today.getDay()), 23, 55);
+  var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+(today.getDay()==6?6:(5-today.getDay())), 23, 55);
   return nextweek;
 }
 
