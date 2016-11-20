@@ -29,40 +29,20 @@ module.exports = {
       required : true
     },
     document : {
-      model : 'File',
-      unique : true
+      model : 'File'
     },
     dataset : {
-      model : 'File',
-      unique : true
+      model : 'File'
     },
     sourceCode : {
-      model : 'File',
-      unique : true
+      model : 'File'
     },
     relatedReports : {
       type: 'array'
     },
     tags: {
       type : 'array'
-    },
-    comments : {
-      type : 'array'
-    },
-    votes : [
-      {
-        author : {
-          model : 'User',
-          required : true,
-          unique : true
-        },
-        vote : {
-          type : 'integer',
-          enum : [0,1,2,3,4,5],
-          required : true
-        }
-      }
-    ]
+    }
   }
 };
 

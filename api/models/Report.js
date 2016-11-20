@@ -26,35 +26,9 @@ module.exports = {
     relatedPapers : [
       {model : 'Paper'}
     ],
-    tags : [
-      {type : 'string'}
-    ],
-    feedbacks : [
-      {
-        author : {
-          model : 'Student',
-          required : true
-        },
-        body : {
-          type : 'String',
-          required : true
-        }
-      }
-    ],
-    votes : [
-      {
-        author : {
-          model : 'User',
-          required : true,
-          unique : true
-        },
-        vote : {
-          type : 'integer',
-          enum : [0,1,2,3,4,5],
-          required : true
-        }
-      }
-    ]
+    tags : {
+      type : 'array'
+    }
   }
 };
 

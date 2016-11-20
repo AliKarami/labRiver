@@ -23,24 +23,7 @@ module.exports = {
     },
     uploader : {
       model : 'User'
-    },
-    comments : [
-      {model : 'Comment'}
-    ],
-    votes : [
-      {
-        author : {
-          model : 'User',
-          required : true,
-          unique : true
-        },
-        vote : {
-          type : 'integer',
-          enum : [0,1,2,3,4,5],
-          required : true
-        }
-      }
-    ]
+    }
   }
 };
 

@@ -9,12 +9,10 @@ module.exports = {
 
   attributes: {
     title : {
-      type : 'string',
-      required : true
+      type : 'string'
     },
     abstract : {
-      type : 'string',
-      required : true
+      type : 'string'
     },
     author : {
       model : 'Student'
@@ -22,26 +20,9 @@ module.exports = {
     files : [
       {model : 'File'}
     ],
-    tags : [
-      {type : 'string'}
-    ],
-    comments : [
-      {model : 'Comment'}
-    ],
-    votes : [
-      {
-        author : {
-          model : 'User',
-          required : true,
-          unique : true
-        },
-        vote : {
-          type : 'integer',
-          enum : [0,1,2,3,4,5],
-          required : true
-        }
-      }
-    ]
+    tags : {
+      type : 'array'
+    }
   }
 };
 

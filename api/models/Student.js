@@ -38,6 +38,7 @@ module.exports = {
     },
     degree : {
       type : 'string',
+      enum : ['bachelor','master','phd'],
       required : true
     },
     rating : {
@@ -62,6 +63,17 @@ module.exports = {
     sourceFiles : {
       model : 'File'
     }
+  },
+  afterCreate: function (newStudent, cb) {
+    var newProposal = Proposal.create({
+      author: newStudent.id
+    });
+    var newThesis = Thesis.create({
+      author: newStudent.id
+    });
+    Promise.all([newProposal,newThesis]).then(function (assignees) {
+      Student.update(newStudent.id,{proposal:assignees[0].id,thesis:assignees[1].id}).then(cb());
+    })
   }
 };
 
