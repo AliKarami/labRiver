@@ -5,6 +5,12 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+function nextWeek(){
+  var today = new Date();
+  var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7, 23, 55);
+  return nextweek;
+}
+
 module.exports = {
 
   attributes: {
@@ -72,9 +78,19 @@ module.exports = {
     var newThesis = Thesis.create({
       author: newStudent.id
     });
-    Promise.all([newProposal,newThesis]).then(function (assignees) {
-      Student.update(newStudent.id,{proposal:assignees[0].id,thesis:assignees[1].id}).then(cb());
-    })
+    Report.create({
+      deadline: nextWeek(),
+      author: newStudent.id
+    }).exec(function (err, newReport) {
+      if (err) console.log("Report Creation error: " + err);
+      Student.update(newReport.author,{currentReport:newReport.id}).exec(function (err, updatedStudent) {
+        if (err) console.log("Assigning Report to Student error: " + err);
+        Promise.all([newProposal,newThesis]).then(function (assignees) {
+          Student.update(newStudent.id,{proposal:assignees[0].id,thesis:assignees[1].id}).then(cb());
+        })
+      })
+    });
+
   }
 };
 
