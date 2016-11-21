@@ -12,15 +12,40 @@ module.exports = {
     rest : false
   },
   main : function (req, res) {
-    User.find({approved: false}).exec(function (err, users) {
-      if (err) return err;
-      else {
-        var ret = {
-          title: 'Admin',
-          users: users
-        };
-        return res.view("adminPanel", ret)
-      }
+    var unapprovedUsers = new Promise(function (resolve, reject) {
+      User.find({approved: false}).exec(function (err, users) {
+        if (err) reject(err);
+        resolve(users);
+      })
+    });
+    var Proposals = new Promise(function (resolve, reject) {
+      Proposal.find().exec(function (err, proposals) {
+        if(err) reject(err);
+        resolve(proposals);
+      })
+    });
+    var Theses = new Promise(function (resolve, reject) {
+      Thesis.find().exec(function (err, theses) {
+        if(err) reject(err);
+        resolve(theses);
+      })
+    });
+    var Students = new Promise(function (resolve, reject) {
+      Student.find().exec(function (err, students) {
+        if(err) reject(err);
+        resolve(students);
+      })
+    });
+
+    Promise.all([unapprovedUsers,Proposals,Theses,Students]).then(function (data) {
+      var ret = {
+        title: 'Admin',
+        users: data[0],
+        proposals: data[1],
+        theses: data[2],
+        students: data[3]
+      };
+      return res.view("adminPanel", ret)
     })
   },
   makeNotif : function (req, res) {

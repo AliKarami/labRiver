@@ -28,7 +28,7 @@ module.exports = {
     },
     freeze : {
       type : 'boolean',
-      defaultsTo : false
+      defaultsTo : true
     }
   },
   beforeUpdate : function (newThesis, cb) {

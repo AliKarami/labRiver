@@ -38,7 +38,8 @@ module.exports.policies = {
     '*' : 'noAuthenticated'
   },
   ViewPanelController : {
-    '*' : 'isApproved'
+    '*' : 'isApproved',
+    'workflow' : 'notAdmin'
   },
   ViewAdminPanelController : {
     '*' : 'isAdmin'

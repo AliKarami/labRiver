@@ -92,12 +92,40 @@ module.exports = {
         })
       })
     });
-    Promise.all([pastPapers,pastReports]).then(function (pastData) {
+    var student = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        resolve(student);
+      })
+    });
+    var proposal = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Proposal.findOne({author:student.id}).exec(function (err, proposal) {
+          if (err) reject(err);
+          resolve(proposal);
+        })
+      })
+    });
+    var thesis = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Thesis.findOne({author:student.id}).exec(function (err, thesis) {
+          if (err) reject(err);
+          resolve(thesis);
+        })
+      })
+    });
+
+    Promise.all([pastPapers,pastReports,student,proposal,thesis]).then(function (data) {
       var ret = {
         title: "WorkFlow",
         moment: moment,
-        pastPapers: pastData[0],
-        pastReports: pastData[1]
+        pastPapers: data[0],
+        pastReports: data[1],
+        reportAvailable: data[2].weeklyReporter,
+        proposalAvailable: !data[3].freeze,
+        thesisAvailable: !data[4].freeze
       };
       return res.view("workflow", ret);
     })

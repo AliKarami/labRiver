@@ -2,6 +2,14 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Workflow' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
+  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery-3.1.1.min.js"></script>
+  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery.blockUI.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.blockUI.defaults.applyPlatformOpacityRules = false;
+      $('div.blocked').block({ message: null });
+    });
+  </script>
 </head>
 <body>
   <div class="colmask">
@@ -13,7 +21,7 @@
     <div class="colmid">
       <div class="colin">
         <div class="colleft">
-          <div class="col1">
+          <div class="col1<%= proposalAvailable?'':' blocked' %>">
             <h2>Proposal:</h2>
             <div>
               <form action="\proposal\edit">
@@ -30,7 +38,7 @@
             </div>
             <div>
               <h3>Past Papers:</h3>
-              <table border="1">
+              <table border="1" align="center">
                 <tr>
                   <td><h4>Row</h4></td>
                   <td><h4>Title</h4></td>
@@ -44,7 +52,7 @@
               </table>
             </div>
           </div>
-          <div class="col3">
+          <div class="col3<%= thesisAvailable?'':' blocked' %>">
             <h2>Thesis:</h2>
             <div>
               <form action="\thesis\edit">
@@ -52,7 +60,7 @@
               </form>
             </div>
           </div>
-          <div class="col4">
+          <div class="col4<%= reportAvailable?'':' blocked' %>">
             <h2>Report:</h2>
             <div>
               <form action="\report\edit">
@@ -61,7 +69,7 @@
             </div>
             <div>
               <h3>Past Papers:</h3>
-              <table border="1">
+              <table border="1" align="center">
                 <tr>
                   <td><h4>Row</h4></td>
                   <td><h4>Deadline</h4></td>

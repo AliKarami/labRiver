@@ -107,6 +107,72 @@
       <% } %>
     </div>
   </div>
+  <div class="window">
+    <h2>Proposal Freezing:</h2>
+    <table border="1" align="center">
+      <tr>
+        <td>studentRef</td>
+        <td>ProposalState</td>
+        <td>Switch State</td>
+      </tr>
+      <% for (var i=0,len=proposals.length;i<len;i++) { %>
+      <tr>
+        <td><%= proposals[i].author %></td>
+        <td><%= proposals[i].freeze?'Freeze':'Free' %></td>
+        <td>
+          <form action="">
+            <input type="hidden" value="<%=proposals[i].author%>">
+            <input type="submit" value="Switch">
+          </form>
+        </td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+  <div class="window">
+    <h2>Thesis Freezing:</h2>
+    <table border="1" align="center">
+      <tr>
+        <td>studentRef</td>
+        <td>ThesisState</td>
+        <td>Switch State</td>
+      </tr>
+      <% for (var i=0,len=theses.length;i<len;i++) { %>
+      <tr>
+        <td><%= theses[i].author %></td>
+        <td><%= theses[i].freeze?'Freeze':'Free' %></td>
+        <td>
+          <form action="">
+            <input type="hidden" value="<%=theses[i].author%>">
+            <input type="submit" value="Switch">
+          </form>
+        </td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+  <div class="window">
+    <h2>Report Assignee:</h2>
+    <table border="1" align="center">
+      <tr>
+        <td>student Num.</td>
+        <td>Reporting State</td>
+        <td>Switch State</td>
+      </tr>
+      <% for (var i=0,len=students.length;i<len;i++) { %>
+      <tr>
+        <td><%= students[i].studentNumber %></td>
+        <td><%= students[i].weeklyReporter?'Reporting':'Not Reporting' %></td>
+        <td>
+          <form action="">
+            <input type="hidden" value="<%=students[i].id%>">
+            <input type="submit" value="Switch">
+          </form>
+        </td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
   <form id="logouter" method="post" action="logout">
     <input type="submit" value="Logout">
   </form>
