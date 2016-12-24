@@ -3,77 +3,119 @@
   <title><%=typeof title == 'undefined' ? 'Login' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
 </head>
-<body>
-<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1></div>
-  <div class="boxed">
-    <h2>Login:</h2>
-    <form id="loginFrom" method="post" action="login">
-      <table align="center">
-        <tr>
-          <td>Email:</td>
-          <td> <input name="email" type="email"></td>
-        </tr>
-        <tr>
-          <td>password:</td>
-          <td><input name="password" type="password"></td>
-        </tr>
-      </table>
-      <input type="submit" value="Login">
-    </form>
-  </div>
-  <div class="boxed">
-    <h2>Signup:</h2>
-    <form id="signupFrom" method="post" action="signup">
-      <table align="center">
-        <tr>
-          <td>Email:</td>
-          <td><input name="email" type="email"> </td>
-        </tr>
-        <tr>
-          <td>Password:</td>
-          <td><input name="password" type="password"> </td>
-        </tr>
-        <tr>
-          <td>First Name:</td>
-          <td><input name="firstname" type="text"> </td>
-        </tr>
-        <tr>
-          <td>Last Name:</td>
-          <td> <input name="lastname" type="text"> </td>
-        </tr>
-        <tr>
-          <td>Student Number:</td>
-          <td><input name="studentNumber" type="text"></td>
-        </tr>
-        <tr>
-          <td>Nickname:</td>
-          <td><input name="nickname" type="text"></td>
-        </tr>
-        <tr>
-          <td>Gender:</td>
-          <td><input type="radio" name="gender" value="m" checked> Male
-            <input type="radio" name="gender" value="f"> Female</td>
-        </tr>
-        <tr>
-          <td>Entering Year:</td>
-          <td><input name="enteringYear" type="number"></td>
-        </tr>
-        <tr>
-          <td>Field of Study:</td>
-          <td><input name="fieldOfStudy" type="text"></td>
-        </tr>
-        <tr>
-          <td>Orientation:</td>
-          <td><input name="orientation" type="text"></td>
-        </tr>
-        <tr>
-          <td>Degree:</td>
-          <td><input type="radio" name="degree" value="bachelor" checked> Bachelor
-            <input type="radio" name="degree" value="master"> Master
-            <input type="radio" name="degree" value="phd"> PhD</td>
-        </tr>
-      </table>
-      <input type="submit" value="Signup">
-    </form>
-  </div>
+<body unresolved>
+<template id="t" is="dom-bind">
+  <app-drawer-layout fullbleed>
+    <app-drawer id="drawer" swipe-open>
+      drawer content
+    </app-drawer>
+    <app-header-layout fullbleed>
+      <app-header fixed effects="parallax-background">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          <div main-title>LabRiver</div>
+        </app-toolbar>
+        <style is="custom-style">
+          .link {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-center);
+          }
+        </style>
+
+        <paper-tabs selected={{selectedTab}}>
+          <paper-tab>
+            Login
+          </paper-tab>
+          <paper-tab>
+            Signup
+          </paper-tab>
+        </paper-tabs>
+      </app-header>
+      <iron-pages selected={{selectedTab}}>
+        <section>
+          <div class="boxed">
+            <h2>Login:</h2>
+            <form id="loginForm" method="post" action="login">
+              <table align="center">
+                <tr>
+                  <paper-input name="email" label="Email" type="email"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="password" label="Password" type="password"></paper-input>
+                </tr>
+              </table>
+              <paper-button class="custom green" raised onclick="submitForm('loginForm')">Login</paper-button>
+            </form>
+          </div>
+        </section>
+        <section>
+          <div class="boxed">
+            <h2>Signup:</h2>
+            <form id="signupForm" method="post" action="signup">
+              <table align="center">
+                <tr>
+                  <paper-input name="email" label="Email" type="email"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="password" label="Password" type="password"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="firstname" label="First Name" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="lastname" label="Last Name" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="studentNumber" label="Student Number" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="nickname" label="Nickname" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-radio-group selected="{{gender}}">
+                    <paper-radio-button name="m">Male</paper-radio-button>
+                    <paper-radio-button name="f">Female</paper-radio-button>
+                  </paper-radio-group>
+                  <input type="hidden" name="gender" value="{{gender}}">
+                </tr>
+                <tr>
+                  <paper-input name="enteringYear" label="Entering Year" type="number"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="fieldOfStudy" label="Field of Study" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="orientation" label="Orientation" type="text"></paper-input>
+                </tr>
+                <tr>
+                  <paper-radio-group selected="{{degree}}">
+                    <paper-radio-button name="bachelor">Bachelor</paper-radio-button>
+                    <paper-radio-button name="master">Master</paper-radio-button>
+                    <paper-radio-button name="phd">PhD</paper-radio-button>
+                  </paper-radio-group>
+                  <input type="hidden" name="degree" value="{{degree}}">
+                </tr>
+              </table>
+              <paper-button class="custom green" raised onclick="submitForm('signupForm')">Signup</paper-button>
+            </form>
+          </div>
+        </section>
+      </iron-pages>
+    </app-header-layout>
+  </app-drawer-layout>
+
+</template>
+<script>
+  var t = document.querySelector('#t');
+  t.selectedTab=0;
+
+  function submitForm(id) {
+    document.getElementById(id).submit();
+  };
+
+  function drawer() {
+    var drawer = document.getElementById('drawer');
+    drawer.toggle();
+  };
+</script>
 </body>
