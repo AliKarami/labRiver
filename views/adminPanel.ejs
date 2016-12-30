@@ -2,179 +2,274 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Admin Panel' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery-3.1.1.min.js"></script>
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery.blockUI.js"></script>
-  <script type="text/javascript">
-    $.blockUI.defaults.applyPlatformOpacityRules = false;
-    $(document).ready(function() {
-      $('div.blocked').block({ message: null });
-    });
-  </script>
+  <style is="custom-style">
+    .disabled {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      color: darkgrey;
+      text-decoration: none;
+    }
+    app-drawer {
+      --app-drawer-width: 280px;
+      --app-drawer-content-container: {
+        background-color: lavender;
+      }
+    }
+    paper-menu {
+      background-color: inherit;
+    }
+    paper-item {
+      --paper-item-selected: {
+        background: skyblue;
+        font-weight: bold;
+      };
+    }
+  </style>
 </head>
 <body>
-<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1></div>
-<div class="boxed">
-  <div class="window blocked">
-    <h2>Supervisor Management:</h2>
-    <form method="post" action="/admin/setSupervisor" class="part">
-      Enter Nicknames:
-      <table align="center">
-        <tr>
-          <td> <input name="who" type="text"></td>
-        </tr>
-        <tr>
-          <td>is Supervisor of</td>
-        </tr>
-        <tr>
-          <td><input name="whom" type="text"></td>
-        </tr>
-      </table>
-      <input type="submit" value="set Supervisor">
-    </form>
-  </div>
-  <div class="window blocked">
-    <h2>Calendar Editor:</h2>
-
-  </div>
-  <div class="window">
-    <h2>Notification Center:</h2>
-    <form method="post" action="/admin/broadcastNotification" class="part">
-      <table align="center">
-        <tr>
-          <td>notification Category:</td>
-          <td> <input name="cat" type="text"></td>
-        </tr>
-        <tr>
-          <td>notification Title:</td>
-          <td><input name="title" type="text"></td>
-        </tr>
-        <tr>
-          <td>notification Link:</td>
-          <td><input name="link" type="url"></td>
-        </tr>
-      </table>
-      <input type="submit" value="Broadcast">
-    </form>
-    <form method="post" action="/admin/makeNotification" class="part">
-      <table align="center">
-        <tr>
-          <td>target Nickname:</td>
-          <td> <input name="nickname" type="text"></td>
-        </tr>
-        <tr>
-          <td>notification Category:</td>
-          <td> <input name="cat" type="text"></td>
-        </tr>
-        <tr>
-          <td>notification Title:</td>
-          <td><input name="title" type="text"></td>
-        </tr>
-        <tr>
-          <td>notification Link:</td>
-          <td><input name="link" type="url"></td>
-        </tr>
-      </table>
-      <input type="submit" value="Make Notification">
-    </form>
-  </div>
-  <div class="window">
-    <h2>User Registration Approval:</h2>
-    <div align="center">
-      <% if (users.length>0) { %>
-      <table align="center" class="part">
-        <% for (var i=0;i<users.length;i++)  { %>
-        <tr>
-          <td><h3>Name</h3></td>
-          <td><h3>Email</h3></td>
-          <td><h3>Approve</h3></td>
-        </tr>
-        <tr>
-          <td><%= users[i].fname %> <%=users[i].lname %></td>
-          <td><%= users[i].email  %></td>
-          <td>
-            <form method="post" action="/admin/approve">
-              <input name="uid" type="hidden" value="<%= users[i].id %>">
-              <input type="submit" value="Approve">
+<template id="t" is="dom-bind">
+  <app-drawer-layout fullbleed>
+    <app-drawer id="drawer" swipe-open>
+      <paper-header-panel>
+        <paper-toolbar class="tall">
+          <image-mask class="middle" title="profile picture" shape="squircle" size="80" src="<%=avatarFd%>"></image-mask>
+          <paper-icon-button src="/images/logo.png"></paper-icon-button>
+          <span class="title">LabRiver</span>
+          <span style="padding: 8px" class="middle">Welcome <%=user.fname%> <%=user.lname%>! <br><br> @<%=user.nickname%></span>
+        </paper-toolbar>
+        <paper-menu selected="4">
+          <paper-item disabled>Profile</paper-item>
+          <a href="/panel" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Panel</paper-item>
+          </a>
+          <a href="/panel/workflow" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item <%=(user.nickname=='admin'?'disabled':'')%>>Workflow</paper-item>
+          </a>
+          <a href="/panel/resources" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Resources</paper-item>
+          </a>
+          <paper-item>
+            <a href="/admin" tabindex="-1" style="text-decoration: inherit; color: inherit">Admin Panel</a>
+          </paper-item>
+          <a href="/logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Logout</paper-item>
+          </a>
+        </paper-menu>
+      </paper-header-panel>
+    </app-drawer>
+    <app-header-layout fullbleed>
+      <app-header fixed effects="parallax-background">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </app-toolbar>
+        <paper-tabs selected={{selectedTab}} scrollable fit-container>
+          <paper-tab disabled>
+            Supervisor Management
+          </paper-tab>
+          <paper-tab disabled>
+            Calendar Editor
+          </paper-tab>
+          <paper-tab>
+            Notification Center
+          </paper-tab>
+          <paper-tab>
+            User Registration Approval
+          </paper-tab>
+          <paper-tab>
+            Proposal Freezing
+          </paper-tab>
+          <paper-tab>
+            Thesis Freezing
+          </paper-tab>
+          <paper-tab>
+            Report Assignee
+          </paper-tab>
+        </paper-tabs>
+      </app-header>
+      <iron-pages selected={{selectedTab}}>
+        <section>
+          <div class="window">
+            <h2>Supervisor Management:</h2>
+            <form method="post" action="/admin/setSupervisor" class="part">
+              Enter Nicknames:
+              <table align="center">
+                <tr>
+                  <td> <input name="who" type="text"></td>
+                </tr>
+                <tr>
+                  <td>is Supervisor of</td>
+                </tr>
+                <tr>
+                  <td><input name="whom" type="text"></td>
+                </tr>
+              </table>
+              <input type="submit" value="set Supervisor">
             </form>
-          </td>
-        </tr>
-        <% } %>
-      </table>
-      <% } else { %>
-      <div class="part" align="center">
-        No User For Approval :)
-      </div>
-      <% } %>
-    </div>
-  </div>
-  <div class="window">
-    <h2>Proposal Freezing:</h2>
-    <table border="1" align="center">
-      <tr>
-        <td>studentRef</td>
-        <td>ProposalState</td>
-        <td>Switch State</td>
-      </tr>
-      <% for (var i=0,len=proposals.length;i<len;i++) { %>
-      <tr>
-        <td><%= proposals[i].author %></td>
-        <td><%= proposals[i].freeze?'Freeze':'Free' %></td>
-        <td>
-          <form action="">
-            <input type="hidden" value="<%=proposals[i].author%>">
-            <input type="submit" value="Switch">
-          </form>
-        </td>
-      </tr>
-      <% } %>
-    </table>
-  </div>
-  <div class="window">
-    <h2>Thesis Freezing:</h2>
-    <table border="1" align="center">
-      <tr>
-        <td>studentRef</td>
-        <td>ThesisState</td>
-        <td>Switch State</td>
-      </tr>
-      <% for (var i=0,len=theses.length;i<len;i++) { %>
-      <tr>
-        <td><%= theses[i].author %></td>
-        <td><%= theses[i].freeze?'Freeze':'Free' %></td>
-        <td>
-          <form action="">
-            <input type="hidden" value="<%=theses[i].author%>">
-            <input type="submit" value="Switch">
-          </form>
-        </td>
-      </tr>
-      <% } %>
-    </table>
-  </div>
-  <div class="window">
-    <h2>Report Assignee:</h2>
-    <table border="1" align="center">
-      <tr>
-        <td>student Num.</td>
-        <td>Reporting State</td>
-        <td>Switch State</td>
-      </tr>
-      <% for (var i=0,len=students.length;i<len;i++) { %>
-      <tr>
-        <td><%= students[i].studentNumber %></td>
-        <td><%= students[i].weeklyReporter?'Reporting':'Not Reporting' %></td>
-        <td>
-          <form action="">
-            <input type="hidden" value="<%=students[i].id%>">
-            <input type="submit" value="Switch">
-          </form>
-        </td>
-      </tr>
-      <% } %>
-    </table>
-  </div>
-  <form id="logouter" method="post" action="logout">
-    <input type="submit" value="Logout">
-  </form>
-</div>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>Calendar Editor:</h2>
+
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>Notification Center:</h2>
+            <form method="post" action="/admin/broadcastNotification" class="part">
+              <table align="center">
+                <tr>
+                  <td>notification Category:</td>
+                  <td> <input name="cat" type="text"></td>
+                </tr>
+                <tr>
+                  <td>notification Title:</td>
+                  <td><input name="title" type="text"></td>
+                </tr>
+                <tr>
+                  <td>notification Link:</td>
+                  <td><input name="link" type="url"></td>
+                </tr>
+              </table>
+              <input type="submit" value="Broadcast">
+            </form>
+            <form method="post" action="/admin/makeNotification" class="part">
+              <table align="center">
+                <tr>
+                  <td>target Nickname:</td>
+                  <td> <input name="nickname" type="text"></td>
+                </tr>
+                <tr>
+                  <td>notification Category:</td>
+                  <td> <input name="cat" type="text"></td>
+                </tr>
+                <tr>
+                  <td>notification Title:</td>
+                  <td><input name="title" type="text"></td>
+                </tr>
+                <tr>
+                  <td>notification Link:</td>
+                  <td><input name="link" type="url"></td>
+                </tr>
+              </table>
+              <input type="submit" value="Make Notification">
+            </form>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>User Registration Approval:</h2>
+            <div align="center">
+              <% if (users.length>0) { %>
+              <table align="center" class="part">
+                <% for (var i=0;i<users.length;i++)  { %>
+                <tr>
+                  <td><h3>Name</h3></td>
+                  <td><h3>Email</h3></td>
+                  <td><h3>Approve</h3></td>
+                </tr>
+                <tr>
+                  <td><%= users[i].fname %> <%=users[i].lname %></td>
+                  <td><%= users[i].email  %></td>
+                  <td>
+                    <form method="post" action="/admin/approve">
+                      <input name="uid" type="hidden" value="<%= users[i].id %>">
+                      <input type="submit" value="Approve">
+                    </form>
+                  </td>
+                </tr>
+                <% } %>
+              </table>
+              <% } else { %>
+              <div class="part" align="center">
+                No User For Approval :)
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>Proposal Freezing:</h2>
+            <table border="1" align="center">
+              <tr>
+                <td>studentRef</td>
+                <td>ProposalState</td>
+                <td>Switch State</td>
+              </tr>
+              <% for (var i=0,len=proposals.length;i<len;i++) { %>
+              <tr>
+                <td><%= proposals[i].author %></td>
+                <td><%= proposals[i].freeze?'Freeze':'Free' %></td>
+                <td>
+                  <form action="">
+                    <input type="hidden" value="<%=proposals[i].author%>">
+                    <input type="submit" value="Switch">
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+            </table>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>Thesis Freezing:</h2>
+            <table border="1" align="center">
+              <tr>
+                <td>studentRef</td>
+                <td>ThesisState</td>
+                <td>Switch State</td>
+              </tr>
+              <% for (var i=0,len=theses.length;i<len;i++) { %>
+              <tr>
+                <td><%= theses[i].author %></td>
+                <td><%= theses[i].freeze?'Freeze':'Free' %></td>
+                <td>
+                  <form action="">
+                    <input type="hidden" value="<%=theses[i].author%>">
+                    <input type="submit" value="Switch">
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+            </table>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <h2>Report Assignee:</h2>
+            <table border="1" align="center">
+              <tr>
+                <td>student Num.</td>
+                <td>Reporting State</td>
+                <td>Switch State</td>
+              </tr>
+              <% for (var i=0,len=students.length;i<len;i++) { %>
+              <tr>
+                <td><%= students[i].studentNumber %></td>
+                <td><%= students[i].weeklyReporter?'Reporting':'Not Reporting' %></td>
+                <td>
+                  <form action="">
+                    <input type="hidden" value="<%=students[i].id%>">
+                    <input type="submit" value="Switch">
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+            </table>
+          </div>
+        </section>
+      </iron-pages>
+    </app-header-layout>
+  </app-drawer-layout>
+</template>
+<script>
+  var t = document.querySelector('#t');
+  t.selectedTab = 0;
+
+  function submitForm(id) {
+    document.getElementById(id).submit();
+  };
+</script>
 </body>

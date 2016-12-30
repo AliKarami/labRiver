@@ -117,9 +117,13 @@ module.exports = {
       })
     });
 
-    Promise.all([pastPapers,pastReports,student,proposal,thesis]).then(function (data) {
+    var avatar = FileService.getAvatar(req.user.id);
+
+    Promise.all([pastPapers,pastReports,student,proposal,thesis,avatar]).then(function (data) {
       var ret = {
         title: "WorkFlow",
+        user: req.user,
+        avatarFd: data[5],
         moment: moment,
         pastPapers: data[0],
         pastReports: data[1],
@@ -131,11 +135,17 @@ module.exports = {
     })
   },
   resources : function (req, res) {
-    var ret = {
-      title: "Resources",
-      moment: moment
-    };
-    return res.view("resources", ret);
+    var avatar = FileService.getAvatar(req.user.id);
+
+    Promise.all([avatar]).then(function (data) {
+      var ret = {
+        title: "Resources",
+        user: req.user,
+        avatarFd: data[0],
+        moment: moment
+      };
+      return res.view("resources", ret);
+    });
   }
 };
 

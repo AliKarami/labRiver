@@ -2,35 +2,81 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Workflow' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery-3.1.1.min.js"></script>
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery.blockUI.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $.blockUI.defaults.applyPlatformOpacityRules = false;
-      $('div.blocked').block({ message: null });
-    });
-  </script>
+  <style is="custom-style">
+    .disabled {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      color: darkgrey;
+      text-decoration: none;
+    }
+    app-drawer {
+      --app-drawer-width: 280px;
+      --app-drawer-content-container: {
+        background-color: lavender;
+      }
+    }
+    paper-menu {
+      background-color: inherit;
+    }
+    paper-item {
+      --paper-item-selected: {
+        background: skyblue;
+        font-weight: bold;
+      };
+    }
+  </style>
 </head>
 <body>
-  <div class="colmask">
-    <div class="header">
-      <div class="boxed">
-        Welcome! Today is <%= moment().format('jYYYY/jM/jD') %>
-      </div>
-    </div>
-    <div class="colmid">
-      <div class="colin">
-        <div class="colleft">
-          <div class="col1<%= proposalAvailable?'':' blocked' %>">
-            <h2>Proposal:</h2>
-            <div>
-              <form action="\proposal\edit">
-                <input type="submit" value="Edit">
-              </form>
-            </div>
-          </div>
-          <div class="col2">
-            <h2>Paper:</h2>
+<template id="t" is="dom-bind">
+  <app-drawer-layout fullbleed>
+    <app-drawer id="drawer" swipe-open>
+      <paper-header-panel>
+        <paper-toolbar class="tall">
+          <image-mask class="middle" title="profile picture" shape="squircle" size="80" src="<%=avatarFd%>"></image-mask>
+          <paper-icon-button src="/images/logo.png"></paper-icon-button>
+          <span class="title">LabRiver</span>
+          <span style="padding: 8px" class="middle">Welcome <%=user.fname%> <%=user.lname%>! <br><br> @<%=user.nickname%></span>
+        </paper-toolbar>
+        <paper-menu selected="2">
+          <paper-item disabled>Profile</paper-item>
+          <a href="/panel" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Panel</paper-item>
+          </a>
+          <paper-item>
+            <a href="/panel/workflow" tabindex="-1" style="text-decoration: inherit; color: inherit">Workflow</a>
+          </paper-item>
+          <a href="/panel/resources" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Resources</paper-item>
+          </a>
+          <a href="/logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Logout</paper-item>
+          </a>
+        </paper-menu>
+      </paper-header-panel>
+    </app-drawer>
+    <app-header-layout fullbleed>
+      <app-header fixed effects="parallax-background">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </app-toolbar>
+        <paper-tabs selected={{selectedTab}} scrollable fit-container>
+          <paper-tab>
+            Paper
+          </paper-tab>
+          <paper-tab>
+            Proposal
+          </paper-tab>
+          <paper-tab disabled>
+            <span class="disabled">Thesis</span>
+          </paper-tab>
+          <paper-tab>
+            Report
+          </paper-tab>
+        </paper-tabs>
+      </app-header>
+      <iron-pages selected={{selectedTab}}>
+        <section>
+          <div class="boxed">
             <div>
               <form action="\paper\new">
                 <input type="submit" value="Add New">
@@ -52,16 +98,23 @@
               </table>
             </div>
           </div>
-          <div class="col3<%= thesisAvailable?'':' blocked' %>">
-            <h2>Thesis:</h2>
-            <div>
-              <form action="\thesis\edit">
-                <input type="submit" value="Edit">
-              </form>
-            </div>
+        </section>
+        <section>
+          <div class="boxed">
+            <form action="\proposal\edit">
+              <input type="submit" value="Edit">
+            </form>
           </div>
-          <div class="col4<%= reportAvailable?'':' blocked' %>">
-            <h2>Report:</h2>
+        </section>
+        <section>
+          <div class="boxed">
+            <form action="\thesis\edit">
+              <input type="submit" value="Edit">
+            </form>
+          </div>
+        </section>
+        <section>
+          <div class="boxed">
             <div>
               <form action="\report\edit">
                 <input type="submit" value="Submit Week Report">
@@ -83,18 +136,17 @@
               </table>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="footer">
-      <div class="boxed" style="padding: 5px">
-        <form action="\panel">
-          <input type="submit" value="Panel">
-        </form>
-        <form action="\logout">
-          <input type="submit" value="Logout">
-        </form>
-      </div>
-    </div>
-  </div>
+        </section>
+      </iron-pages>
+    </app-header-layout>
+  </app-drawer-layout>
+</template>
+<script>
+  var t = document.querySelector('#t');
+  t.selectedTab = 0;
+
+  function submitForm(id) {
+    document.getElementById(id).submit();
+  };
+</script>
 </body>

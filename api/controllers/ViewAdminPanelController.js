@@ -36,10 +36,13 @@ module.exports = {
         resolve(students);
       })
     });
+    var avatar = FileService.getAvatar(req.user.id);
 
-    Promise.all([unapprovedUsers,Proposals,Theses,Students]).then(function (data) {
+    Promise.all([unapprovedUsers,Proposals,Theses,Students,avatar]).then(function (data) {
       var ret = {
         title: 'Admin',
+        user: req.user,
+        avatarFd: data[4],
         users: data[0],
         proposals: data[1],
         theses: data[2],

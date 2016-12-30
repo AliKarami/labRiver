@@ -3,12 +3,6 @@
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
   <style is="custom-style">
-    .link {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
-      color: inherit;
-      text-decoration: none;
-    }
     .disabled {
       @apply(--layout-horizontal);
       @apply(--layout-center-center);
@@ -24,6 +18,12 @@
     paper-menu {
       background-color: inherit;
     }
+    paper-item {
+      --paper-item-selected: {
+        background: skyblue;
+        font-weight: bold;
+      };
+    }
   </style>
 </head>
 <body unresolved>
@@ -37,9 +37,23 @@
           <span class="title">LabRiver</span>
           <span style="padding: 8px" class="middle">Welcome <%=user.fname%> <%=user.lname%>! <br><br> @<%=user.nickname%></span>
         </paper-toolbar>
-        <paper-menu>
+        <paper-menu selected="1">
           <paper-item disabled>Profile</paper-item>
-          <a href="logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
+          <paper-item>
+            <a href="/panel" tabindex="-1" style="text-decoration: inherit; color: inherit">Panel</a>
+          </paper-item>
+          <a href="/panel/workflow" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item <%=(user.nickname=='admin'?'disabled':'')%>>Workflow</paper-item>
+          </a>
+          <a href="/panel/resources" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Resources</paper-item>
+          </a>
+          <% if (user.nickname=='admin') { %>
+          <a href="/admin" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Admin Panel</paper-item>
+          </a>
+          <% } %>
+          <a href="/logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
             <paper-item>Logout</paper-item>
           </a>
         </paper-menu>
@@ -59,12 +73,6 @@
           </paper-tab>
           <paper-tab>
             Calendar
-          </paper-tab>
-          <paper-tab link <%=user.nickname=='admin'?'disabled':''%>>
-            <a href="/panel/workflow" class="<%=user.nickname=='admin'?'disabled':'link'%>" tabindex="-1">Workflow</a>
-          </paper-tab>
-          <paper-tab link>
-            <a href="/panel/resources" class="link" tabindex="-1">Resources</a>
           </paper-tab>
           <paper-tab disabled>
             <span class="disabled">Supervisor</span>
@@ -111,8 +119,6 @@
             Today: <%= date %> <br>
           </div>
         </section>
-        <section></section>
-        <section></section>
         <section>
           <div class="window">
             <% if (supervisorOf!=undefined) { %>
