@@ -28,6 +28,9 @@
       background-color: red;
       color: white;
     }
+    paper-card {
+      min-width: 400px;
+    }
   </style>
 </head>
 <body unresolved>
@@ -103,21 +106,21 @@
             </a>
           </div>
         </section>
-        <section>
+        <section id="notifications">
           <div class="window">
-            <div class="notifbox" align="center">
-              <ul>
-                <%for(var i=0;i<notifs.length;i++) {%>
-                <li>
-                  <a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a>
-                  <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span>
-                  <span style="margin-left:2em">
-              <img src="/images/delete.png" alt="delete"/>
-            </span>
-                </li>
-                <% } %>
-              </ul>
-            </div>
+            <%for(var i=0;i<notifs.length;i++) {%>
+            <a href="<%= notifs[i].link %>">
+              <paper-card heading="<%= notifs[i].title %>"  alt="<%= notifs[i].title %>" elevation="3">
+                <div class="card-content">
+                    <%= notifs[i].description %>
+                </div>
+                <div class="card-actions">
+                  <%= moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm') %>
+                </div>
+              </paper-card>
+            </a>
+            <br> <br>
+            <% } %>
           </div>
         </section>
         <section>

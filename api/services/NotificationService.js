@@ -22,6 +22,7 @@ module.exports = {
             user.notifications.push({
               cat: notif.cat,
               title: notif.title,
+              description: notif.description,
               link: notif.link,
               date: notif.date
             });
@@ -43,6 +44,7 @@ module.exports = {
             user.notifications.push({
               cat: notif.cat,
               title: notif.title,
+              description: notif.description,
               link: notif.link,
               date: notif.date
             });
