@@ -67,7 +67,6 @@ module.exports = {
     })
   },
   uploadAvatar: function (req, res) {
-
     req.file('avatar').upload({
       // don't allow the total upload size to exceed ~6MB
       maxBytes: 6000000,

@@ -12,98 +12,118 @@
       font-size: x-large;
       color: white;
     }
+    #middleBox {
+      position: fixed;
+      left: 0px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      overflow-y: auto;
+      background-color: #dbe4fe;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+      scroll-behavior: smooth;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #toast {
+      --paper-toast-background-color: red;
+      --paper-toast-color: white;
+    }
   </style>
 </head>
 <body unresolved>
 <template id="t" is="dom-bind">
-  <app-header-layout fullbleed>
-    <app-header fixed effects="parallax-background">
-      <app-toolbar>
-        <paper-icon-button src="/images/logo.png"></paper-icon-button>
-        <div class="main-title">LabRiver</div>
-      </app-toolbar>
-      <paper-tabs selected={{selectedTab}} scrollable fit-container>
-        <paper-tab>
-          Login
-        </paper-tab>
-        <paper-tab>
-          Signup
-        </paper-tab>
-      </paper-tabs>
-    </app-header>
-    <iron-pages selected={{selectedTab}}>
-      <section>
-        <div class="boxed">
-          <h2>Login:</h2>
-          <form id="loginForm" method="post" action="login">
-            <table align="center">
-              <tr>
-                <paper-input name="email" label="Email" type="email"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="password" label="Password" type="password"></paper-input>
-              </tr>
-            </table>
-            <paper-button class="custom green" raised onclick="submitForm('loginForm')">Login</paper-button>
-          </form>
-        </div>
-      </section>
-      <section>
-        <div class="boxed">
-          <h2>Signup:</h2>
-          <form id="signupForm" method="post" action="signup">
-            <table align="center">
-              <tr>
-                <paper-input name="email" label="Email" type="email"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="password" label="Password" type="password"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="firstname" label="First Name" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="lastname" label="Last Name" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="studentNumber" label="Student Number" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="nickname" label="Nickname" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-radio-group selected="{{gender}}">
-                  <paper-radio-button name="m">Male</paper-radio-button>
-                  <paper-radio-button name="f">Female</paper-radio-button>
-                </paper-radio-group>
-                <input type="hidden" name="gender" value="{{gender}}">
-              </tr>
-              <tr>
-                <paper-input name="enteringYear" label="Entering Year" type="number"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="fieldOfStudy" label="Field of Study" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-input name="orientation" label="Orientation" type="text"></paper-input>
-              </tr>
-              <tr>
-                <paper-radio-group selected="{{degree}}">
-                  <paper-radio-button name="bachelor">Bachelor</paper-radio-button>
-                  <paper-radio-button name="master">Master</paper-radio-button>
-                  <paper-radio-button name="phd">PhD</paper-radio-button>
-                </paper-radio-group>
-                <input type="hidden" name="degree" value="{{degree}}">
-              </tr>
-            </table>
-            <paper-button class="custom green" raised onclick="submitForm('signupForm')">Signup</paper-button>
-          </form>
-        </div>
-      </section>
-    </iron-pages>
-  </app-header-layout>
-
+  <app-box id="middleBox" style="max-width: 500px" effects="parallax-background">
+    <app-header-layout fullbleed>
+      <app-header fixed effects="parallax-background">
+        <app-toolbar>
+          <paper-icon-button src="/images/logo.png"></paper-icon-button>
+          <div class="main-title">LabRiver</div>
+        </app-toolbar>
+        <paper-tabs selected={{selectedTab}} scrollable fit-container>
+          <paper-tab>
+            Login
+          </paper-tab>
+          <paper-tab>
+            Signup
+          </paper-tab>
+        </paper-tabs>
+      </app-header>
+      <iron-pages selected={{selectedTab}}>
+        <section>
+          <div class="boxed">
+            <h2>Login:</h2>
+            <form id="loginForm" method="post" action="login">
+              <table align="center">
+                <tr>
+                  <paper-input name="email" label="Email" type="email" required></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="password" label="Password" type="password" required>
+                  </paper-input>
+                </tr>
+              </table>
+              <paper-button class="green" raised onclick="submitForm('loginForm')">Login</paper-button>
+            </form>
+          </div>
+        </section>
+        <section>
+          <div class="boxed">
+            <h2>Signup:</h2>
+            <form id="signupForm" method="post" action="signup">
+              <table align="center">
+                <tr>
+                  <paper-input name="email" label="Email" type="email"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="password" label="Password" type="password"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="firstname" label="First Name" type="text" auto-validate pattern="[a-zA-Z]*" error-message="Letters only!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="lastname" label="Last Name" type="text" auto-validate pattern="[a-zA-Z]*" error-message="Letters only!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="studentNumber" label="Student Number" type="text" auto-validate pattern="[0-9]{9}" error-message="Not valid Student Number!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="nickname" label="Nickname" type="text" char-counter maxlength="10" auto-validate pattern="[a-zA-Z0-9_.-]*" error-message="Not valid Nickname!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-radio-group selected="{{gender}}">
+                    <paper-radio-button name="m">Male</paper-radio-button>
+                    <paper-radio-button name="f">Female</paper-radio-button>
+                  </paper-radio-group>
+                  <input type="hidden" name="gender" value="{{gender}}">
+                </tr>
+                <tr>
+                  <paper-input name="enteringYear" label="Entering Year" type="number"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="fieldOfStudy" label="Field of Study" type="text" auto-validate pattern="[a-zA-Z]*" error-message="Only letters!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-input name="orientation" label="Orientation" type="text" auto-validate pattern="[a-zA-Z]*" error-message="Only letters!"></paper-input>
+                </tr>
+                <tr>
+                  <paper-radio-group selected="{{degree}}">
+                    <paper-radio-button name="bachelor">Bachelor</paper-radio-button>
+                    <paper-radio-button name="master">Master</paper-radio-button>
+                    <paper-radio-button name="phd">PhD</paper-radio-button>
+                  </paper-radio-group>
+                  <input type="hidden" name="degree" value="{{degree}}">
+                </tr>
+              </table>
+              <paper-button class="green" raised onclick="submitForm('signupForm')">Signup</paper-button>
+            </form>
+          </div>
+        </section>
+      </iron-pages>
+    </app-header-layout>
+  </app-box>
 </template>
+<paper-toast id="toast" class="fit-bottom" text="Invalid form data!"></paper-toast>
 <script>
   var t = document.querySelector('#t');
   t.selectedTab = 0;

@@ -15,6 +15,19 @@
         font-weight: bold;
       };
     }
+    vaadin-upload {
+      --primary-color: #396;
+      --vaadin-upload-file-row: {
+        background-color: rgba(183, 225, 205, 0.24);
+        padding: 5px;
+        border-radius: 4px 4px 0px 0px;
+      };
+    }
+    paper-button.red {
+      text-decoration: none;
+      background-color: red;
+      color: white;
+    }
   </style>
 </head>
 <body unresolved>
@@ -71,21 +84,23 @@
         </paper-tabs>
       </app-header>
       <iron-pages selected={{selectedTab}}>
-        <section>
+        <section id="profile">
           <div class="window">
-            Upload Avatar: <br>
-            <form class="part"
-                  enctype="multipart/form-data"
-                  action="/user/uploadAvatar"
-                  method="post">
-              <input type="file" name="avatar" />
-              <input type="submit" value="upload"/>
-            </form>
-            <form class="part" action="/user/removeAvatar">
-              <input type="submit" value="Remove">
-            </form>
             Current Avatar: <br>
-            <img src="<%=avatarFd%>" alt="Avatar" width="200px" height="200px">
+            <iron-image alt="Profile Picture" src="<%=avatarFd%>" height="300" width="300" sizing="cover"></iron-image> <br> <br>
+            Upload Avatar: <br>
+            <vaadin-upload id="avatarUpload" target="/user/uploadAvatar" accept="image/*"></vaadin-upload> <br>
+            <script>
+              document.querySelector('vaadin-upload#avatarUpload').addEventListener('upload-before', function(event) {
+                event.detail.file.formDataName = 'avatar';
+              });
+              document.querySelector('vaadin-upload#avatarUpload').addEventListener('upload-success', function(event) {
+                location.reload();
+              });
+            </script>
+            <a href="/user/removeAvatar">
+              <paper-button raised class="red">Remove Avatar</paper-button>
+            </a>
           </div>
         </section>
         <section>
@@ -125,11 +140,10 @@
   </app-drawer-layout>
 </template>
 <script>
-  var t = document.querySelector('#t');
-  t.selectedTab = 0;
-
-  function submitForm(id) {
-    document.getElementById(id).submit();
-  };
+    var t = document.querySelector('#t');
+    t.selectedTab = 0;
+    function submitForm(id) {
+      document.getElementById(id).submit();
+    };
 </script>
 </body>

@@ -1,6 +1,9 @@
 body {
   background-color: #eeeeee;
 }
+a {
+  text-decoration: none;
+}
 .disabled {
   @apply(--layout-horizontal);
   @apply(--layout-center-center);
