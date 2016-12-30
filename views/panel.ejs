@@ -1,3 +1,4 @@
+  <link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker.html">
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
   <style is="custom-style">
     app-drawer {
@@ -123,7 +124,7 @@
             <% } %>
           </div>
         </section>
-        <section>
+        <section id="calendar">
           <div class="window">
             Today: <%= date %> <br>
           </div>
