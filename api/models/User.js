@@ -50,7 +50,7 @@ module.exports = {
     },
     avatarUrl : {
       type : 'string',
-      defaultsTo : require('util').format('%s/images/avatars/%s', sails.config.appUrl, 'default.png')
+      defaultsTo : require('util').format('/images/avatars/%s', 'default.png')
     },
     gender : {
       type : 'string',
