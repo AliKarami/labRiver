@@ -1,7 +1,13 @@
 body {
   background-color: #eeeeee;
 }
-
+.disabled {
+  @apply(--layout-horizontal);
+  @apply(--layout-center-center);
+  color: darkgrey;
+  text-decoration: none;
+  opacity: 0.25;
+}
 .boxed {
   align: center;
   width: auto;
@@ -50,11 +56,18 @@ body {
 /*////////////////////////////////////////////////////////////////////polymer*/
 
 app-header {
-  background-color: blue;
+  background-color: #3F51B5;
   --app-header-background-rear-layer: {
     /* The header is blue when condensed */
     background-color: red;
   };
+}
+paper-tab {
+  color: white;
+}
+
+paper-tabs {
+
 }
 
 /*////////////////////////////////////////////////////////////////////*/

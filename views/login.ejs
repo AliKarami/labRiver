@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<head>
   <title><%= typeof title == 'undefined' ? 'Login' : title %></title>
-  <link rel="stylesheet" href="<%= sails.config.appUrl %>/styles/style.css">
   <style is="custom-style">
     .link {
       @apply(--layout-horizontal);
@@ -9,6 +6,10 @@
     }
     paper-button.green {
       background-color: mediumseagreen;
+      color: white;
+    }
+    .main-title {
+      font-size: x-large;
       color: white;
     }
   </style>
@@ -19,7 +20,7 @@
     <app-header fixed effects="parallax-background">
       <app-toolbar>
         <paper-icon-button src="/images/logo.png"></paper-icon-button>
-        <div main-title>LabRiver</div>
+        <div class="main-title">LabRiver</div>
       </app-toolbar>
       <paper-tabs selected={{selectedTab}} scrollable fit-container>
         <paper-tab>

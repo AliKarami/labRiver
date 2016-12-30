@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<head>
   <title><%=typeof title == 'undefined' ? 'Admin Panel' : title%></title>
-  <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
   <style is="custom-style">
-    .disabled {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
-      color: darkgrey;
-      text-decoration: none;
-    }
     app-drawer {
       --app-drawer-width: 280px;
       --app-drawer-content-container: {
@@ -64,10 +55,10 @@
         </app-toolbar>
         <paper-tabs selected={{selectedTab}} scrollable fit-container>
           <paper-tab disabled>
-            Supervisor Management
+            <span class="disabled">Supervisor Management</span>
           </paper-tab>
           <paper-tab disabled>
-            Calendar Editor
+            <span class="disabled">Calendar Editor</span>
           </paper-tab>
           <paper-tab>
             Notification Center
@@ -266,7 +257,7 @@
 </template>
 <script>
   var t = document.querySelector('#t');
-  t.selectedTab = 0;
+  t.selectedTab = 2;
 
   function submitForm(id) {
     document.getElementById(id).submit();

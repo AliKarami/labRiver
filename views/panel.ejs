@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<head>
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
-  <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
   <style is="custom-style">
-    .disabled {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
-      color: darkgrey;
-      text-decoration: none;
-    }
     app-drawer {
       --app-drawer-width: 280px;
       --app-drawer-content-container: {

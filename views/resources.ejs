@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<head>
   <title><%=typeof title == 'undefined' ? 'Resources' : title%></title>
-  <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
   <style is="custom-style">
-    .disabled {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
-      color: darkgrey;
-      text-decoration: none;
-    }
     app-drawer {
       --app-drawer-width: 280px;
       --app-drawer-content-container: {
@@ -48,6 +39,11 @@
           <paper-item>
             <a href="/panel/resources" tabindex="-1" style="text-decoration: inherit; color: inherit">Resources</a>
           </paper-item>
+          <% if (user.nickname=='admin') { %>
+          <a href="/admin" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Admin Panel</paper-item>
+          </a>
+          <% } %>
           <a href="/logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
             <paper-item>Logout</paper-item>
           </a>
