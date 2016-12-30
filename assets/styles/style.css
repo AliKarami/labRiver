@@ -1,20 +1,25 @@
+body {
+  background-color: #eeeeee;
+}
+
 .boxed {
   align: center;
   width: auto;
-  border: 5px solid green;
+  /*border: 5px solid green;*/
   padding: 5px;
   margin: 5px;
   text-align: center;
-  background-color: seashell;
+  background-color: transparent;
 }
 .window{
   align: center;
   width: auto;
-  border: 2px solid salmon;
+  /*border: 2px solid salmon;*/
   padding: 2px;
   margin: 2px;
   text-align: center;
   background-color: #eeeeee;
+  box-sizing: border-box;
 }
 
 .part {
@@ -37,6 +42,10 @@
   text-align: center;
   background-color: floralwhite;
 }
+.tit {
+  font-size: x-large;
+  padding: 10px;
+}
 
 /*////////////////////////////////////////////////////////////////////polymer*/
 
@@ -46,45 +55,6 @@ app-header {
     /* The header is blue when condensed */
     background-color: red;
   };
-}
-paper-button.custom {
-  --paper-button-ink-color: var(--paper-pink-a200);
-  /* These could also be individually defined for each of the
-    specific css classes, but we'll just do it once as an example */
-  --paper-button-flat-keyboard-focus: {
-    background-color: var(--paper-pink-a200);
-    color: white !important;
-  };
-  --paper-button-raised-keyboard-focus: {
-    background-color: var(--paper-pink-a200) !important;
-    color: white !important;
-  };
-}
-paper-button.custom:hover {
-  background-color: var(--paper-indigo-100);
-}
-paper-button.pink {
-  color: var(--paper-pink-a200);
-
-}
-paper-button.indigo {
-  background-color: indigo;
-  color: white;
-  --paper-button-raised-keyboard-focus: {
-    background-color: pink !important;
-    color: white !important;
-  };
-}
-
-paper-button.green {
-  background-color: mediumseagreen;
-  color: white;
-}
-paper-button.green[active] {
-  background-color: var(--paper-red-500);
-}
-paper-button.disabled {
-  color: white;
 }
 
 /*////////////////////////////////////////////////////////////////////*/

@@ -2,79 +2,137 @@
 <head>
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
   <link rel="stylesheet" href="<%=sails.config.appUrl%>/styles/style.css">
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery-3.1.1.min.js"></script>
-  <script src="<%=sails.config.appUrl%>/js/dependencies/jquery.blockUI.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $.blockUI.defaults.applyPlatformOpacityRules = false;
-      $('div.blocked').block({ message: null });
-    });
-  </script>
+  <style is="custom-style">
+    .link {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      color: inherit;
+      text-decoration: none;
+    }
+    .disabled {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      color: darkgrey;
+      text-decoration: none;
+    }
+    app-drawer {
+      --app-drawer-width: 280px;
+      --app-drawer-content-container: {
+        background-color: lavender;
+      }
+    }
+    paper-menu {
+      background-color: inherit;
+    }
+  </style>
 </head>
-<body>
-<div class="boxed"><img src="/images/icon.png"><h1>LabRiver</h1> Welcome <%=user.fname%> <%=user.lname%>! <br> @<%=user.nickname%></div>
-  <div class="boxed">
-    <div class="window">
-      <h2>profile:</h2>
-      Upload Avatar: <br>
-      <form class="part"
-            enctype="multipart/form-data"
-            action="/user/uploadAvatar"
-            method="post">
-        <input type="file" name="avatar" />
-        <input type="submit" value="upload"/>
-      </form>
-      <form class="part" action="/user/removeAvatar">
-        <input type="submit" value="Remove">
-      </form>
-      Current Avatar: <br>
-      <img src="<%=avatarFd%>" alt="Avatar" width="200px" height="200px">
-    </div>
-    <div class="window">
-      <h2>notifications:</h2>
-      <div class="notifbox" align="center">
-        <ul>
-          <%for(var i=0;i<notifs.length;i++) {%>
-          <li>
-            <a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a>
-            <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span>
-            <span style="margin-left:2em">
+<body unresolved>
+<template id="t" is="dom-bind">
+  <app-drawer-layout fullbleed>
+    <app-drawer id="drawer" swipe-open>
+      <paper-header-panel>
+        <paper-toolbar class="tall">
+          <image-mask class="middle" title="profile picture" shape="squircle" size="80" src="<%=avatarFd%>"></image-mask>
+          <paper-icon-button src="/images/logo.png"></paper-icon-button>
+          <span class="title">LabRiver</span>
+          <span style="padding: 8px" class="middle">Welcome <%=user.fname%> <%=user.lname%>! <br><br> @<%=user.nickname%></span>
+        </paper-toolbar>
+        <paper-menu>
+          <paper-item disabled>Profile</paper-item>
+          <a href="logout" tabindex="-1" style="text-decoration: inherit; color: inherit">
+            <paper-item>Logout</paper-item>
+          </a>
+        </paper-menu>
+      </paper-header-panel>
+    </app-drawer>
+    <app-header-layout fullbleed>
+      <app-header fixed effects="parallax-background">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </app-toolbar>
+        <paper-tabs selected={{selectedTab}} scrollable fit-container>
+          <paper-tab>
+            Profile
+          </paper-tab>
+          <paper-tab>
+            Notifications
+          </paper-tab>
+          <paper-tab>
+            Calendar
+          </paper-tab>
+          <paper-tab link <%=user.nickname=='admin'?'disabled':''%>>
+            <a href="/panel/workflow" class="<%=user.nickname=='admin'?'disabled':'link'%>" tabindex="-1">Workflow</a>
+          </paper-tab>
+          <paper-tab link>
+            <a href="/panel/resources" class="link" tabindex="-1">Resources</a>
+          </paper-tab>
+          <paper-tab disabled>
+            <span class="disabled">Supervisor</span>
+          </paper-tab>
+        </paper-tabs>
+      </app-header>
+      <iron-pages selected={{selectedTab}}>
+        <section>
+          <div class="window">
+            Upload Avatar: <br>
+            <form class="part"
+                  enctype="multipart/form-data"
+                  action="/user/uploadAvatar"
+                  method="post">
+              <input type="file" name="avatar" />
+              <input type="submit" value="upload"/>
+            </form>
+            <form class="part" action="/user/removeAvatar">
+              <input type="submit" value="Remove">
+            </form>
+            Current Avatar: <br>
+            <img src="<%=avatarFd%>" alt="Avatar" width="200px" height="200px">
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            <div class="notifbox" align="center">
+              <ul>
+                <%for(var i=0;i<notifs.length;i++) {%>
+                <li>
+                  <a href="<%= notifs[i].link %>"><%= notifs[i].title %> </a>
+                  <span style="margin-left:2em"><%=  moment(Date.parse(notifs[i].date)).format('jYYYY/jM/jD h:mm')%></span>
+                  <span style="margin-left:2em">
               <img src="/images/delete.png" alt="delete"/>
             </span>
-          </li>
-          <% } %>
-        </ul>
-      </div>
-    </div>
-    <div class="window">
-      <h2>calendar:</h2>
-      Today: <%= date %> <br>
-    </div>
-    <div class="window">
-      <h2>workflow:</h2>
-      <form action="/Panel/workflow">
-        <input type="submit" value="Workflow" />
-      </form>
-    </div>
-    <div class="window blocked">
-      <h2>resources:</h2>
-      <form action="/panel/resources">
-        <input type="submit" value="Resources" />
-      </form>
-    </div>
-    <div class="window blocked">
-      <h2>supervisor:</h2>
-      <% if (supervisorOf!=undefined) { %>
-        you are supervisor of: <%= supervisorOf %>
-      <% } %>
-      <% if (supervisor!=undefined) { %>
-        your supervisor is: <%= supervisor %>
-      <% } %>
-    </div>
-    <div class="notifbox" style="padding: 5px">
-      <form action="logout">
-        <input type="submit" value="Logout">
-      </form>
-    </div>
-  </div>
+                </li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="window">
+            Today: <%= date %> <br>
+          </div>
+        </section>
+        <section></section>
+        <section></section>
+        <section>
+          <div class="window">
+            <% if (supervisorOf!=undefined) { %>
+            you are supervisor of: <%= supervisorOf %>
+            <% } %>
+            <% if (supervisor!=undefined) { %>
+            your supervisor is: <%= supervisor %>
+            <% } %>
+          </div>
+        </section>
+      </iron-pages>
+    </app-header-layout>
+  </app-drawer-layout>
+</template>
+<script>
+  var t = document.querySelector('#t');
+  t.selectedTab = 0;
+
+  function submitForm(id) {
+    document.getElementById(id).submit();
+  };
+</script>
 </body>
