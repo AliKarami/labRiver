@@ -46,6 +46,12 @@ module.exports = {
         })
       })
   },
+  editPage : function (req, res) {
+    var ret = {
+      title : 'Edit Paper'
+    }
+    return res.view("Resources/Paper",ret)
+  },
   edit : function (req, res) {
     var ret = {
       title : 'Edit Paper'

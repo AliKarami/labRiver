@@ -1,4 +1,6 @@
-  <link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker.html">
+  <!--<link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker.html">-->
+  <link rel="import" href="/bower_components/fullcalendar-calendar/fullcalendar-theme.html">
+  <link rel="import" href="/bower_components/fullcalendar-calendar/fullcalendar-calendar.html">
   <title><%=typeof title == 'undefined' ? 'Panel' : title%></title>
   <style is="custom-style">
     app-drawer {
@@ -126,6 +128,7 @@
         </section>
         <section id="calendar">
           <div class="window">
+            <fullcalendar-calendar></fullcalendar-calendar>
             Today: <%= date %> <br>
           </div>
         </section>

@@ -15,6 +15,19 @@
         font-weight: bold;
       };
     }
+    paper-button.blue {
+      text-decoration: none;
+      background-color: blue;
+      color: white;
+    }
+    paper-button.pdf {
+      text-decoration: none;
+      background-color: darkred;
+      color: white;
+    }
+    paper-datatable {
+      --paper-datatable-row-hover-color: #d6d6d6;
+    }
   </style>
 </head>
 <body>
@@ -57,79 +70,136 @@
         </app-toolbar>
         <paper-tabs selected={{selectedTab}} scrollable fit-container>
           <paper-tab>
-            Paper
+            My Papers
           </paper-tab>
           <paper-tab>
-            Proposal
-          </paper-tab>
-          <paper-tab disabled>
-            <span class="disabled">Thesis</span>
+            My Proposal
           </paper-tab>
           <paper-tab>
-            Report
+            My Thesis
+          </paper-tab>
+          <paper-tab>
+            My Reports
           </paper-tab>
         </paper-tabs>
       </app-header>
       <iron-pages selected={{selectedTab}}>
-        <section>
+        <section id="myPapers">
           <div class="boxed">
             <div>
-              <form action="\paper\new">
-                <input type="submit" value="Add New">
-              </form>
-            </div>
-            <div>
               <h3>Past Papers:</h3>
-              <table border="1" align="center">
-                <tr>
-                  <td><h4>Row</h4></td>
-                  <td><h4>Title</h4></td>
-                </tr>
-                <% for (var i=0,len=pastPapers.length;i<len;i++) { %>
-                <tr>
-                  <td> <%= i+1 %> </td>
-                  <td> <%= pastPapers[i].title %> </td>
-                </tr>
-                <% } %>
-              </table>
+              <paper-datatable id="pastPapers" data='<%= JSON.stringify(pastPapers) %>'>
+                <paper-datatable-column header="Title" property="title" align="center" sortable></paper-datatable-column>
+                <paper-datatable-column header="Authors" property="authors" align="center" sortable></paper-datatable-column>
+                <paper-datatable-column header="Year" property="year" align="center" sortable></paper-datatable-column>
+                <paper-datatable-column header="last Touch" property="lastTouch" align="center" sortable></paper-datatable-column>
+              </paper-datatable>
+              <br>
+              <a href="\paper\new">
+                <paper-button raised class="blue">Add New</paper-button>
+              </a>
             </div>
           </div>
         </section>
-        <section>
+        <section id="myProposal">
           <div class="boxed">
-            <form action="\proposal\edit">
-              <input type="submit" value="Edit">
+            <form id="editProposal" method="post" action="\proposal\edit">
+              <paper-input name="title" label="Title" type="text" value="<%= proposal.title %>"></paper-input>
+              <paper-textarea name="abstract" label="Abstract" value="<%= proposal.abstract %>"></paper-textarea>
+              <paper-input name="tags" label="Tags" type="text" value="<%= proposal.tags?proposal.tags.join():'' %>"></paper-input>
+              <a href="/proposal/file/<%=proposal.document%>">
+                <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+              </a>
+              <% if (!proposal.freeze) { %>
+              <vaadin-upload id="proposalPdfUpload" target="/proposal/uploadPdf" accept=".pdf"></vaadin-upload> <br>
+              <script>
+                document.querySelector('vaadin-upload#proposalPdfUpload').addEventListener('upload-before', function(event) {
+                  event.detail.file.formDataName = 'document';
+                });
+                document.querySelector('vaadin-upload#proposalPdfUpload').addEventListener('upload-success', function(event) {
+                	submitForm('editProposal');
+                  window.location = '/panel/workflow?tab=1'
+                });
+              </script>
+              <paper-button class="blue" raised onclick="submitForm('editProposal')">Submit</paper-button>
+              <% } else { %>
+              <br><br>
+              <paper-card elevation=5>
+                <div class="card-content">
+                  Your Proposal is Freezed.
+                </div>
+              </paper-card>
+              <% } %>
             </form>
           </div>
         </section>
-        <section>
+        <section id="myThesis">
           <div class="boxed">
-            <form action="\thesis\edit">
-              <input type="submit" value="Edit">
+            <form id="editThesis" method="post" action="\thesis\edit">
+              <paper-input name="title" label="Title" type="text" value="<%= thesis.title %>"></paper-input>
+              <paper-textarea name="abstract" label="Abstract" value="<%= thesis.abstract %>"></paper-textarea>
+              <paper-input name="tags" label="Tags" type="text" value="<%= thesis.tags?thesis.tags.join():'' %>"></paper-input>
+              <a href="/thesis/file/<%=thesis.document%>">
+                <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+              </a>
+              <% if (!thesis.freeze) { %>
+              <vaadin-upload id="thesisPdfUpload" target="/thesis/uploadPdf" accept=".pdf"></vaadin-upload> <br>
+              <script>
+                document.querySelector('vaadin-upload#thesisPdfUpload').addEventListener('upload-before', function(event) {
+                  event.detail.file.formDataName = 'document';
+                });
+                document.querySelector('vaadin-upload#thesisPdfUpload').addEventListener('upload-success', function(event) {
+                  submitForm('editThesis');
+                  window.location = '/panel/workflow?tab=2'
+                });
+              </script>
+              <paper-button class="blue" raised onclick="submitForm('editThesis')">Submit</paper-button>
+              <% } else { %>
+              <br><br>
+              <paper-card elevation=5>
+                <div class="card-content">
+                  Your Thesis is Freezed.
+                </div>
+              </paper-card>
+              <% } %>
             </form>
           </div>
         </section>
-        <section>
+        <section id="myReports">
           <div class="boxed">
             <div>
-              <form action="\report\edit">
-                <input type="submit" value="Submit Week Report">
-              </form>
-            </div>
-            <div>
-              <h3>Past Papers:</h3>
-              <table border="1" align="center">
-                <tr>
-                  <td><h4>Row</h4></td>
-                  <td><h4>Deadline</h4></td>
-                </tr>
-                <% for (var i=0,len=pastReports.length;i<len;i++) { %>
-                <tr>
-                  <td> <%= i+1 %> </td>
-                  <td> <%= moment(pastReports[i].deadline).format('jYYYY/jM/jD') %> </td>
-                </tr>
-                <% } %>
-              </table>
+              <h3>Past Reports:</h3>
+              <paper-datatable id="pastReports" data='<%= JSON.stringify(pastReports) %>'>
+                <paper-datatable-column header="Deadline" property="persianDeadline" sortable align="center"></paper-datatable-column>
+              </paper-datatable>
+              <br>
+              <% if (reportAvailable) { %>
+              <paper-button raised class="blue" onclick="reportDialog.open()">Submit/Edit Weekly Report</paper-button>
+              <paper-dialog id="reportDialog">
+                <div>
+                  <div class="boxed" align="center">
+                    <form id="newReport" method="post" action="\report\edit">
+                      <paper-textarea name="body" label="Body" value="<%= currentReport.body %>"></paper-textarea>
+                      <paper-input name="relatedPapers" label="Related Papers" type="text"></paper-input>
+                      <paper-input name="tags" label="Tags" type="text" value="<%= currentReport.tags?currentReport.tags.join():'' %>"></paper-input>
+                      <a href="/report/file/<%=currentReport.document%>">
+                        <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+                      </a>
+                      <vaadin-upload id="reportPdfUpload" target="/report/uploadPdf/<%=currentReport.id%>" accept=".pdf"></vaadin-upload> <br>
+                      <script>
+                        document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {
+                          event.detail.file.formDataName = 'document';
+                        });
+                        document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-success', function(event) {
+                          submitForm('newReport');
+                          window.location = '/panel/workflow?tab=3'
+                        });
+                      </script>
+                      <paper-button class="blue" raised onclick="submitForm('newReport')">Submit</paper-button>
+                    </form>
+                </div>
+              </paper-dialog>
+              <% } %>
             </div>
           </div>
         </section>
@@ -139,10 +209,19 @@
 </template>
 <script>
   var t = document.querySelector('#t');
-  t.selectedTab = 0;
+  t.selectedTab = <%= selectedTab %>;
 
   function submitForm(id) {
     document.getElementById(id).submit();
   };
+
+  $(document).ready(function () {
+    document.querySelector('#pastPapers').addEventListener('row-tap',function (data) {
+      window.location = '/paper/edit/' + data.detail.item.id;
+    });
+    document.querySelector('#pastReports').addEventListener('row-tap',function (data) {
+      window.location = '/report/' + data.detail.item.id;
+    });
+  })
 </script>
 </body>

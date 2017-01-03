@@ -8,6 +8,12 @@
 var moment = require('moment-jalaali');
 moment.loadPersian();
 
+function addPersianDate(array,sourceField,destinationField) {
+  for (let i=0,len=array.length;i<len;i++){
+    array[i][destinationField]=moment(array[i][sourceField]).format('jYYYY/jMM/jDD - hh:mm');
+  }
+}
+
 function viewSupervisor(uid) {
   return new Promise(function (resolve, reject) {
     User.findOne(uid).exec(function (err, user) {
@@ -48,7 +54,6 @@ module.exports = {
     rest : false
   },
   main : function (req,res) {
-
     FileService.getAvatar(req.user.id).then(function (avUrl) {
       NotificationService.getNotifs(req.user.id).then(function (notifs) {
         viewSupervisor(req.user.id).then(function (supers) {
@@ -83,6 +88,15 @@ module.exports = {
         })
       })
     });
+    var proposal = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Proposal.findOne({author:student.id}).exec(function (err, proposal) {
+          if (err) reject(err);
+          resolve(proposal);
+        })
+      })
+    });
     var pastReports = new Promise(function (resolve, reject) {
       StudentService.studentByUser(req.user.id).exec(function (err, student) {
         if (err) reject(err);
@@ -98,15 +112,6 @@ module.exports = {
         resolve(student);
       })
     });
-    var proposal = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Proposal.findOne({author:student.id}).exec(function (err, proposal) {
-          if (err) reject(err);
-          resolve(proposal);
-        })
-      })
-    });
     var thesis = new Promise(function (resolve, reject) {
       StudentService.studentByUser(req.user.id).exec(function (err, student) {
         if (err) reject(err);
@@ -117,19 +122,34 @@ module.exports = {
       })
     });
 
+    var currentReport = new Promise(function (resolve, reject) {
+      StudentService.studentByUser(req.user.id).exec(function (err, student) {
+        if (err) reject(err);
+        Report.findOne(student.currentReport).exec(function (err, currentReport) {
+          if (err) reject(err);
+          else resolve(currentReport)
+        });
+      })
+    })
+
     var avatar = FileService.getAvatar(req.user.id);
 
-    Promise.all([pastPapers,pastReports,student,proposal,thesis,avatar]).then(function (data) {
+    Promise.all([pastPapers,pastReports,student,proposal,thesis,avatar,currentReport]).then(function (data) {
+      addPersianDate(data[0],'updatedAt','lastTouch');
+      addPersianDate(data[1],'deadline','persianDeadline');
+      data[1].splice(-1,1);
       var ret = {
         title: "WorkFlow",
         user: req.user,
         avatarFd: data[5],
         moment: moment,
         pastPapers: data[0],
+        proposal: data[3],
+        thesis: data[4],
         pastReports: data[1],
         reportAvailable: data[2].weeklyReporter,
-        proposalAvailable: !data[3].freeze,
-        thesisAvailable: !data[4].freeze
+        currentReport: data[6],
+        selectedTab: req.query.tab?req.query.tab:0
       };
       return res.view("workflow", ret);
     })

@@ -4,6 +4,8 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+  font-weight: 500;
+  height: auto !important;
 }
 .disabled {
   @apply(--layout-horizontal);
