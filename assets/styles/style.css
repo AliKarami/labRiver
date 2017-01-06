@@ -72,8 +72,10 @@ paper-tab {
   color: white;
 }
 
-paper-tabs {
-
+paper-dialog {
+  top: 10%;
+  min-width: 80%;
+  padding: 0%;
 }
 
 /*////////////////////////////////////////////////////////////////////*/

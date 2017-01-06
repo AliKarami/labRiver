@@ -54,7 +54,7 @@ module.exports = {
     },
     gender : {
       type : 'string',
-      enum : ['m','f'],
+      enum : ['m','f','u'],
       required : true
     },
     notifications : {

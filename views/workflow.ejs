@@ -28,6 +28,10 @@
     paper-datatable {
       --paper-datatable-row-hover-color: #d6d6d6;
     }
+    paper-dialog > paper-toolbar {
+      margin: 0;
+      padding: 0;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +121,7 @@
                   event.detail.file.formDataName = 'document';
                 });
                 document.querySelector('vaadin-upload#proposalPdfUpload').addEventListener('upload-success', function(event) {
-                	submitForm('editProposal');
+                  submitForm('editProposal');
                   window.location = '/panel/workflow?tab=1'
                 });
               </script>
@@ -174,31 +178,7 @@
               </paper-datatable>
               <br>
               <% if (reportAvailable) { %>
-              <paper-button raised class="blue" onclick="reportDialog.open()">Submit/Edit Weekly Report</paper-button>
-              <paper-dialog id="reportDialog">
-                <div>
-                  <div class="boxed" align="center">
-                    <form id="newReport" method="post" action="\report\edit">
-                      <paper-textarea name="body" label="Body" value="<%= currentReport.body %>"></paper-textarea>
-                      <paper-input name="relatedPapers" label="Related Papers" type="text"></paper-input>
-                      <paper-input name="tags" label="Tags" type="text" value="<%= currentReport.tags?currentReport.tags.join():'' %>"></paper-input>
-                      <a href="/report/file/<%=currentReport.document%>">
-                        <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
-                      </a>
-                      <vaadin-upload id="reportPdfUpload" target="/report/uploadPdf/<%=currentReport.id%>" accept=".pdf"></vaadin-upload> <br>
-                      <script>
-                        document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {
-                          event.detail.file.formDataName = 'document';
-                        });
-                        document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-success', function(event) {
-                          submitForm('newReport');
-                          window.location = '/panel/workflow?tab=3'
-                        });
-                      </script>
-                      <paper-button class="blue" raised onclick="submitForm('newReport')">Submit</paper-button>
-                    </form>
-                </div>
-              </paper-dialog>
+              <paper-button raised class="blue" onclick="newReportDialog.open()">Submit/Edit Weekly Report</paper-button>
               <% } %>
             </div>
           </div>
@@ -206,6 +186,48 @@
       </iron-pages>
     </app-header-layout>
   </app-drawer-layout>
+  <paper-dialog id="newReportDialog" with-backdrop>
+      <paper-toolbar>
+        <div class="title">Weekly Report Submission</div>
+      </paper-toolbar>
+    <paper-dialog-scrollable>
+      <div align="center">
+        <form id="newReport" method="post" action="\report\edit\<%=currentReport.id%>">
+          <paper-textarea name="body" label="Body" value="<%= currentReport.body %>"></paper-textarea>
+          <paper-input name="relatedPapers" label="Related Papers" type="text"></paper-input>
+          <paper-input name="tags" label="Tags" type="text" value="<%= currentReport.tags?currentReport.tags.join():'' %>"></paper-input>
+          <a href="/report/file/<%=currentReport.document%>">
+            <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+          </a>
+          <vaadin-upload id="reportPdfUpload" target="/report/uploadPdf/<%=currentReport.id%>" accept=".pdf"></vaadin-upload> <br>
+          <script>
+            document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {
+              event.detail.file.formDataName = 'document';
+            });
+            document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-success', function(event) {
+              submitForm('newReport');
+              window.location = '/panel/workflow?tab=3'
+            });
+          </script>
+        </form>
+      </div>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button class="blue" raised onclick="submitForm('newReport')">Submit</paper-button>
+    </div>
+  </paper-dialog>
+  <paper-dialog id="viewReportDialog" with-backdrop>
+    <paper-toolbar>
+      <div class="title" id="viewReportTitle">View Report</div>
+    </paper-toolbar>
+    <paper-dialog-scrollable>
+      <div>
+        <h3>Body:</h3> <p id="viewReportBody"></p>
+        <h3>Related Papers:</h3> <p id="viewReportRelatedPapers"></p>
+        <h3>Tags:</h3> <p id="viewReportTags"></p>
+      </div>
+    </paper-dialog-scrollable>
+  </paper-dialog>
 </template>
 <script>
   var t = document.querySelector('#t');
@@ -220,7 +242,11 @@
       window.location = '/paper/edit/' + data.detail.item.id;
     });
     document.querySelector('#pastReports').addEventListener('row-tap',function (data) {
-      window.location = '/report/' + data.detail.item.id;
+      document.getElementById('viewReportTitle').innerHTML = 'View Report ' + data.detail.item.persianDeadline.slice(2,10);
+      document.getElementById('viewReportBody').innerHTML = data.detail.item.body?data.detail.item.body:'-';
+      document.getElementById('viewReportRelatedPapers').innerHTML = 'Blah Blah, and science';
+      document.getElementById('viewReportTags').innerHTML = data.detail.item.tags.length>0?data.detail.item.tags.join():'-';
+      viewReportDialog.open();
     });
   })
 </script>

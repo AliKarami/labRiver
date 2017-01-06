@@ -20,6 +20,25 @@ module.exports.bootstrap = function(cb) {
     schedule.scheduleJob(item.interval,sails.config.crontab[item.method]);
   });
 
+  sails.on('lifted',function () {
+    User.findOrCreate({
+      nickname:'admin'
+    },{
+      approved:true,
+      fname: 'admin',
+      lname: 'admin',
+      nickname: 'admin',
+      email: 'admin@admin.com',
+      password: '123456',
+      gender: 'u',
+      avatarFd: require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png',
+      avatarUrl: require('util').format('/images/avatars/%s', 'default.png'),
+      notifications: []
+    }).catch(function (err) {
+      console.log('error:' + err);
+    })
+  })
+
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap! (otherwise your server will never lift, since it's waiting on the bootstrap)
   cb();
