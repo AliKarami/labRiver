@@ -11,6 +11,25 @@ module.exports = {
     shortcuts : false,
     rest : false
   },
+  uploadPdf: function (req,res) {
+    StudentService.studentByUser(req.user.id).exec(function (err, student) {
+      if (err) return Promise.reject(err);
+      return FileService.uploadFile(req,'paper','document').then(function (fileId) {
+        return Paper.update({author:student.id},{document: fileId})
+      }).then(function () {
+        res.send('successful');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    })
+  },
+  getFile: function (req,res) {
+    FileService.getFileUrl(req.params['id']).then(function (fileUrl) {
+      res.redirect(fileUrl);
+    }).catch(function (err) {
+      console.log(err);
+    })
+  },
   new: function (req, res) {
     var ret = {
       title : 'New Paper'

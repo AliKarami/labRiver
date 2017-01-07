@@ -25,6 +25,16 @@
       background-color: darkred;
       color: white;
     }
+    paper-button.sourcecode {
+      text-decoration: none;
+      background-color: #2e2e2e;
+      color: white;
+    }
+    paper-button.dataset {
+      text-decoration: none;
+      background-color: #0d7611;
+      color: white;
+    }
     paper-datatable {
       --paper-datatable-row-hover-color: #d6d6d6;
     }
@@ -225,6 +235,36 @@
         <h3>Body:</h3> <p id="viewReportBody"></p>
         <h3>Related Papers:</h3> <p id="viewReportRelatedPapers"></p>
         <h3>Tags:</h3> <p id="viewReportTags"></p>
+        <div align="center">
+          <a id="viewReportPdf" href="#">
+            <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+          </a>
+        </div>
+      </div>
+    </paper-dialog-scrollable>
+  </paper-dialog>
+  <paper-dialog id="viewPaperDialog" with-backdrop>
+    <paper-toolbar>
+      <div class="title" id="viewPaperTitle">View Paper</div>
+    </paper-toolbar>
+    <paper-dialog-scrollable>
+      <div>
+        <h3>Abstract:</h3> <p id="viewPaperAbstract"></p>
+        <h3>Authors:</h3> <p id="viewPaperAuthors"></p>
+        <h3>Type:</h3> <p id="viewPaperType"></p>
+        <h3>Tags:</h3> <p id="viewPaperTags"></p>
+        <h3>Year:</h3> <p id="viewPaperYear"></p>
+        <div align="center">
+          <a id="viewPaperPdf" href="#">
+            <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
+          </a>
+          <a id="viewPaperDataset" href="#">
+            <paper-button class="dataset" raised><iron-icon icon="line-weight"></iron-icon>Dataset</paper-button>
+          </a>
+          <a id="viewPaperSourceCode" href="#">
+            <paper-button class="sourcecode" raised><iron-icon icon="code"></iron-icon>Source Code</paper-button>
+          </a>
+        </div>
       </div>
     </paper-dialog-scrollable>
   </paper-dialog>
@@ -239,13 +279,43 @@
 
   $(document).ready(function () {
     document.querySelector('#pastPapers').addEventListener('row-tap',function (data) {
-      window.location = '/paper/edit/' + data.detail.item.id;
+      document.getElementById('viewPaperTitle').innerHTML = data.detail.item.title;
+      document.getElementById('viewPaperAbstract').innerHTML = data.detail.item.abstract?data.detail.item.abstract:'-';
+      document.getElementById('viewPaperAuthors').innerHTML = data.detail.item.authors.length>0?data.detail.item.authors.join():'-';
+      document.getElementById('viewPaperType').innerHTML = data.detail.item.type;
+      document.getElementById('viewPaperTags').innerHTML = data.detail.item.tags.length>0?data.detail.item.tags.join():'-';
+      document.getElementById('viewPaperYear').innerHTML = data.detail.item.year?data.detail.item.year:'-';
+      if (data.detail.item.document) {
+        $('#viewPaperPdf').show();
+        document.getElementById('viewPaperPdf').setAttribute('href','/paper/file/' + data.detail.item.document);
+      } else {
+        $('#viewPaperPdf').hide();
+      }
+      if (data.detail.item.dataset) {
+        $('#viewPaperDataset').show();
+        document.getElementById('viewPaperDataset').setAttribute('href','/paper/file/' + data.detail.item.dataset);
+      } else {
+        $('#viewPaperDataset').hide();
+      }
+      if (data.detail.item.sourceCode) {
+        $('#viewPaperSourceCode').show();
+        document.getElementById('viewPaperSourceCode').setAttribute('href','/paper/file/' + data.detail.item.sourceCode);
+      } else {
+        $('#viewPaperSourceCode').hide();
+      }
+      viewPaperDialog.open();
     });
     document.querySelector('#pastReports').addEventListener('row-tap',function (data) {
       document.getElementById('viewReportTitle').innerHTML = 'View Report ' + data.detail.item.persianDeadline.slice(2,10);
       document.getElementById('viewReportBody').innerHTML = data.detail.item.body?data.detail.item.body:'-';
       document.getElementById('viewReportRelatedPapers').innerHTML = 'Blah Blah, and science';
       document.getElementById('viewReportTags').innerHTML = data.detail.item.tags.length>0?data.detail.item.tags.join():'-';
+      if (data.detail.item.document) {
+        $('#viewReportPdf').show();
+        document.getElementById('viewReportPdf').setAttribute('href','/report/file/' + data.detail.item.document);
+      } else {
+        $('#viewReportPdf').hide();
+      }
       viewReportDialog.open();
     });
   })

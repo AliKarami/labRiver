@@ -55,6 +55,8 @@ module.exports.routes = {
   '/paper/:paperId'                   :   'PaperController.view',
   'get /paper/edit/:paperId'          :   'PaperController.editPage',
   'post /paper/edit/:paperId'         :   'PaperController.edit',
+  'post /paper/uploadPdf'             :   'PaperController.uploadPdf',
+  'get /paper/file/:id'               :   'PaperController.getFile',
   'post /proposal/edit'               :   'ProposalController.edit',
   'post /proposal/uploadPdf'          :   'ProposalController.uploadPdf',
   'get /proposal/file/:id'            :   'ProposalController.getFile',
