@@ -11,7 +11,12 @@ module.exports = {
     return new Promise(function (resolve,reject) {
       File.findOne(fid).exec(function (err, file) {
         if (err) reject(err);
-        else resolve(file.fileUrl);
+        else {
+          if (!!file)
+            resolve(file.fileUrl);
+          else
+            resolve('/404')
+        }
       })
     })
   },

@@ -109,9 +109,10 @@
                 <paper-datatable-column header="last Touch" property="lastTouch" align="center" sortable></paper-datatable-column>
               </paper-datatable>
               <br>
-              <a href="\paper\new">
-                <paper-button raised class="blue">Add New</paper-button>
-              </a>
+              <paper-button raised class="blue" onclick="newPaperDialog.open()">Add New</paper-button>
+              <!--<a href="\paper\new">-->
+                <!--<paper-button raised class="blue">Add New</paper-button>-->
+              <!--</a>-->
             </div>
           </div>
         </section>
@@ -242,6 +243,42 @@
         </div>
       </div>
     </paper-dialog-scrollable>
+  </paper-dialog>
+  <paper-dialog id="newPaperDialog" with-backdrop>
+    <paper-toolbar>
+      <div class="title">New Paper</div>
+    </paper-toolbar>
+    <paper-dialog-scrollable>
+      <div align="center">
+        <form id="newPaper" method="post" action="\paper\new\">
+          <paper-input name="title" label="Title" type="text"></paper-input>
+          <paper-textarea name="abstract" label="Abstract"></paper-textarea>
+          <paper-input name="authors" label="Authors" type="text"></paper-input>
+          <paper-radio-group selected="{{newPaperType}}">
+            <paper-radio-button name="submit">Submit</paper-radio-button>
+            <paper-radio-button name="conferenceAccepted">Conference Accepted</paper-radio-button>
+            <paper-radio-button name="journalAccepted">Journal Accepted</paper-radio-button>
+            <paper-radio-button name="published">Published</paper-radio-button>
+          </paper-radio-group>
+          <input type="hidden" name="type" value="{{newPaperType}}">
+          <paper-input name="tags" label="Tags" type="text"></paper-input>
+          <paper-input name="year" label="Year" type="number"></paper-input>
+          <!--<vaadin-upload id="paperPdfUpload" target="/paper/uploadPdf/< %=newPaper.id% >" accept=".pdf"></vaadin-upload> <br>-->
+          <!--<script>-->
+            <!--document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {-->
+              <!--event.detail.file.formDataName = 'document';-->
+            <!--});-->
+            <!--document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-success', function(event) {-->
+              <!--submitForm('newReport');-->
+              <!--window.location = '/panel/workflow?tab=3'-->
+            <!--});-->
+          <!--</script>-->
+        </form>
+      </div>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button class="blue" raised onclick="submitForm('newPaper')">Submit</paper-button>
+    </div>
   </paper-dialog>
   <paper-dialog id="viewPaperDialog" with-backdrop>
     <paper-toolbar>
