@@ -62,7 +62,8 @@ module.exports.connections = {
     port: 27017,
     // user: 'username', //optional
     // password: 'password', //optional
-    database: 'labRiver' //optional
+    database: 'labRiver', //optional
+    migrate: 'safe'
   }
   // ,
 
