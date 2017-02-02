@@ -250,7 +250,7 @@
     </paper-toolbar>
     <paper-dialog-scrollable>
       <div align="center">
-        <form id="newPaper" method="post" action="\paper\new\">
+        <form id="newPaper" method="post"  action="\paper\new\" enctype="multipart/form-data">
           <paper-input name="title" label="Title" type="text"></paper-input>
           <paper-textarea name="abstract" label="Abstract"></paper-textarea>
           <paper-input name="authors" label="Authors" type="text"></paper-input>
@@ -263,6 +263,30 @@
           <input type="hidden" name="type" value="{{newPaperType}}">
           <paper-input name="tags" label="Tags" type="text"></paper-input>
           <paper-input name="year" label="Year" type="number"></paper-input>
+          <table style="border: 1px solid #dfdfdf; background-color: #f8f8f8">
+            <tr>
+              <th>
+                PDF
+              </th>
+              <th>
+                Dataset
+              </th>
+              <th>
+                Source
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <input name="document" type="file" accept="application/pdf"/>
+              </td>
+              <td>
+                <input name="dataset" type="file"/>
+              </td>
+              <td>
+                <input name="source" type="file"/>
+              </td>
+            </tr>
+          </table>
           <!--<vaadin-upload id="paperPdfUpload" target="/paper/uploadPdf/< %=newPaper.id% >" accept=".pdf"></vaadin-upload> <br>-->
           <!--<script>-->
             <!--document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {-->

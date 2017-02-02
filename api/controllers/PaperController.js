@@ -30,16 +30,16 @@ module.exports = {
       console.log(err);
     })
   },
-  new: function (req, res) {
+   new: function (req, res) {
     var ret = {
       title : 'New Paper'
     }
     return res.view("Resources/Paper",ret)
   },
   createNew : function (req, res) {
-    var documentId = FileService.uploadFile(req,'paper', 'document');
-    var datasetId = FileService.uploadFile(req,'paper', 'dataset');
-    var sourceCodeId = FileService.uploadFile(req,'paper', 'source');
+    let documentId = FileService.uploadFile(req,'paper', 'document');
+    let datasetId = FileService.uploadFile(req,'paper', 'dataset');
+    let sourceCodeId = FileService.uploadFile(req,'paper', 'source');
     var student = new Promise(function (resolve, reject) {
       StudentService.studentByUser(req.user.id).exec(function (err, student) {
         if (err) reject(err);

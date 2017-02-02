@@ -46,7 +46,9 @@ module.exports = {
               reject('creating File:'+err);
               return reject(err);
             }
-            else resolve(file.id);
+            else {
+              resolve(file.id);
+            }
           });
         } else {
           resolve(undefined);
