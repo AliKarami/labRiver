@@ -6,12 +6,38 @@
  */
 
 var moment = require('moment-jalaali');
+var _ = require('underscore');
 moment.loadPersian();
 
 function addPersianDate(array,sourceField,destinationField) {
   for (let i=0,len=array.length;i<len;i++){
     array[i][destinationField]=moment(array[i][sourceField]).format('jYYYY/jMM/jDD - hh:mm');
   }
+}
+function addAuthor(arr) {
+  return arr.then(function (array) {
+    let promises = [];
+    for (let i=0,len=array.length;i<len;i++) {
+      promises.push(new Promise(function (resolve, reject) {
+        User.findOne(array[i].author.userRef).exec(function (err, user) {
+          if (err) reject(err);
+          else {
+            array[i].author.fname=user.fname;
+            array[i].author.lname=user.lname;
+            array[i].author.nickname=user.nickname;
+            array[i].author.avatarUrl=user.avatarUrl;
+            array[i].authorFullname=user.fname + ' ' + user.lname
+            resolve(user);
+          }
+        })
+      }));
+    }
+    return Promise.all(promises).then(function () {
+      return array;
+    });
+  }).catch(function (err) {
+    throw Error(err);
+  })
 }
 
 function viewSupervisor(uid) {
@@ -155,14 +181,23 @@ module.exports = {
     })
   },
   resources : function (req, res) {
-    var avatar = FileService.getAvatar(req.user.id);
+    let avatar = FileService.getAvatar(req.user.id);
+    let Papers = addAuthor(Paper.find({}).populate('author'));
+    let Proposals = addAuthor(Proposal.find({}).populate('author'));
+    let Theses = addAuthor(Thesis.find({}).populate('author'));
+    let Reports = addAuthor(Report.find({}).populate('author'));
 
-    Promise.all([avatar]).then(function (data) {
+    Promise.all([avatar,Papers,Proposals,Theses,Reports]).then(function (data) {
+      addPersianDate(data[4],'deadline','persianDeadline');
       var ret = {
         title: "Resources",
         user: req.user,
         avatarFd: data[0],
-        moment: moment
+        moment: moment,
+        sourcePapers: data[1],
+        sourceProposals: data[2],
+        sourceTheses: data[3],
+        sourceReports: data[4]
       };
       return res.view("resources", ret);
     });
