@@ -62,7 +62,8 @@ module.exports = {
         users: data[0],
         proposals: data[1],
         theses: data[2],
-        students: data[3]
+        students: data[3],
+        selectedTab: req.query.tab?req.query.tab:2
       };
       return res.view("adminPanel", ret)
     })
@@ -107,12 +108,32 @@ module.exports = {
     });
     return res.redirect("/admin")
   },
-  approveUser : function (req, res) {
-    User.update(req.param("uid"),{approved : true}).exec(function (err, approvedUser) {
-      if (err) return err;
-      else {
-        return res.redirect('/admin');
-      }
+  approveUsers : function (req, res) {
+    var approvedUsers = req.body.users;
+    var promises = [];
+    for (var i=0,len=approvedUsers.length;i<len;i++) {
+      promises.push(User.update(approvedUsers[i].id,{approved: true}));
+    }
+    return Promise.all(promises).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
+    })
+  },
+  declineUsers : function (req, res) {
+    var declinedUsers = req.body.users;
+    var promises = [];
+    for (var i=0,len=declinedUsers.length;i<len;i++) {
+      promises.push(User.destroy(declinedUsers[i].id));
+    }
+    return Promise.all(promises).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
     })
   }
 };

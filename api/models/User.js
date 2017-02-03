@@ -98,6 +98,40 @@ module.exports = {
         cb();
       }
     })
+  },
+  beforeDestroy: function (criteria, cb) {
+    var studentIds = [];
+    var proposalIds = [];
+    var thesisIds = [];
+    var reportIds = [];
+    User.find(criteria).then(function (users) {
+      var userIds = [];
+      for (var i=0,len=users.length;i<len;i++) {
+        userIds.push(users[i].id);
+      }
+      return Student.find({userRef:userIds})
+    }).then(function (students) {
+      for (var i=0,len=students.length;i<len;i++) {
+        studentIds.push(students[i].id);
+        proposalIds.push(students[i].proposal);
+        thesisIds.push(students[i].thesis);
+      }
+      return Report.find({author:studentIds})
+    }).then(function (reports) {
+      for (var i=0,len=reports.length;i<len;i++) {
+        reportIds.push(reports[i].id);
+      }
+      var promises = []
+      promises.push(Report.destroy({id:reportIds}));
+      promises.push(Thesis.destroy({id:thesisIds}));
+      promises.push(Proposal.destroy({id:proposalIds}));
+      promises.push(Student.destroy({id:studentIds}));
+      Promise.all(promises).then(function () {
+        cb();
+      });
+    }).catch(function (error) {
+      console.log(error);
+    })
   }
 };
 

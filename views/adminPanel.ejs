@@ -169,7 +169,6 @@
         </section>
         <section id="registrationApproval">
           <div class="window">
-            <h2>User Registration Approval:</h2>
             <div align="center">
               <paper-datatable id="userApproval" data='<%= JSON.stringify(users) %>' multi-selection="true" selectable="true">
                 <paper-datatable-column header="Name" property="fullname" align="center" sortable></paper-datatable-column>
@@ -247,18 +246,33 @@
     </app-header-layout>
   </app-drawer-layout>
 </template>
+<script src="/js/dependencies/jquery-3.1.1.min.js"></script>
 <script>
   var t = document.querySelector('#t');
-  t.selectedTab = 2;
+  t.selectedTab = <%= selectedTab %>;
 
   function submitForm(id) {
     document.getElementById(id).submit();
   };
   function approveUsers() {
-    let approvedUsers = document.getElementById('userApproval').selectedItems;
+    var approvedUsers = document.getElementById('userApproval').selectedItems;
+    $.post('/admin/approve',{
+      users:approvedUsers
+    }).done(function () {
+      window.location='/admin?tab=3';
+    }).fail(function (err) {
+      console.log(err);
+    })
   };
   function declineUsers() {
-
+    var declinedUsers = document.getElementById('userApproval').selectedItems;
+    $.post('/admin/decline',{
+      users:declinedUsers
+    }).done(function () {
+      window.location='/admin?tab=3';
+    }).fail(function (err) {
+      console.log(err);
+    })
   };
 </script>
 </body>
