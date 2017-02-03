@@ -12,8 +12,7 @@ module.exports = {
     rest : false
   },
   uploadPdf: function (req,res) {
-    StudentService.studentByUser(req.user.id).exec(function (err, student) {
-      if (err) return Promise.reject(err);
+    StudentService.studentByUser(req.user.id).then(function (student) {
       return FileService.uploadFile(req,'paper','document').then(function (fileId) {
         return Paper.update({author:student.id},{document: fileId})
       }).then(function () {
@@ -41,8 +40,7 @@ module.exports = {
     let datasetId = FileService.uploadFile(req,'paper', 'dataset');
     let sourceCodeId = FileService.uploadFile(req,'paper', 'source');
     var student = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
+      StudentService.studentByUser(req.user.id).then(function (student) {
         resolve(student);
       })
     });

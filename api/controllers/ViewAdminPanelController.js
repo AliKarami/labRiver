@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var _ = require('underscore');
+
 function addAuthor(arr) {
   return arr.then(function (array) {
     let promises = [];
@@ -63,7 +65,7 @@ module.exports = {
         proposals: data[1],
         theses: data[2],
         students: data[3],
-        selectedTab: req.query.tab?req.query.tab:2
+        selectedTab: req.query.tab?req.query.tab:0
       };
       return res.view("adminPanel", ret)
     })
@@ -85,28 +87,6 @@ module.exports = {
       link : req.param("link"),
       date : new Date().toISOString(),
     }).then(res.redirect("/admin")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
-  },
-  setSupervisor : function (req, res) {
-    var whoSID,whomSID;
-    User.findOne({nickname:req.param("who")}).exec(function (err, user) {
-      if (err) return err;
-      else {
-        whoSID = user.studentRef;
-        User.findOne({nickname:req.param("whom")}).exec(function (err, user) {
-          if (err) return err;
-          else {
-            whomSID = user.studentRef;
-            Student.update(whoSID,{supervisorOf:whomSID}).exec(function (err, updated) {
-              if (err) return err;
-            })
-            Student.update(whomSID,{supervisor:whoSID}).exec(function (err, updated) {
-              if (err) return err;
-            })
-          }
-        });
-      }
-    });
-    return res.redirect("/admin")
   },
   approveUsers : function (req, res) {
     var approvedUsers = req.body.users;
@@ -134,6 +114,46 @@ module.exports = {
     }).catch(function (error) {
       res.send(error);
       return;
+    })
+  },
+  proposalFreeze: function (req, res) {
+    Student.findOne(req.body.studentId).then(function (student) {
+      return Proposal.update(student.proposal,{freeze:req.body.value});
+    }).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
+    })
+  },
+  thesisFreeze: function (req, res) {
+    Student.findOne(req.body.studentId).then(function (student) {
+      return Thesis.update(student.thesis,{freeze:req.body.value});
+    }).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
+    })
+  },
+  weeklyReporting: function (req, res) {
+    Student.update(req.body.studentId,{weeklyReporter:req.body.value}).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
+    })
+  },
+  setSupervisor: function (req,res) {
+    Student.findOne({studentNumber:req.param('who')}).then(function (supervisor) {
+      return Student.update({studentNumber:req.param('whom').split(',')},{supervisor:supervisor.id});
+    }).then(function () {
+      return res.redirect('/admin?tab=0')
+    }).catch(function (error) {
+      return res.send(error);
     })
   }
 };

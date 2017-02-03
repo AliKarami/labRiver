@@ -22,6 +22,12 @@ module.exports = {
     document : {
       model : 'File'
     },
+    sourceCode : {
+      model : 'File'
+    },
+    dataset : {
+      model : 'File'
+    },
     tags : {
       type : 'array',
       defaultsTo: []

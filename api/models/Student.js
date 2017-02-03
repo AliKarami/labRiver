@@ -29,7 +29,8 @@ module.exports = {
     },
     supervisorOf :
     {
-      model : 'Student'
+      collection : 'Student',
+      via: 'supervisor'
     },
     enteringYear : {
       type : 'integer',

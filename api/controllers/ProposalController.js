@@ -14,8 +14,7 @@ module.exports = {
     rest : false
   },
   uploadPdf: function (req,res) {
-    StudentService.studentByUser(req.user.id).exec(function (err, student) {
-      if (err) return Promise.reject(err);
+    StudentService.studentByUser(req.user.id).then(function (student) {
       return FileService.uploadFile(req,'proposal','document').then(function (fileId) {
         return Proposal.update({author:student.id},{document: fileId})
       }).then(function () {
@@ -38,7 +37,7 @@ module.exports = {
       abstract: req.param("abstract")?req.param("abstract"):'',
       tags: req.param("tags")?req.param("tags").split(','):[],
     };
-    StudentService.studentByUser(req.user.id).exec(function (err, student) {
+    StudentService.studentByUser(req.user.id).then(function (student) {
       Proposal.update({author:student.id},newProposal).exec(function (err, updatedProposal) {
         if (err) return res.negotiate(err);
         return res.redirect('/panel/workflow?tab=1');

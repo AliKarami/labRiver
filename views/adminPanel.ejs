@@ -69,8 +69,8 @@
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
         </app-toolbar>
         <paper-tabs selected={{selectedTab}} scrollable fit-container>
-          <paper-tab disabled>
-            <span class="disabled">Supervisor Management</span>
+          <paper-tab>
+            <span>Supervisorship</span>
           </paper-tab>
           <paper-tab disabled>
             <span class="disabled">Calendar Editor</span>
@@ -79,7 +79,7 @@
             Notification Center
           </paper-tab>
           <paper-tab>
-            User Registration Approval
+            Registration Approval
           </paper-tab>
           <paper-tab>
             Proposal Freezing
@@ -93,27 +93,28 @@
         </paper-tabs>
       </app-header>
       <iron-pages selected={{selectedTab}}>
-        <section>
+        <section id="supervisorship">
           <div class="window">
-            <h2>Supervisor Management:</h2>
-            <form method="post" action="/admin/setSupervisor" class="part">
-              Enter Nicknames:
-              <table align="center">
-                <tr>
-                  <td> <input name="who" type="text"></td>
-                </tr>
-                <tr>
-                  <td>is Supervisor of</td>
-                </tr>
-                <tr>
-                  <td><input name="whom" type="text"></td>
-                </tr>
-              </table>
-              <input type="submit" value="set Supervisor">
-            </form>
+            <table align="center"  style="border: 1px solid #4b4b4b">
+              <tr>
+                <td class="boxed" style="border: 1px solid #4b4b4b">
+                  <form method="post" action="/admin/setSupervisor" id="setSupervisorForm">
+                    <table align="center">
+                      <tr>
+                        <paper-input name="who" label="Supervisor SID" type="text"></paper-input>
+                      </tr>
+                      <tr>
+                        <paper-input name="whom" label="Student SIDs" type="text"></paper-input>
+                      </tr>
+                    </table>
+                    <paper-button class="blue" raised onclick="submitForm('setSupervisorForm')">Set</paper-button>
+                  </form>
+                </td>
+              </tr>
+            </table>
           </div>
         </section>
-        <section>
+        <section id="calendarEditor">
           <div class="window">
             <h2>Calendar Editor:</h2>
 
@@ -193,7 +194,7 @@
                 <td><%= proposals[i].authorFullname %></td>
                 <td><%= proposals[i].author.studentNumber%></td>
                 <td>
-                  <paper-toggle-button value="<%=proposals[i].author%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
+                  <paper-toggle-button class="proposalFreezeToggle" value="<%=proposals[i].author.id%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
                 </td>
               </tr>
               <% } %>
@@ -214,7 +215,7 @@
                 <td><%= theses[i].authorFullname %></td>
                 <td><%= theses[i].author.studentNumber%></td>
                 <td>
-                  <paper-toggle-button value="<%=theses[i].author%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
+                  <paper-toggle-button class="thesisFreezeToggle" value="<%=theses[i].author.id%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
                 </td>
               </tr>
               <% } %>
@@ -235,7 +236,7 @@
                   <td><%= students[i].userRef.fname %> <%= students[i].userRef.lname %></td>
                   <td><%= students[i].studentNumber%></td>
                   <td>
-                    <paper-toggle-button value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
+                    <paper-toggle-button class="weeklyReporterToggle" value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
                   </td>
                 </tr>
                 <% } %>
@@ -246,10 +247,52 @@
     </app-header-layout>
   </app-drawer-layout>
 </template>
-<script src="/js/dependencies/jquery-3.1.1.min.js"></script>
+<!--<script src="/js/dependencies/jquery-3.1.1.min.js"></script>-->
 <script>
   var t = document.querySelector('#t');
   t.selectedTab = <%= selectedTab %>;
+  $(document).ready(function () {
+    var proposalToggles = document.querySelectorAll('.proposalFreezeToggle');
+    var thesisToggles = document.querySelectorAll('.thesisFreezeToggle');
+    var weeklyReporterToggles = document.querySelectorAll('.weeklyReporterToggle');
+    for (var i=0,len=proposalToggles.length;i<len;i++) {
+      proposalToggles[i].addEventListener('change',function () {
+      	$.post('/admin/proposalFreeze',{
+      		studentId: this.value,
+          value: this.checked
+        }).done(function () {
+          window.location='/admin?tab=4';
+        }).fail(function (err) {
+          console.log(err);
+        })
+      })
+    }
+    for (var i=0,len=thesisToggles.length;i<len;i++) {
+      thesisToggles[i].addEventListener('change',function () {
+        $.post('/admin/thesisFreeze',{
+          studentId: this.value,
+          value: this.checked
+        }).done(function () {
+          window.location='/admin?tab=5';
+        }).fail(function (err) {
+          console.log(err);
+        })
+      })
+    }
+    for (var i=0,len=weeklyReporterToggles.length;i<len;i++) {
+      weeklyReporterToggles[i].addEventListener('change',function () {
+        $.post('/admin/weeklyReporting',{
+          studentId: this.value,
+          value: this.checked
+        }).done(function () {
+          window.location='/admin?tab=6';
+        }).fail(function (err) {
+          console.log(err);
+        })
+      })
+    }
+  });
+
 
   function submitForm(id) {
     document.getElementById(id).submit();

@@ -101,7 +101,6 @@
         <section id="myPapers">
           <div class="boxed">
             <div>
-              <h3>Past Papers:</h3>
               <paper-datatable id="pastPapers" data='<%= JSON.stringify(pastPapers) %>'>
                 <paper-datatable-column header="Title" property="title" align="center" sortable></paper-datatable-column>
                 <paper-datatable-column header="Authors" property="authors" align="center" sortable></paper-datatable-column>
@@ -168,6 +167,26 @@
                   window.location = '/panel/workflow?tab=2'
                 });
               </script>
+              <vaadin-upload id="thesisSourceCodeUpload" target="/thesis/uploadSourceCode"></vaadin-upload> <br>
+              <script>
+                document.querySelector('vaadin-upload#thesisSourceCodeUpload').addEventListener('upload-before', function(event) {
+                  event.detail.file.formDataName = 'source';
+                });
+                document.querySelector('vaadin-upload#thesisSourceCodeUpload').addEventListener('upload-success', function(event) {
+                  submitForm('editThesis');
+                  window.location = '/panel/workflow?tab=2'
+                });
+              </script>
+              <vaadin-upload id="thesisDatasetUpload" target="/thesis/uploadDataset"></vaadin-upload> <br>
+              <script>
+                document.querySelector('vaadin-upload#thesisDatasetUpload').addEventListener('upload-before', function(event) {
+                  event.detail.file.formDataName = 'dataset';
+                });
+                document.querySelector('vaadin-upload#thesisDatasetUpload').addEventListener('upload-success', function(event) {
+                  submitForm('editThesis');
+                  window.location = '/panel/workflow?tab=2'
+                });
+              </script>
               <paper-button class="blue" raised onclick="submitForm('editThesis')">Submit</paper-button>
               <% } else { %>
               <br><br>
@@ -183,7 +202,6 @@
         <section id="myReports">
           <div class="boxed">
             <div>
-              <h3>Past Reports:</h3>
               <paper-datatable id="pastReports" data='<%= JSON.stringify(pastReports) %>'>
                 <paper-datatable-column header="Deadline" property="persianDeadline" sortable align="center"></paper-datatable-column>
               </paper-datatable>

@@ -201,6 +201,12 @@
           <a id="viewThesisPdf" href="#">
             <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
           </a>
+          <a id="viewThesisDataset" href="#">
+            <paper-button class="dataset" raised><iron-icon icon="line-weight"></iron-icon>Dataset</paper-button>
+          </a>
+          <a id="viewThesisSourceCode" href="#">
+            <paper-button class="sourcecode" raised><iron-icon icon="code"></iron-icon>Source Code</paper-button>
+          </a>
         </div>
       </div>
     </paper-dialog-scrollable>
@@ -284,6 +290,18 @@
         document.getElementById('viewThesisPdf').setAttribute('href','/proposal/file/' + data.detail.item.document);
       } else {
         $('#viewThesisPdf').hide();
+      }
+      if (data.detail.item.document) {
+        $('#viewThesisSourceCode').show();
+        document.getElementById('viewThesisSourceCode').setAttribute('href','/proposal/file/' + data.detail.item.source);
+      } else {
+        $('#viewThesisSourceCode').hide();
+      }
+      if (data.detail.item.document) {
+        $('#viewThesisDataset').show();
+        document.getElementById('viewThesisDataset').setAttribute('href','/proposal/file/' + data.detail.item.dataset);
+      } else {
+        $('#viewThesisDataset').hide();
       }
       viewThesisDialog.open();
     });

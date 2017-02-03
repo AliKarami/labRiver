@@ -15,10 +15,31 @@ module.exports = {
     rest : false
   },
   uploadPdf: function (req,res) {
-    StudentService.studentByUser(req.user.id).exec(function (err, student) {
-      if (err) return Promise.reject(err);
+    StudentService.studentByUser(req.user.id).then(function (student) {
       return FileService.uploadFile(req,'thesis','document').then(function (fileId) {
         return Thesis.update({author:student.id},{document: fileId})
+      }).then(function () {
+        res.send('successful');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    })
+  },
+  uploadSourceCode: function (req,res) {
+    StudentService.studentByUser(req.user.id).then(function (student) {
+      return FileService.uploadFile(req,'thesis','source').then(function (fileId) {
+        return Thesis.update({author:student.id},{sourceCode: fileId})
+      }).then(function () {
+        res.send('successful');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    })
+  },
+  uploadDataset: function (req,res) {
+    StudentService.studentByUser(req.user.id).then(function (student) {
+      return FileService.uploadFile(req,'thesis','dataset').then(function (fileId) {
+        return Thesis.update({author:student.id},{dataset: fileId})
       }).then(function () {
         res.send('successful');
       }).catch(function (err) {
@@ -39,7 +60,7 @@ module.exports = {
       abstract: req.param("abstract")?req.param("abstract"):'',
       tags: req.param("tags")?req.param("tags").split(','):[],
     };
-    StudentService.studentByUser(req.user.id).exec(function (err, student) {
+    StudentService.studentByUser(req.user.id).then(function (student) {
       Thesis.update({author:student.id},newThesis).exec(function (err, updatedThesis) {
         if (err) return res.negotiate(err);
         return res.redirect('/panel/workflow?tab=2');

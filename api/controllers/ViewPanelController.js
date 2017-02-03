@@ -40,35 +40,32 @@ function addAuthor(arr) {
   })
 }
 
-function viewSupervisor(uid) {
+function viewSupervisor(user) {
   return new Promise(function (resolve, reject) {
-    User.findOne(uid).exec(function (err, user) {
-      if (err) return reject(err);
-      else {
-        if (user.studentRef)
-        Student.findOne(user.studentRef).exec(function (err, student) {
-          if (err) return reject(err);
-          else {
-            var sup, supOf;
-            if (student.supervisor) {
-              Student.findOne(student.supervisor).exec(function (err, supe) {
-                if (err) return reject(err);
-                else sup = supe;
-                return resolve([sup.studentNumber,]);
-              })
-            }
-            else if (student.supervisorOf) {
-              Student.findOne(student.supervisorOf).exec(function (err, supeOf) {
-                if (err) return reject(err);
-                else supOf = supeOf;
-                return resolve([,supOf.studentNumber]);
-              })
-            }
-            else return resolve([,]);
-          }
-        });
-        else return resolve([,]);
+    var supervisorSID;
+    var supervisorOfSIDs = [];
+    User.findOne(user.id).then(function (user) {
+      if (user.nickname=='admin')
+        resolve([null,null]);
+      else
+        return Student.findOne(user.studentRef).populate('supervisorOf');
+    }).then(function (student) {
+      for (var i=0,len=student.supervisorOf.length;i<len;i++) {
+        supervisorOfSIDs.push(student.supervisorOf[i].studentNumber);
       }
+      if (student.supervisor)
+        return Student.findOne(student.supervisor);
+      else
+        return null;
+    }).then(function (supervisor) {
+      if (supervisor)
+        supervisorSID = supervisor.studentNumber;
+      else
+        supervisorSID = null;
+
+      resolve([supervisorSID,supervisorOfSIDs]);
+    }).catch(function (error) {
+      return reject(error);
     })
   })
 }
@@ -82,7 +79,7 @@ module.exports = {
   main : function (req,res) {
     FileService.getAvatar(req.user.id).then(function (avUrl) {
       NotificationService.getNotifs(req.user.id).then(function (notifs) {
-        viewSupervisor(req.user.id).then(function (supers) {
+        viewSupervisor(req.user).then(function (supers) {
           var ret = {
             title: 'Panel',
             user: req.user,
@@ -91,7 +88,8 @@ module.exports = {
             date: moment().format('jYYYY/jM/jD dddd'),
             moment: moment,
             supervisor : supers[0],
-            supervisorOf : supers[1]
+            supervisorOf : supers[1],
+            selectedTab: req.query.tab?req.query.tab:0
           };
           return res.view("panel", ret)
         }).catch(function (reason) {
@@ -106,56 +104,60 @@ module.exports = {
   },
   workflow : function (req, res) {
     var pastPapers = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Paper.find({author:student.id}).exec(function (err, papers) {
-          if (err) reject(err);
-          resolve(papers);
-        })
+      StudentService.studentByUser(req.user.id).then(function (student) {
+        return Paper.find({author:student.id})
+      }).then(function (papers) {
+        resolve(papers);
+      }).catch(function (error) {
+        console.log(error);
+        res.send(error);
       })
     });
     var proposal = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Proposal.findOne({author:student.id}).exec(function (err, proposal) {
-          if (err) reject(err);
-          resolve(proposal);
-        })
+      StudentService.studentByUser(req.user.id).then(function (student) {
+        return Proposal.findOne({author:student.id})
+      }).then(function (proposal) {
+        resolve(proposal);
+      }).catch(function (error) {
+        console.log(error);
+        res.send(error);
       })
     });
     var pastReports = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Report.find({author:student.id}).exec(function (err, reports) {
-          if (err) reject(err);
-          resolve(reports);
-        })
+      StudentService.studentByUser(req.user.id).then(function (student) {
+        return Report.find({author:student.id});
+      }).then(function (reports) {
+        resolve(reports);
+      }).catch(function (error) {
+        console.log(error);
+        res.send(error);
       })
     });
     var student = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
+      StudentService.studentByUser(req.user.id).then(function (student) {
         resolve(student);
       })
     });
     var thesis = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Thesis.findOne({author:student.id}).exec(function (err, thesis) {
-          if (err) reject(err);
-          resolve(thesis);
-        })
+      StudentService.studentByUser(req.user.id).then(function (student) {
+        return Thesis.findOne({author:student.id})
+      }).then(function (thesis) {
+        resolve(thesis);
+      }).catch(function (error) {
+        console.log(error);
+        res.send(error);
       })
     });
 
     var currentReport = new Promise(function (resolve, reject) {
-      StudentService.studentByUser(req.user.id).exec(function (err, student) {
-        if (err) reject(err);
-        Report.findOne(student.currentReport).exec(function (err, currentReport) {
-          if (err) reject(err);
-          else resolve(currentReport)
-        });
-      })
+      StudentService.studentByUser(req.user.id).then(function (student) {
+        return Report.findOne(student.currentReport);
+      }).then(function (currentReport) {
+        resolve(currentReport)
+      }).catch(function (error) {
+        console.log(error);
+        res.send(error);
+      });
     })
 
     var avatar = FileService.getAvatar(req.user.id);
@@ -201,6 +203,18 @@ module.exports = {
       };
       return res.view("resources", ret);
     });
+  },
+  deleteNotification : function (req, res) {
+    User.findOne(req.user.id).then(function (user) {
+      user.notifications.splice(req.body.index,1);
+      return User.update(req.user.id,{notifications:user.notifications})
+    }).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.send(error);
+      return;
+    })
   }
 };
 

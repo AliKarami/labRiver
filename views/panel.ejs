@@ -91,8 +91,8 @@
           <paper-tab>
             Calendar
           </paper-tab>
-          <paper-tab disabled>
-            <span class="disabled">Supervisor</span>
+          <paper-tab <%=user.nickname=='admin'?'disabled':''%>>
+            <span class="<%=user.nickname=='admin'?'disabled':''%>">Supervisor</span>
           </paper-tab>
         </paper-tabs>
       </app-header>
@@ -129,6 +129,7 @@
                 </div>
               </paper-card>
             </a>
+            <paper-icon-button class="removeNotificationButton" icon="cancel" alt="<%=i%>"></paper-icon-button>
             <br> <br>
             <% } %>
           </div>
@@ -139,15 +140,18 @@
             Today: <%= date %> <br>
           </div>
         </section>
-        <section>
+        <section id="supervisor">
+          <% if (user.nickname!='admin') { %>
           <div class="window">
-            <% if (supervisorOf!=undefined) { %>
-            you are supervisor of: <%= supervisorOf %>
+            <br>
+            <% if (supervisorOf.length>0) { %>
+            <h2>You're Supervisor of: <%= supervisorOf.join(' & ') %></h2> <br>
             <% } %>
-            <% if (supervisor!=undefined) { %>
-            your supervisor is: <%= supervisor %>
+            <% if (!!supervisor) { %>
+            <h2>Your Supervisor is: <%= supervisor %></h2>
             <% } %>
           </div>
+          <% } %>
         </section>
       </iron-pages>
     </app-header-layout>
@@ -155,9 +159,23 @@
 </template>
 <script>
     var t = document.querySelector('#t');
-    t.selectedTab = 0;
+    t.selectedTab = <%= selectedTab %>;
     function submitForm(id) {
       document.getElementById(id).submit();
     };
+    $(document).ready(function () {
+    	var removeNotifButtons = document.querySelectorAll('.removeNotificationButton');
+    	for (var i=0,len=removeNotifButtons.length;i<len;i++) {
+    		removeNotifButtons[i].addEventListener('click',function () {
+          $.post('/panel/deleteNotification',{
+            index: this.alt
+          }).done(function () {
+            window.location='/panel?tab=1';
+          }).fail(function (err) {
+            console.log(err);
+          })
+        })
+      }
+    });
 </script>
 </body>
