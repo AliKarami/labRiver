@@ -5,6 +5,32 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+function addAuthor(arr) {
+  return arr.then(function (array) {
+    let promises = [];
+    for (let i=0,len=array.length;i<len;i++) {
+      promises.push(new Promise(function (resolve, reject) {
+        User.findOne(array[i].author.userRef).exec(function (err, user) {
+          if (err) reject(err);
+          else {
+            array[i].author.fname=user.fname;
+            array[i].author.lname=user.lname;
+            array[i].author.nickname=user.nickname;
+            array[i].author.avatarUrl=user.avatarUrl;
+            array[i].authorFullname=user.fname + ' ' + user.lname
+            resolve(user);
+          }
+        })
+      }));
+    }
+    return Promise.all(promises).then(function () {
+      return array;
+    });
+  }).catch(function (err) {
+    throw Error(err);
+  })
+}
+
 module.exports = {
   _config : {
     actions : false,
@@ -15,27 +41,17 @@ module.exports = {
     var unapprovedUsers = new Promise(function (resolve, reject) {
       User.find({approved: false}).exec(function (err, users) {
         if (err) reject(err);
-        resolve(users);
+        else {
+          for (let i=0,len=users.length;i<len;i++) {
+            users[i].fullname=users[i].fname + ' ' + users[i].lname;
+          }
+          resolve(users);
+        }
       })
     });
-    var Proposals = new Promise(function (resolve, reject) {
-      Proposal.find().exec(function (err, proposals) {
-        if(err) reject(err);
-        resolve(proposals);
-      })
-    });
-    var Theses = new Promise(function (resolve, reject) {
-      Thesis.find().exec(function (err, theses) {
-        if(err) reject(err);
-        resolve(theses);
-      })
-    });
-    var Students = new Promise(function (resolve, reject) {
-      Student.find().exec(function (err, students) {
-        if(err) reject(err);
-        resolve(students);
-      })
-    });
+    var Proposals = addAuthor(Proposal.find().populate('author'));
+    var Theses = addAuthor(Thesis.find().populate('author'));
+    var Students = Student.find().populate('userRef');
     var avatar = FileService.getAvatar(req.user.id);
 
     Promise.all([unapprovedUsers,Proposals,Theses,Students,avatar]).then(function (data) {
@@ -55,6 +71,7 @@ module.exports = {
     NotificationService.makeNotif(req.param("nickname").split(','),{
       cat : req.param("cat"),
       title : req.param("title"),
+      description : req.param("description"),
       link : req.param("link"),
       date : new Date().toISOString(),
     }).then(res.redirect("/admin")).catch(function () {sails.log("makeNotif error.")})
@@ -63,6 +80,7 @@ module.exports = {
     NotificationService.broadcastNotif({
       cat : req.param("cat"),
       title : req.param("title"),
+      description : req.param("description"),
       link : req.param("link"),
       date : new Date().toISOString(),
     }).then(res.redirect("/admin")).catch(function (err) {sails.log("broadcastNotif error: " + err)})

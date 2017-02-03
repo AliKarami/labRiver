@@ -15,6 +15,21 @@
         font-weight: bold;
       };
     }
+    paper-button.blue {
+      text-decoration: none;
+      background-color: blue;
+      color: white;
+    }
+    paper-button.green {
+      text-decoration: none;
+      background-color: #0d7611;
+      color: white;
+    }
+    paper-button.red {
+      text-decoration: none;
+      background-color: #a1000b;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -104,151 +119,128 @@
 
           </div>
         </section>
-        <section>
-          <div class="window">
-            <h2>Notification Center:</h2>
-            <form method="post" action="/admin/broadcastNotification" class="part">
-              <table align="center">
-                <tr>
-                  <td>notification Category:</td>
-                  <td> <input name="cat" type="text"></td>
-                </tr>
-                <tr>
-                  <td>notification Title:</td>
-                  <td><input name="title" type="text"></td>
-                </tr>
-                <tr>
-                  <td>notification Link:</td>
-                  <td><input name="link" type="url"></td>
-                </tr>
-              </table>
-              <input type="submit" value="Broadcast">
-            </form>
-            <form method="post" action="/admin/makeNotification" class="part">
-              <table align="center">
-                <tr>
-                  <td>target Nickname:</td>
-                  <td> <input name="nickname" type="text"></td>
-                </tr>
-                <tr>
-                  <td>notification Category:</td>
-                  <td> <input name="cat" type="text"></td>
-                </tr>
-                <tr>
-                  <td>notification Title:</td>
-                  <td><input name="title" type="text"></td>
-                </tr>
-                <tr>
-                  <td>notification Link:</td>
-                  <td><input name="link" type="url"></td>
-                </tr>
-              </table>
-              <input type="submit" value="Make Notification">
-            </form>
-          </div>
+        <section id="notificationCenter">
+          <br>
+          <table align="center"  style="border: 1px solid #4b4b4b">
+            <tr>
+              <td class="boxed" style="border: 1px solid #4b4b4b">
+                <form method="post" action="/admin/broadcastNotification" id="broadcastNotificationForm">
+                  <table align="center">
+                    <tr>
+                      <paper-input name="cat" label="Notification Category" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-input name="title" label="Notification Title" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-textarea name="description" label="Notification Description"></paper-textarea>
+                    </tr>
+                    <tr>
+                      <paper-input name="link" label="Notification Link" type="url"></paper-input>
+                    </tr>
+                  </table>
+                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationForm')">Broadcast</paper-button>
+                </form>
+              </td>
+              <td class="boxed" style="border: 1px solid #4b4b4b">
+                <form method="post" action="/admin/makeNotification" id="makeNotificationForm">
+                  <table align="center">
+                    <tr>
+                      <paper-input name="nickname" label="Target Nickname" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-input name="cat" label="Notification Category" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-input name="title" label="Notification Title" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-textarea name="description" label="Notification Description"></paper-textarea>
+                    </tr>
+                    <tr>
+                      <paper-input name="link" label="Notification Link" type="url"></paper-input>
+                    </tr>
+                  </table>
+                  <paper-button class="blue" raised onclick="submitForm('makeNotificationForm')">Send</paper-button>
+                </form>
+              </td>
+            </tr>
+          </table>
         </section>
-        <section>
+        <section id="registrationApproval">
           <div class="window">
             <h2>User Registration Approval:</h2>
             <div align="center">
-              <% if (users.length>0) { %>
-              <table align="center" class="part">
-                <% for (var i=0;i<users.length;i++)  { %>
+              <paper-datatable id="userApproval" data='<%= JSON.stringify(users) %>' multi-selection="true" selectable="true">
+                <paper-datatable-column header="Name" property="fullname" align="center" sortable></paper-datatable-column>
+                <paper-datatable-column header="Email" property="email" align="center" sortable></paper-datatable-column>
+              </paper-datatable>
+              <paper-button class="green" raised onclick="approveUsers()">Approve</paper-button>
+              <paper-button class="red" raised onclick="declineUsers()">Decline</paper-button>
+            </div>
+          </div>
+        </section>
+        <section id="proposalFreezing">
+          <div class="window">
+            <br>
+            <table cellpadding="10" align="center">
+              <tr>
+                <th>Name</th>
+                <th>Student Number</th>
+                <th>Freeze</th>
+              </tr>
+              <% for (var i=0,len=proposals.length;i<len;i++) { %>
+              <tr>
+                <td><%= proposals[i].authorFullname %></td>
+                <td><%= proposals[i].author.studentNumber%></td>
+                <td>
+                  <paper-toggle-button value="<%=proposals[i].author%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
+                </td>
+              </tr>
+              <% } %>
+            </table>
+          </div>
+        </section>
+        <section id="thesisFreezing">
+          <div class="window">
+            <br>
+            <table cellpadding="10" align="center">
+              <tr>
+                <th>Name</th>
+                <th>Student Number</th>
+                <th>Freeze</th>
+              </tr>
+              <% for (var i=0,len=theses.length;i<len;i++) { %>
+              <tr>
+                <td><%= theses[i].authorFullname %></td>
+                <td><%= theses[i].author.studentNumber%></td>
+                <td>
+                  <paper-toggle-button value="<%=theses[i].author%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
+                </td>
+              </tr>
+              <% } %>
+            </table>
+          </div>
+        </section>
+        <section id="reportAssignee">
+            <div class="window">
+              <br>
+              <table cellpadding="10" align="center">
                 <tr>
-                  <td><h3>Name</h3></td>
-                  <td><h3>Email</h3></td>
-                  <td><h3>Approve</h3></td>
+                  <th>Name</th>
+                  <th>Student Number</th>
+                  <th>Weekly Reporting</th>
                 </tr>
+                <% for (var i=0,len=students.length;i<len;i++) { %>
                 <tr>
-                  <td><%= users[i].fname %> <%=users[i].lname %></td>
-                  <td><%= users[i].email  %></td>
+                  <td><%= students[i].userRef.fname %> <%= students[i].userRef.lname %></td>
+                  <td><%= students[i].studentNumber%></td>
                   <td>
-                    <form method="post" action="/admin/approve">
-                      <input name="uid" type="hidden" value="<%= users[i].id %>">
-                      <input type="submit" value="Approve">
-                    </form>
+                    <paper-toggle-button value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
                   </td>
                 </tr>
                 <% } %>
               </table>
-              <% } else { %>
-              <div class="part" align="center">
-                No User For Approval :)
-              </div>
-              <% } %>
-            </div>
-          </div>
-        </section>
-        <section>
-          <div class="window">
-            <h2>Proposal Freezing:</h2>
-            <table border="1" align="center">
-              <tr>
-                <td>studentRef</td>
-                <td>ProposalState</td>
-                <td>Switch State</td>
-              </tr>
-              <% for (var i=0,len=proposals.length;i<len;i++) { %>
-              <tr>
-                <td><%= proposals[i].author %></td>
-                <td><%= proposals[i].freeze?'Freeze':'Free' %></td>
-                <td>
-                  <form action="">
-                    <input type="hidden" value="<%=proposals[i].author%>">
-                    <input type="submit" value="Switch">
-                  </form>
-                </td>
-              </tr>
-              <% } %>
-            </table>
-          </div>
-        </section>
-        <section>
-          <div class="window">
-            <h2>Thesis Freezing:</h2>
-            <table border="1" align="center">
-              <tr>
-                <td>studentRef</td>
-                <td>ThesisState</td>
-                <td>Switch State</td>
-              </tr>
-              <% for (var i=0,len=theses.length;i<len;i++) { %>
-              <tr>
-                <td><%= theses[i].author %></td>
-                <td><%= theses[i].freeze?'Freeze':'Free' %></td>
-                <td>
-                  <form action="">
-                    <input type="hidden" value="<%=theses[i].author%>">
-                    <input type="submit" value="Switch">
-                  </form>
-                </td>
-              </tr>
-              <% } %>
-            </table>
-          </div>
-        </section>
-        <section>
-          <div class="window">
-            <h2>Report Assignee:</h2>
-            <table border="1" align="center">
-              <tr>
-                <td>student Num.</td>
-                <td>Reporting State</td>
-                <td>Switch State</td>
-              </tr>
-              <% for (var i=0,len=students.length;i<len;i++) { %>
-              <tr>
-                <td><%= students[i].studentNumber %></td>
-                <td><%= students[i].weeklyReporter?'Reporting':'Not Reporting' %></td>
-                <td>
-                  <form action="">
-                    <input type="hidden" value="<%=students[i].id%>">
-                    <input type="submit" value="Switch">
-                  </form>
-                </td>
-              </tr>
-              <% } %>
-            </table>
           </div>
         </section>
       </iron-pages>
@@ -261,6 +253,12 @@
 
   function submitForm(id) {
     document.getElementById(id).submit();
+  };
+  function approveUsers() {
+    let approvedUsers = document.getElementById('userApproval').selectedItems;
+  };
+  function declineUsers() {
+
   };
 </script>
 </body>
