@@ -46,7 +46,7 @@ function viewSupervisor(user) {
     var supervisorOfSIDs = [];
     User.findOne(user.id).then(function (user) {
       if (user.nickname=='admin')
-        resolve([null,null]);
+        resolve([null,[]]);
       else
         return Student.findOne(user.studentRef).populate('supervisorOf');
     }).then(function (student) {
@@ -80,20 +80,30 @@ module.exports = {
     FileService.getAvatar(req.user.id).then(function (avUrl) {
       NotificationService.getNotifs(req.user.id).then(function (notifs) {
         viewSupervisor(req.user).then(function (supers) {
-          var ret = {
-            title: 'Panel',
-            user: req.user,
-            avatarFd: avUrl,
-            notifs: notifs,
-            date: moment().format('jYYYY/jM/jD dddd'),
-            moment: moment,
-            supervisor : supers[0],
-            supervisorOf : supers[1],
-            selectedTab: req.query.tab?req.query.tab:0
-          };
-          return res.view("panel", ret)
+          var superOfNicks = [];
+          for (var i=0,len=supers[1].length;i<len;i++) {
+            superOfNicks.push(StudentService.userBySID(supers[1][i]).then(function (user) {
+              return user.nickname;
+            }));
+          }
+          Promise.all(superOfNicks).then(function (superOfNicknames) {
+            var ret = {
+              title: 'Panel',
+              user: req.user,
+              avatarFd: avUrl,
+              notifs: notifs,
+              date: moment().format('jYYYY/jM/jD dddd'),
+              moment: moment,
+              supervisor : supers[0],
+              supervisorOf : supers[1],
+              supervisorOfNicknames: superOfNicknames,
+              selectedTab: req.query.tab?req.query.tab:0
+            };
+            return res.view("panel", ret)
+          })
         }).catch(function (reason) {
           sails.log('viewSupervisor err: ' + reason);
+          res.negotiate(reason);
         })
       }),function (rsn) {
         return res.negotiate(rsn)
@@ -110,7 +120,7 @@ module.exports = {
         resolve(papers);
       }).catch(function (error) {
         console.log(error);
-        res.send(error);
+        res.negotiate(error);
       })
     });
     var proposal = new Promise(function (resolve, reject) {
@@ -120,7 +130,7 @@ module.exports = {
         resolve(proposal);
       }).catch(function (error) {
         console.log(error);
-        res.send(error);
+        res.negotiate(error);
       })
     });
     var pastReports = new Promise(function (resolve, reject) {
@@ -130,7 +140,7 @@ module.exports = {
         resolve(reports);
       }).catch(function (error) {
         console.log(error);
-        res.send(error);
+        res.negotiate(error);
       })
     });
     var student = new Promise(function (resolve, reject) {
@@ -145,7 +155,7 @@ module.exports = {
         resolve(thesis);
       }).catch(function (error) {
         console.log(error);
-        res.send(error);
+        res.negotiate(error);
       })
     });
 
@@ -156,7 +166,7 @@ module.exports = {
         resolve(currentReport)
       }).catch(function (error) {
         console.log(error);
-        res.send(error);
+        res.negotiate(error);
       });
     })
 
@@ -202,6 +212,8 @@ module.exports = {
         sourceReports: data[4]
       };
       return res.view("resources", ret);
+    }).catch(function (err) {
+      res.negotiate(err);
     });
   },
   deleteNotification : function (req, res) {
@@ -212,9 +224,35 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
+  },
+  broadcastNotificationSV : function (req, res) {
+    viewSupervisor(req.user).then(function (supers) {
+      return Student.find({studentNumber:supers[1]})
+    }).then(function (students) {
+      var UIDs = [];
+      for (var i=0,len=students.length;i<len;i++) {
+        UIDs.push(students[i].userRef);
+      }
+      NotificationService.makeNotifByUID(UIDs,{
+        cat : 'supervisor',
+        title : req.param("title"),
+        description : req.param("description"),
+        link : req.param("link"),
+        date : new Date().toISOString(),
+      }).then(res.redirect("/panel?tab=3")).catch(function () {sails.log("makeNotif error.")})
+    })
+  },
+  makeNotificationSV : function (req, res) {
+    NotificationService.makeNotif([req.param("nickname")],{
+      cat : 'supervisor',
+      title : req.param("title"),
+      description : req.param("description"),
+      link : req.param("link"),
+      date : new Date().toISOString(),
+    }).then(res.redirect("/panel?tab=3")).catch(function () {sails.log("makeNotif error.")})
   }
 };
 

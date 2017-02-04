@@ -152,7 +152,7 @@
     <paper-dialog-scrollable>
       <div>
         <h3>Abstract:</h3> <p id="viewPaperAbstract"></p>
-        <h3>Author:</h3> <p id="viewPaperAuthor"></p>
+        <h3>Submitter:</h3> <p id="viewPaperSubmitter"></p>
         <h3>Authors:</h3> <p id="viewPaperAuthors"></p>
         <h3>Type:</h3> <p id="viewPaperType"></p>
         <h3>Tags:</h3> <p id="viewPaperTags"></p>
@@ -242,7 +242,7 @@
     document.querySelector('#sourcePapers').addEventListener('row-tap',function (data) {
       document.getElementById('viewPaperTitle').innerHTML = data.detail.item.title;
       document.getElementById('viewPaperAbstract').innerHTML = data.detail.item.abstract?data.detail.item.abstract:'-';
-      document.getElementById('viewPaperAuthor').innerHTML = data.detail.item.author?data.detail.item.author.fname+' '+data.detail.item.author.lname+' (@'+data.detail.item.author.nickname+')':'-';
+      document.getElementById('viewPaperSubmitter').innerHTML = data.detail.item.author?data.detail.item.author.fname+' '+data.detail.item.author.lname+' (@'+data.detail.item.author.nickname+')':'-';
       document.getElementById('viewPaperAuthors').innerHTML = data.detail.item.authors.length>0?data.detail.item.authors.join():'-';
       document.getElementById('viewPaperType').innerHTML = data.detail.item.type;
       document.getElementById('viewPaperTags').innerHTML = data.detail.item.tags.length>0?data.detail.item.tags.join():'-';

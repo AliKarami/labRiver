@@ -42,6 +42,8 @@ module.exports.routes = {
   '/panel/workflow'                   :   'ViewPanelController.workflow',
   '/panel/resources'                  :   'ViewPanelController.resources',
   '/panel/deleteNotification'         :   'ViewPanelController.deleteNotification',
+  '/panel/broadcastNotificationSV'    :   'ViewPanelController.broadcastNotificationSV',
+  '/panel/makeNotificationSV'         :   'ViewPanelController.makeNotificationSV',
   '/admin'                            :   'ViewAdminPanelController.main',
   'post /admin/makeNotification'      :   'ViewAdminPanelController.makeNotif',
   'post /admin/broadcastNotification' :   'ViewAdminPanelController.broadcastNotif',

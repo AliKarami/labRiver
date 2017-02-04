@@ -41,6 +41,19 @@
         font-weight: 600;
       }
     }
+    paper-button.blue {
+      text-decoration: none;
+      background-color: blue;
+      color: white;
+    }
+    paper-dropdown-menu {
+      --paper-input-container-label: {
+        text-align: center;
+      };
+      --paper-input-container-input: {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body unresolved>
@@ -121,6 +134,7 @@
             <%for(var i=notifs.length-1;i>=0;i--) {%>
             <a href="<%= notifs[i].link %>">
               <paper-card heading="<%= notifs[i].title %>"  alt="<%= notifs[i].title %>" elevation="3">
+                <iron-icon icon="<%= notifs[i].cat=='general'?'label':notifs[i].cat=='event'?'query-builder':notifs[i].cat=='warning'?'warning':notifs[i].cat=='information'?'info':notifs[i].cat=='supervisor'?'face':'help'%>"></iron-icon>
                 <div class="card-content">
                     <%= notifs[i].description?notifs[i].description:'-' %>
                 </div>
@@ -149,8 +163,62 @@
             <% } %>
             <% if (!!supervisor) { %>
             <h2>Your Supervisor is: <%= supervisor %></h2>
-            <% } %>
           </div>
+          <table align="center" style="border: 1px solid #4b4b4b">
+            <tr>
+              <th>
+                Broadcast Notification to Your Students
+              </th>
+              <th>
+                Send Notification to a Student
+              </th>
+            </tr>
+            <tr>
+              <td class="boxed" style="border: 1px solid #4b4b4b">
+                <form method="post" action="/panel/broadcastNotificationToStudents" id="broadcastNotificationForm">
+                  <table align="center">
+                    <tr>
+                      <paper-input name="title" label="Notification Title" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-textarea name="description" label="Notification Description"></paper-textarea>
+                    </tr>
+                    <tr>
+                      <paper-input name="link" label="Notification Link" type="url"></paper-input>
+                    </tr>
+                  </table>
+                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationForm')">Broadcast</paper-button>
+                </form>
+              </td>
+              <td class="boxed" style="border: 1px solid #4b4b4b">
+                <form method="post" action="/panel/makeNotificationSV" id="makeNotificationForm">
+                  <table align="center">
+                    <tr>
+                      <paper-dropdown-menu label="Target Nickname">
+                        <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{selectedNickname}}">
+                          <% for (var i=0,len=supervisorOfNicknames.length;i<len;i++) { %>
+                            <paper-item value="<%=supervisorOfNicknames[i]%>"><%=supervisorOfNicknames[i]%></paper-item>
+                          <% } %>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                      <input type="hidden" name="nickname" value="{{selectedNickname}}">
+                    </tr>
+                    <tr>
+                      <paper-input name="title" label="Notification Title" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-textarea name="description" label="Notification Description"></paper-textarea>
+                    </tr>
+                    <tr>
+                      <paper-input name="link" label="Notification Link" type="url"></paper-input>
+                    </tr>
+                  </table>
+                  <paper-button class="blue" raised onclick="submitForm('makeNotificationForm')">Send</paper-button>
+                </form>
+              </td>
+            </tr>
+          </table>
+            <% } %>
           <% } %>
         </section>
       </iron-pages>

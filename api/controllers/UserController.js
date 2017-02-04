@@ -16,13 +16,13 @@ module.exports = {
   login: function (req,res) {
     passport.authenticate('local', function(err, user, info) {
       if ((err) || (!user)) {
-        return res.send({
+        return res.negotiate({
           message: info.message,
           user: user
         });
       }
       req.logIn(user, function(err) {
-        if (err) res.send(err);
+        if (err) res.negotiate(err);
         var ret = {};
         return res.redirect('/panel');
       });
@@ -34,6 +34,7 @@ module.exports = {
     res.redirect('/');
   },
   signup: function (req, res) {
+    var created = null;
     User.create({
       fname: req.param("firstname"),
       lname: req.param("lastname"),
@@ -41,29 +42,22 @@ module.exports = {
       password: req.param("password"),
       nickname: req.param("nickname"),
       gender: req.param("gender")
-    }).exec(function (err, created) {
-      if (err) res.send(err);
-      else {
-        Student.create({
-          userRef: created.id,
-          studentNumber: req.param("studentNumber"),
-          enteringYear: req.param("enteringYear"),
-          fieldOfStudy: req.param("fieldOfStudy"),
-          orientation: req.param("orientation"),
-          degree: req.param("degree")
-        }).exec(function (err, std) {
-          if (err) res.send(err);
-          else {
-            User.update({id:created.id},{studentRef:std.id}).exec(function (err,updated) {
-              if (err) res.send(err);
-              else {
-                res.redirect('/');
-              }
-            })
-
-          }
-        })
-      }
+    }).then(function (crtd) {
+      created = crtd;
+      return Student.create({
+        userRef: created.id,
+        studentNumber: req.param("studentNumber"),
+        enteringYear: req.param("enteringYear"),
+        fieldOfStudy: req.param("fieldOfStudy"),
+        orientation: req.param("orientation"),
+        degree: req.param("degree")
+      })
+    }).then(function (std) {
+      User.update({id:created.id},{studentRef:std.id}).then(function (updated) {
+        res.redirect('/');
+      })
+    }).catch(function (err) {
+      res.negotiate(err);
     })
   },
   uploadAvatar: function (req, res) {

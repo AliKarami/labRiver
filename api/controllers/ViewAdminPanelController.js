@@ -68,6 +68,8 @@ module.exports = {
         selectedTab: req.query.tab?req.query.tab:0
       };
       return res.view("adminPanel", ret)
+    }).catch(function (err) {
+      res.negotiate(err);
     })
   },
   makeNotif : function (req, res) {
@@ -77,7 +79,7 @@ module.exports = {
       description : req.param("description"),
       link : req.param("link"),
       date : new Date().toISOString(),
-    }).then(res.redirect("/admin")).catch(function () {sails.log("makeNotif error.")})
+    }).then(res.redirect("/admin?tab=2")).catch(function () {sails.log("makeNotif error.")})
   },
   broadcastNotif : function (req, res) {
     NotificationService.broadcastNotif({
@@ -86,7 +88,7 @@ module.exports = {
       description : req.param("description"),
       link : req.param("link"),
       date : new Date().toISOString(),
-    }).then(res.redirect("/admin")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
+    }).then(res.redirect("/admin?tab=2")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
   },
   approveUsers : function (req, res) {
     var approvedUsers = req.body.users;
@@ -98,7 +100,7 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
   },
@@ -112,7 +114,7 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
   },
@@ -123,7 +125,7 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
   },
@@ -134,7 +136,7 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
   },
@@ -143,7 +145,7 @@ module.exports = {
       res.send('success');
       return;
     }).catch(function (error) {
-      res.send(error);
+      res.negotiate(error);
       return;
     })
   },
@@ -153,7 +155,7 @@ module.exports = {
     }).then(function () {
       return res.redirect('/admin?tab=0')
     }).catch(function (error) {
-      return res.send(error);
+      return res.negotiate(error);
     })
   }
 };

@@ -44,6 +44,11 @@
     "file-input": "rnicholus/file-input#^2.0.0",
     "paper-dialog-behavior": "PolymerElements/paper-dialog-behavior#^1.2.7",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
-    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^1.1.5"
+    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^1.1.5",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
+    "paper-input": "^1.1.23",
+    "paper-ripple": "*",
+    "vellum-selectbox": "*",
+    "paper-dropdown-input": "^1.0.9"
   }
 }

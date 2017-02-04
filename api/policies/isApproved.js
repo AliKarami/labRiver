@@ -4,7 +4,7 @@ module.exports = function ( req, res, next ) {
   }
   else {
     if (req.isAuthenticated())
-      return res.send ( 'Your account needs admin approval to activate.' );
+      return res.negotiate( 'Your account needs admin approval to activate.' );
     else
       return res.redirect('/');
   }

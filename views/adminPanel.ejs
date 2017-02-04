@@ -30,6 +30,14 @@
       background-color: #a1000b;
       color: white;
     }
+    paper-dropdown-menu {
+      --paper-input-container-label: {
+        text-align: center;
+      };
+      --paper-input-container-input: {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -122,13 +130,21 @@
         </section>
         <section id="notificationCenter">
           <br>
-          <table align="center"  style="border: 1px solid #4b4b4b">
+          <table align="center" style="border: 1px solid #4b4b4b">
             <tr>
               <td class="boxed" style="border: 1px solid #4b4b4b">
                 <form method="post" action="/admin/broadcastNotification" id="broadcastNotificationForm">
                   <table align="center">
                     <tr>
-                      <paper-input name="cat" label="Notification Category" type="text"></paper-input>
+                      <paper-dropdown-menu label="Category">
+                        <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{broadcastSelectedCategory}}">
+                          <paper-item value="general">General</paper-item>
+                          <paper-item value="event">Event</paper-item>
+                          <paper-item value="warning">Warning</paper-item>
+                          <paper-item value="information">Information</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                      <input type="hidden" name="cat" value="{{broadcastSelectedCategory}}">
                     </tr>
                     <tr>
                       <paper-input name="title" label="Notification Title" type="text"></paper-input>
@@ -150,7 +166,15 @@
                       <paper-input name="nickname" label="Target Nickname" type="text"></paper-input>
                     </tr>
                     <tr>
-                      <paper-input name="cat" label="Notification Category" type="text"></paper-input>
+                      <paper-dropdown-menu label="Category">
+                        <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{selectedCategory}}">
+                          <paper-item value="general">General</paper-item>
+                          <paper-item value="event">Event</paper-item>
+                          <paper-item value="warning">Warning</paper-item>
+                          <paper-item value="information">Information</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                      <input type="hidden" name="cat" value="{{selectedCategory}}">
                     </tr>
                     <tr>
                       <paper-input name="title" label="Notification Title" type="text"></paper-input>

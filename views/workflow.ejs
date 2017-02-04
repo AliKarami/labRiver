@@ -42,6 +42,9 @@
       margin: 0;
       padding: 0;
     }
+    vaadin-upload {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -121,11 +124,13 @@
               <paper-input name="title" label="Title" type="text" value="<%= proposal.title %>"></paper-input>
               <paper-textarea name="abstract" label="Abstract" value="<%= proposal.abstract %>"></paper-textarea>
               <paper-input name="tags" label="Tags" type="text" value="<%= proposal.tags?proposal.tags.join():'' %>"></paper-input>
+              <% if (!!proposal.document) { %>
               <a href="/proposal/file/<%=proposal.document%>">
                 <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
               </a>
+              <% } %>
               <% if (!proposal.freeze) { %>
-              <vaadin-upload id="proposalPdfUpload" target="/proposal/uploadPdf" accept=".pdf"></vaadin-upload> <br>
+              <vaadin-upload id="proposalPdfUpload" target="/proposal/uploadPdf" accept=".pdf"><div class="drop-label">Drop your PDF here.</div></vaadin-upload> <br>
               <script>
                 document.querySelector('vaadin-upload#proposalPdfUpload').addEventListener('upload-before', function(event) {
                   event.detail.file.formDataName = 'document';
@@ -153,11 +158,23 @@
               <paper-input name="title" label="Title" type="text" value="<%= thesis.title %>"></paper-input>
               <paper-textarea name="abstract" label="Abstract" value="<%= thesis.abstract %>"></paper-textarea>
               <paper-input name="tags" label="Tags" type="text" value="<%= thesis.tags?thesis.tags.join():'' %>"></paper-input>
+              <% if (!!thesis.document) { %>
               <a href="/thesis/file/<%=thesis.document%>">
                 <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
               </a>
+              <% } %>
+              <% if (!!thesis.sourceCode) { %>
+              <a href="/thesis/file/<%=thesis.sourceCode%>">
+                <paper-button class="sourcecode" raised><iron-icon icon="code"></iron-icon>Source Code</paper-button>
+              </a>
+              <% } %>
+              <% if (!!thesis.dataset) { %>
+              <a href="/thesis/file/<%=thesis.dataset%>">
+                <paper-button class="sourcecode" raised><iron-icon icon="line-weight"></iron-icon>Dataset</paper-button>
+              </a>
+              <% } %>
               <% if (!thesis.freeze) { %>
-              <vaadin-upload id="thesisPdfUpload" target="/thesis/uploadPdf" accept=".pdf"></vaadin-upload> <br>
+              <vaadin-upload id="thesisPdfUpload" target="/thesis/uploadPdf" accept=".pdf"><div class="drop-label">Drop your PDF here.</div></vaadin-upload> <br>
               <script>
                 document.querySelector('vaadin-upload#thesisPdfUpload').addEventListener('upload-before', function(event) {
                   event.detail.file.formDataName = 'document';
@@ -167,7 +184,7 @@
                   window.location = '/panel/workflow?tab=2'
                 });
               </script>
-              <vaadin-upload id="thesisSourceCodeUpload" target="/thesis/uploadSourceCode"></vaadin-upload> <br>
+              <vaadin-upload id="thesisSourceCodeUpload" target="/thesis/uploadSourceCode"><div class="drop-label">Drop your Source Code here.</div></vaadin-upload> <br>
               <script>
                 document.querySelector('vaadin-upload#thesisSourceCodeUpload').addEventListener('upload-before', function(event) {
                   event.detail.file.formDataName = 'source';
@@ -177,7 +194,7 @@
                   window.location = '/panel/workflow?tab=2'
                 });
               </script>
-              <vaadin-upload id="thesisDatasetUpload" target="/thesis/uploadDataset"></vaadin-upload> <br>
+              <vaadin-upload id="thesisDatasetUpload" target="/thesis/uploadDataset"><div class="drop-label">Drop your Dataset here.</div></vaadin-upload> <br>
               <script>
                 document.querySelector('vaadin-upload#thesisDatasetUpload').addEventListener('upload-before', function(event) {
                   event.detail.file.formDataName = 'dataset';
@@ -225,10 +242,12 @@
           <paper-textarea name="body" label="Body" value="<%= currentReport.body %>"></paper-textarea>
           <paper-input name="relatedPapers" label="Related Papers" type="text"></paper-input>
           <paper-input name="tags" label="Tags" type="text" value="<%= currentReport.tags?currentReport.tags.join():'' %>"></paper-input>
+          <% if(!!currentReport.document) { %>
           <a href="/report/file/<%=currentReport.document%>">
             <paper-button class="pdf" raised><iron-icon icon="description"></iron-icon>PDF</paper-button>
           </a>
-          <vaadin-upload id="reportPdfUpload" target="/report/uploadPdf/<%=currentReport.id%>" accept=".pdf"></vaadin-upload> <br>
+          <% } %>
+          <vaadin-upload id="reportPdfUpload" target="/report/uploadPdf/<%=currentReport.id%>" accept=".pdf"><div class="drop-label">Drop your PDF here.</div></vaadin-upload> <br>
           <script>
             document.querySelector('vaadin-upload#reportPdfUpload').addEventListener('upload-before', function(event) {
               event.detail.file.formDataName = 'document';
