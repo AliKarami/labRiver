@@ -35,9 +35,10 @@ module.exports = {
       body: req.param("body")?req.param("body"):'',
       tags: req.param("tags")?req.param("tags").split(','):[],
     };
-    Report.update({id:req.params['reportId']},newReport).exec(function (err, updatedReport) {
-      if (err) return res.negotiate(err);
-      else return res.redirect('/panel/workflow?tab=3')
+    Report.update({id:req.params['reportId']},newReport).then(function (updatedReport) {
+      return res.redirect('/panel/workflow?tab=3')
+    }).catch(function (err) {
+      return res.negotiate(err);
     })
   },
 

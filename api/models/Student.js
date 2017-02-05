@@ -82,14 +82,16 @@ module.exports = {
     Report.create({
       deadline: nextWeek(),
       author: newStudent.id
-    }).exec(function (err, newReport) {
-      if (err) console.log("Report Creation error: " + err);
-      Student.update(newReport.author,{currentReport:newReport.id}).exec(function (err, updatedStudent) {
-        if (err) console.log("Assigning Report to Student error: " + err);
+    }).then(function (newReport) {
+      Student.update(newReport.author,{currentReport:newReport.id}).then(function (updatedStudent) {
         Promise.all([newProposal,newThesis]).then(function (assignees) {
           Student.update(newStudent.id,{proposal:assignees[0].id,thesis:assignees[1].id}).then(cb());
         })
+      }).catch(function (err) {
+        console.log("Assigning Report to Student error: " + err);
       })
+    }).catch(function (err) {
+      console.log("Report Creation error: " + err);
     });
 
   }

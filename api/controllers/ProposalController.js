@@ -38,9 +38,10 @@ module.exports = {
       tags: req.param("tags")?req.param("tags").split(','):[],
     };
     StudentService.studentByUser(req.user.id).then(function (student) {
-      Proposal.update({author:student.id},newProposal).exec(function (err, updatedProposal) {
-        if (err) return res.negotiate(err);
+      Proposal.update({author:student.id},newProposal).then(function (updatedProposal) {
         return res.redirect('/panel/workflow?tab=1');
+      }).catch(function (err) {
+        return res.negotiate(err);
       })
     });
   },

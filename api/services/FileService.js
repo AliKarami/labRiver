@@ -1,22 +1,22 @@
 module.exports = {
   getAvatar: function (uid) {
     return new Promise(function (resolve,reject) {
-      User.findOne(uid).exec(function (err, user) {
-        if (err) reject(err);
-        else resolve(user.avatarUrl);
+      User.findOne(uid).then(function (user) {
+        resolve(user.avatarUrl);
+      }).catch(function (err) {
+        reject(err)
       })
     });
   },
   getFileUrl: function (fid) {
     return new Promise(function (resolve,reject) {
-      File.findOne(fid).exec(function (err, file) {
-        if (err) reject(err);
-        else {
-          if (!!file)
-            resolve(file.fileUrl);
-          else
-            resolve('/404')
-        }
+      File.findOne(fid).then(function (file) {
+        if (!!file)
+          resolve(file.fileUrl);
+        else
+          resolve('/404')
+      }).catch(function (err) {
+        reject(err)
       })
     })
   },
@@ -41,14 +41,11 @@ module.exports = {
             fileFd: uploadedFiles[0].fd,
             fileUrl: require('util').format('/files/%s/%s', type, filename),
             uploader: req.user.id,
-          }).exec(function (err,file) {
-            if (err) {
-              reject('creating File:'+err);
-              return reject(err);
-            }
-            else {
+          }).then(function (file) {
               resolve(file.id);
-            }
+          }).catch(function (err) {
+            reject('creating File:'+err);
+            return reject(err);
           });
         } else {
           resolve(undefined);

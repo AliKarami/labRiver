@@ -218,7 +218,7 @@
                 <td><%= proposals[i].authorFullname %></td>
                 <td><%= proposals[i].author.studentNumber%></td>
                 <td>
-                  <paper-toggle-button class="proposalFreezeToggle" value="<%=proposals[i].author.id%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
+                  <paper-toggle-button style="display: inline-flex" class="proposalFreezeToggle" value="<%=proposals[i].author.id%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
                 </td>
               </tr>
               <% } %>
@@ -239,7 +239,7 @@
                 <td><%= theses[i].authorFullname %></td>
                 <td><%= theses[i].author.studentNumber%></td>
                 <td>
-                  <paper-toggle-button class="thesisFreezeToggle" value="<%=theses[i].author.id%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
+                  <paper-toggle-button style="display: inline-flex" class="thesisFreezeToggle" value="<%=theses[i].author.id%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
                 </td>
               </tr>
               <% } %>
@@ -260,7 +260,7 @@
                   <td><%= students[i].userRef.fname %> <%= students[i].userRef.lname %></td>
                   <td><%= students[i].studentNumber%></td>
                   <td>
-                    <paper-toggle-button class="weeklyReporterToggle" value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
+                    <paper-toggle-button style="display: inline-flex" class="weeklyReporterToggle" value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
                   </td>
                 </tr>
                 <% } %>

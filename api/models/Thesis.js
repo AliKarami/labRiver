@@ -38,20 +38,22 @@ module.exports = {
     }
   },
   beforeUpdate : function (newThesis, cb) {
-    Thesis.findOne(newThesis.id).exec(function (err, originalThesis) {
-      if (err || !originalThesis) {
+    Thesis.findOne(newThesis.id).then(function (originalThesis) {
+      if (!originalThesis) {
         return cb();
       }
       //if document changed
       if (newThesis.document != originalThesis.document && originalThesis.document != null && originalThesis.document != undefined) {
-        File.destroy(originalThesis.document).exec(function (err) {
-          if (err)
-            return err;
-            cb();
+        File.destroy(originalThesis.document).then(function () {
+        }).catch(function (err) {
+          return err;
+          cb();
         })
       } else {
         cb();
       }
+    }).catch(function (err) {
+      return cb()
     })
   }
 };

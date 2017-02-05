@@ -61,9 +61,10 @@ module.exports = {
       tags: req.param("tags")?req.param("tags").split(','):[],
     };
     StudentService.studentByUser(req.user.id).then(function (student) {
-      Thesis.update({author:student.id},newThesis).exec(function (err, updatedThesis) {
-        if (err) return res.negotiate(err);
+      Thesis.update({author:student.id},newThesis).then(function (updatedThesis) {
         return res.redirect('/panel/workflow?tab=2');
+      }).catch(function (err) {
+        return res.negotiate(err);
       })
     });
   },

@@ -81,8 +81,8 @@ module.exports = {
     } );
   },
   beforeUpdate : function (newUser, cb) {
-    User.findOne(newUser.id).exec(function (err, originalUser) {
-      if (err || !originalUser) {
+    User.findOne(newUser.id).then(function (originalUser) {
+      if (!originalUser) {
         return cb();
       }
       //if avatar changed
@@ -97,6 +97,8 @@ module.exports = {
       else {
         cb();
       }
+    }).catch(function (err) {
+      return cb()
     })
   },
   beforeDestroy: function (criteria, cb) {

@@ -86,10 +86,10 @@ module.exports = {
 
         // Grab the first file and use it's `fd` (file descriptor)
         avatarFd: uploadedFiles[0].fd
-      })
-        .exec(function (err){
-          if (err) return res.negotiate(err);
-          return res.redirect("panel");
+      }).then(function () {
+        return res.redirect("panel");
+      }).catch(function (err){
+          return res.negotiate(err);
         });
     });
   },
@@ -101,10 +101,10 @@ module.exports = {
 
       // Grab the first file and use it's `fd` (file descriptor)
       avatarFd: require('path').resolve(sails.config.appPath, 'assets/images/avatars') + '/default.png'
-    })
-      .exec(function (err){
+    }).then(function () {
+      return res.redirect("panel");
+    }).catch(function (err){
         if (err) return res.negotiate(err);
-        return res.redirect("panel");
       });
   }
 };

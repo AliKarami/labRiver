@@ -56,10 +56,10 @@ module.exports = {
           dataset: fileIds[1],
           sourceCode: fileIds[2],
           tags: req.param("tags").split(',')
-        }).exec(function (err, paper) {
-          if (err) return res.negotiate(err);
-          else
+        }).then(function (paper) {
             res.redirect('/panel/workflow');
+        }).catch(function (err) {
+          return res.negotiate(err);
         })
       })
   },

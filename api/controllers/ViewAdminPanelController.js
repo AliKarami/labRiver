@@ -12,16 +12,15 @@ function addAuthor(arr) {
     let promises = [];
     for (let i=0,len=array.length;i<len;i++) {
       promises.push(new Promise(function (resolve, reject) {
-        User.findOne(array[i].author.userRef).exec(function (err, user) {
-          if (err) reject(err);
-          else {
+        User.findOne(array[i].author.userRef).then(function (user) {
             array[i].author.fname=user.fname;
             array[i].author.lname=user.lname;
             array[i].author.nickname=user.nickname;
             array[i].author.avatarUrl=user.avatarUrl;
             array[i].authorFullname=user.fname + ' ' + user.lname
             resolve(user);
-          }
+        }).catch(function (err) {
+          reject(err);
         })
       }));
     }
@@ -41,14 +40,13 @@ module.exports = {
   },
   main : function (req, res) {
     var unapprovedUsers = new Promise(function (resolve, reject) {
-      User.find({approved: false}).exec(function (err, users) {
-        if (err) reject(err);
-        else {
-          for (let i=0,len=users.length;i<len;i++) {
-            users[i].fullname=users[i].fname + ' ' + users[i].lname;
-          }
-          resolve(users);
+      User.find({approved: false}).then(function (users) {
+        for (let i=0,len=users.length;i<len;i++) {
+          users[i].fullname=users[i].fname + ' ' + users[i].lname;
         }
+        resolve(users);
+      }).catch(function (err) {
+        reject(err)
       })
     });
     var Proposals = addAuthor(Proposal.find().populate('author'));

@@ -35,20 +35,21 @@ module.exports = {
     }
   },
   beforeUpdate : function (newReport, cb) {
-    Report.findOne(newReport.id).exec(function (err, originalReport) {
-      if (err || !originalReport) {
+    Report.findOne(newReport.id).then(function (originalReport) {
+      if (!originalReport) {
         return cb();
       }
       //if document changed
       if (newReport.document != originalReport.document && originalReport.document != null && originalReport.document != undefined) {
-        File.destroy(originalReport.document).exec(function (err) {
-          if (err)
-            return err;
-          cb();
+        File.destroy(originalReport.document).then(function () {
+        }).catch(function (err) {
+          return cb();
         })
       } else {
         cb();
       }
+    }).catch(function (err) {
+      return cb();
     })
   }
 };

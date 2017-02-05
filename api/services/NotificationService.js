@@ -1,14 +1,13 @@
 module.exports = {
   getNotifs: function (uid) {
     return new Promise(function (resolve, reject) {
-      User.findOne(uid).exec(function (err, user) {
-        if (err) reject(err);
+      User.findOne(uid).then(function (user) {
+        if (!user.notifications) resolve([]);
         else {
-          if (!user.notifications) resolve([]);
-          else {
-            resolve(user.notifications);
-          }
+          resolve(user.notifications);
         }
+      }).catch(function (err) {
+        reject(err)
       })
     });
   },
@@ -71,8 +70,7 @@ module.exports = {
     })
   },
   deleteNotif: function (userid, title, date) {
-    StudentService.studentByUser(userid).exec(function (err, student) {
-        if (err) return err;
+    StudentService.studentByUser(userid).then(function (student) {
         var notifs = student.notifications;
         for (var i=0,len=notifs.length;i<len;i++) {
           if (notifs[i].title==title && notifs[i].date==date) {
@@ -81,6 +79,8 @@ module.exports = {
           }
         }
         Student.update(student.id,{notifications: notifs})
+    }).then(function (err) {
+      return err
     })
   }
 }
