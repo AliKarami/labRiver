@@ -16,6 +16,7 @@ module.exports = {
       User.find().then(function (users) {
         while (users.length > 0) {
           var user = users.pop();
+
           user.notifications.push({
             cat: notif.cat,
             title: notif.title,
@@ -23,6 +24,7 @@ module.exports = {
             link: notif.link,
             date: notif.date
           });
+          MailService.sendNotifMail([user.email],notif);
           user.save(function (err) {
             if (err) return reject(err);
           })
@@ -42,6 +44,7 @@ module.exports = {
             link: notif.link,
             date: notif.date
           });
+          MailService.sendNotifMail([user.email],notif);
           user.save(function (err) {
             if (err) return reject(err);
           });
@@ -61,6 +64,7 @@ module.exports = {
             link: notif.link,
             date: notif.date
           });
+          MailService.sendNotifMail([user.email],notif);
           user.save(function (err) {
             if (err) return reject(err);
           });
