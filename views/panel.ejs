@@ -112,10 +112,10 @@
       <iron-pages selected={{selectedTab}}>
         <section id="profile">
           <div class="window">
-            Current Avatar: <br>
-            <iron-image alt="Profile Picture" src="<%=avatarFd%>" height="300" width="300" sizing="cover"></iron-image> <br> <br>
-            Upload Avatar: <br>
-            <vaadin-upload id="avatarUpload" target="/user/uploadAvatar" accept="image/*"></vaadin-upload> <br>
+            <br>
+            <iron-image style="border: groove" alt="Profile Picture" src="<%=avatarFd%>" height="300" width="300" sizing="cover"></iron-image> <br> <br>
+            <br>
+            <vaadin-upload id="avatarUpload" target="/user/uploadAvatar" accept="image/*"><div class="drop-label">Drop your Avatar here.</div></vaadin-upload> <br>
             <script>
               document.querySelector('vaadin-upload#avatarUpload').addEventListener('upload-before', function(event) {
                 event.detail.file.formDataName = 'avatar';
@@ -163,6 +163,7 @@
             <% } %>
             <% if (!!supervisor) { %>
             <h2>Your Supervisor is: <%= supervisor %></h2>
+            <% } %>
           </div>
           <table align="center" style="border: 1px solid #4b4b4b">
             <tr>
@@ -218,7 +219,6 @@
               </td>
             </tr>
           </table>
-            <% } %>
           <% } %>
         </section>
       </iron-pages>
