@@ -57,6 +57,13 @@ module.exports = {
           sourceCode: fileIds[2],
           tags: req.param("tags").split(',')
         }).then(function (paper) {
+            NotificationService.makeNotif('admin',{
+              cat: 'general',
+              title: 'New Paper Submited!',
+              description: req.user.fname + ' ' + req.user.lname + ' added new paper: ' + req.param('title'),
+              link: '', //should be paper link
+              date: Date.now()
+            });
             res.redirect('/panel/workflow');
         }).catch(function (err) {
           return res.negotiate(err);

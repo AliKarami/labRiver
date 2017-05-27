@@ -62,6 +62,13 @@ module.exports = {
     };
     StudentService.studentByUser(req.user.id).then(function (student) {
       Thesis.update({author:student.id},newThesis).then(function (updatedThesis) {
+        NotificationService.makeNotif('admin',{
+          cat: 'general',
+          title: 'Thesis Submited!',
+          description: req.user.fname + ' ' + req.user.lname + ' submitted new thesis: ' + req.param('title'),
+          link: '', //should be thesis link
+          date: Date.now()
+        });
         return res.redirect('/panel/workflow?tab=2');
       }).catch(function (err) {
         return res.negotiate(err);

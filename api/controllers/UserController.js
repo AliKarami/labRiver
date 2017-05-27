@@ -54,6 +54,13 @@ module.exports = {
       })
     }).then(function (std) {
       User.update({id:created.id},{studentRef:std.id}).then(function (updated) {
+        NotificationService.makeNotif('admin',{
+          cat: 'general',
+          title: 'New User Registered!',
+          description: req.param('firstname') + ' ' + req.param('lastname') + ' registered and is waiting for approval.',
+          link: '', //should be approval link
+          date: Date.now()
+        });
         res.redirect('/');
       })
     }).catch(function (err) {

@@ -33,6 +33,31 @@ module.exports = {
       })
     })
   },
+  broadcastByDegree: function (degree, notif) {
+    return new Promise(function (resolve, reject) {
+      User.find({}).then(function (users) {
+        while (users.length > 0) {
+          var user = users.pop();
+          StudentService.studentByUser(user.id).then((student)=>{
+            if (student.degree == degree) {
+              user.notifications.push({
+                cat: notif.cat,
+                title: notif.title,
+                description: notif.description,
+                link: notif.link,
+                date: notif.date
+              });
+              MailService.sendNotifMail([user.email],notif);
+              user.save(function (err) {
+                if (err) return reject(err);
+              });
+            }
+          })
+        }
+        return resolve();
+      })
+    })
+  },
   makeNotif: function (nicknames, notif) {
     return new Promise(function (resolve, reject) {
       nicknames.forEach(function (nick) {
