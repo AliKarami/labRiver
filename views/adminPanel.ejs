@@ -133,6 +133,43 @@
           <table align="center" style="border: 1px solid #4b4b4b">
             <tr>
               <td class="boxed" style="border: 1px solid #4b4b4b">
+                <form method="post" action="/admin/broadcastNotificationD" id="broadcastNotificationByDegreeForm">
+                  <table align="center">
+                    <tr>
+                      <paper-dropdown-menu label="Degree">
+                        <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{broadcastSelectedDegree}}">
+                          <paper-item value="bachelor">Bachelor</paper-item>
+                          <paper-item value="master">Master</paper-item>
+                          <paper-item value="phd">PhD</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                      <input type="hidden" name="degree" value="{{broadcastSelectedDegree}}">
+                    </tr>
+                    <tr>
+                      <paper-dropdown-menu label="Category">
+                        <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{broadcastDSelectedCategory}}">
+                          <paper-item value="general">General</paper-item>
+                          <paper-item value="event">Event</paper-item>
+                          <paper-item value="warning">Warning</paper-item>
+                          <paper-item value="information">Information</paper-item>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+                      <input type="hidden" name="cat" value="{{broadcastDSelectedCategory}}">
+                    </tr>
+                    <tr>
+                      <paper-input name="title" label="Notification Title" type="text"></paper-input>
+                    </tr>
+                    <tr>
+                      <paper-textarea name="description" label="Notification Description"></paper-textarea>
+                    </tr>
+                    <tr>
+                      <paper-input name="link" label="Notification Link" type="url"></paper-input>
+                    </tr>
+                  </table>
+                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationByDegreeForm')">Broadcast</paper-button>
+                </form>
+              </td>
+              <td class="boxed" style="border: 1px solid #4b4b4b">
                 <form method="post" action="/admin/broadcastNotification" id="broadcastNotificationForm">
                   <table align="center">
                     <tr>

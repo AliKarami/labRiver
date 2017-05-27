@@ -36,10 +36,12 @@ module.exports = {
   broadcastByDegree: function (degree, notif) {
     return new Promise(function (resolve, reject) {
       User.find({}).then(function (users) {
-        while (users.length > 0) {
-          var user = users.pop();
+        // while (users.length > 0) {
+        //   var user = users.pop();
+        for (var i=0,len=users.length; i<len; i++) {
+          var user = users[i];
           StudentService.studentByUser(user.id).then((student)=>{
-            if (student.degree == degree) {
+            if (student && student.degree == degree) {
               user.notifications.push({
                 cat: notif.cat,
                 title: notif.title,
@@ -54,6 +56,7 @@ module.exports = {
             }
           })
         }
+        // }
         return resolve();
       })
     })

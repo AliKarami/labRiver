@@ -1,7 +1,10 @@
 module.exports = {
     studentByUser: function (userid) {
       return User.findOne(userid).then(function (user) {
-        return Student.findOne(user.studentRef);
+        if (user.studentRef)
+          return Student.findOne(user.studentRef);
+        else
+          return null;
       }).catch(function (error) {
         throw Error(error);
       })

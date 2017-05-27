@@ -47,6 +47,7 @@ module.exports.routes = {
   '/admin'                            :   'ViewAdminPanelController.main',
   'post /admin/makeNotification'      :   'ViewAdminPanelController.makeNotif',
   'post /admin/broadcastNotification' :   'ViewAdminPanelController.broadcastNotif',
+  'post /admin/broadcastNotificationD':   'ViewAdminPanelController.broadcastNotifByDegree',
   'post /admin/setSupervisor'         :   'ViewAdminPanelController.setSupervisor',
   'post /admin/approve'               :   'ViewAdminPanelController.approveUsers',
   'post /admin/decline'               :   'ViewAdminPanelController.declineUsers',

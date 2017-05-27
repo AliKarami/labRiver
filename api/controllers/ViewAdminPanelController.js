@@ -85,8 +85,17 @@ module.exports = {
       title : req.param("title"),
       description : req.param("description"),
       link : req.param("link"),
-      date : new Date().toISOString(),
+      date : new Date().toISOString()
     }).then(res.redirect("/admin?tab=2")).catch(function (err) {sails.log("broadcastNotif error: " + err)})
+  },
+  broadcastNotifByDegree : function (req, res) {
+    NotificationService.broadcastByDegree(req.param("degree"),{
+      cat: req.param("cat"),
+      title : req.param("title"),
+      description : req.param("description"),
+      link : req.param("link"),
+      date : new Date().toISOString()
+    }).then(res.redirect("/admin?tab=2")).catch(function (err) {sails.log("broadcastNotifByDegree error: " + err)})
   },
   approveUsers : function (req, res) {
     var approvedUsers = req.body.users;
