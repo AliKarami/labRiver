@@ -9,6 +9,16 @@ module.exports = {
         throw Error(error);
       })
     },
+    studentByNickname: function (nickname) {
+      return User.findOne({nickname: nickname}).then(function (user) {
+        if (user.studentRef)
+          return Student.findOne(user.studentRef)
+        else
+          return null;
+      }).catch(function (error) {
+        throw Error(error);
+      })
+    },
     userBySID: function (sid) {
       return Student.findOne({studentNumber:sid}).then(function (student) {
         return User.findOne(student.userRef);

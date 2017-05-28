@@ -49,6 +49,7 @@ module.exports.routes = {
   'post /admin/broadcastNotification' :   'ViewAdminPanelController.broadcastNotif',
   'post /admin/broadcastNotificationD':   'ViewAdminPanelController.broadcastNotifByDegree',
   'post /admin/setSupervisor'         :   'ViewAdminPanelController.setSupervisor',
+  'post /admin/setSupervisorByNick'   :   'ViewAdminPanelController.setSupervisorByNickname',
   'post /admin/approve'               :   'ViewAdminPanelController.approveUsers',
   'post /admin/decline'               :   'ViewAdminPanelController.declineUsers',
   'post /admin/proposalFreeze'        :   'ViewAdminPanelController.proposalFreeze',

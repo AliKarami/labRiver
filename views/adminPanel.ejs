@@ -100,13 +100,13 @@
             <table align="center"  style="border: 1px solid #4b4b4b">
               <tr>
                 <td class="boxed" style="border: 1px solid #4b4b4b">
-                  <form method="post" action="/admin/setSupervisor" id="setSupervisorForm">
+                  <form method="post" action="/admin/setSupervisorByNick" id="setSupervisorForm">
                     <table align="center">
                       <tr>
-                        <paper-input name="who" label="Supervisor SID" type="text"></paper-input>
+                        <paper-input name="who" label="Supervisor nickname" type="text"></paper-input>
                       </tr>
                       <tr>
-                        <paper-input name="whom" label="Student SIDs" type="text"></paper-input>
+                        <paper-input name="whom" label="Student nicknames" type="text"></paper-input>
                       </tr>
                     </table>
                     <paper-button class="blue" raised onclick="submitForm('setSupervisorForm')">Set</paper-button>

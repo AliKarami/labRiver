@@ -156,9 +156,25 @@ module.exports = {
       return;
     })
   },
-  setSupervisor: function (req,res) {
+  setSupervisor: function (req, res) {
     Student.findOne({studentNumber:req.param('who')}).then(function (supervisor) {
       return Student.update({studentNumber:req.param('whom').split(',')},{supervisor:supervisor.id});
+    }).then(function () {
+      return res.redirect('/admin?tab=0')
+    }).catch(function (error) {
+      return res.negotiate(error);
+    })
+  },
+  setSupervisorByNickname: function (req, res) {
+    StudentService.studentByNickname(req.param('who')).then(function (supervisor) {
+      var whom = req.param('whom').split(',');
+      var promises = [];
+      for (var i=0,len=whom.length;i<len;i++) {
+        promises.push(StudentService.studentByNickname(whom[i]).then(function (supervisee) {
+          return Student.update(supervisee.id,{supervisor:supervisor.id});
+        }));
+      }
+      return Promise.all(promises);
     }).then(function () {
       return res.redirect('/admin?tab=0')
     }).catch(function (error) {
