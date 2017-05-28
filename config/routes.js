@@ -54,6 +54,7 @@ module.exports.routes = {
   'post /admin/proposalFreeze'        :   'ViewAdminPanelController.proposalFreeze',
   'post /admin/thesisFreeze'          :   'ViewAdminPanelController.thesisFreeze',
   'post /admin/weeklyReporting'       :   'ViewAdminPanelController.weeklyReporting',
+  'post /admin/changeState'           :   'ViewAdminPanelController.changeState',
   /***************************************************************************/
   'post /user/uploadAvatar'           :   'UserController.uploadAvatar',
   '/user/removeAvatar'                :   'UserController.removeAvatar',

@@ -70,6 +70,11 @@ module.exports = {
     weeklyReporter : {
       type : 'boolean',
       defaultsTo: true
+    },
+    state : {
+      type: 'string',
+      enum: ['preproposal','proposal','thesis','graduate'],
+      defaultsTo: 'preproposal'
     }
   },
   afterCreate: function (newStudent, cb) {

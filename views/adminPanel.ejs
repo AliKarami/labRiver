@@ -90,13 +90,7 @@
             Registration Approval
           </paper-tab>
           <paper-tab>
-            Proposal Freezing
-          </paper-tab>
-          <paper-tab>
-            Thesis Freezing
-          </paper-tab>
-          <paper-tab>
-            Report Assignee
+            Workflow Management
           </paper-tab>
         </paper-tabs>
       </app-header>
@@ -144,7 +138,7 @@
                         </paper-listbox>
                       </paper-dropdown-menu>
                       <input type="hidden" name="degree" value="{{broadcastSelectedDegree}}">
-                    </tr>
+                    </tr> <br>
                     <tr>
                       <paper-dropdown-menu label="Category">
                         <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{broadcastDSelectedCategory}}">
@@ -166,7 +160,7 @@
                       <paper-input name="link" label="Notification Link" type="url"></paper-input>
                     </tr>
                   </table>
-                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationByDegreeForm')">Broadcast</paper-button>
+                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationByDegreeForm')">Broadcast By Degree</paper-button>
                 </form>
               </td>
               <td class="boxed" style="border: 1px solid #4b4b4b">
@@ -193,7 +187,7 @@
                       <paper-input name="link" label="Notification Link" type="url"></paper-input>
                     </tr>
                   </table>
-                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationForm')">Broadcast</paper-button>
+                  <paper-button class="blue" raised onclick="submitForm('broadcastNotificationForm')">Broadcast To All</paper-button>
                 </form>
               </td>
               <td class="boxed" style="border: 1px solid #4b4b4b">
@@ -241,67 +235,31 @@
             </div>
           </div>
         </section>
-        <section id="proposalFreezing">
+        <section id="workflowManagement">
           <div class="window">
             <br>
             <table cellpadding="10" align="center">
               <tr>
                 <th>Name</th>
                 <th>Student Number</th>
-                <th>Freeze</th>
+                <th>State</th>
               </tr>
-              <% for (var i=0,len=proposals.length;i<len;i++) { %>
+              <% for (var i=0,len=students.length;i<len;i++) { %>
               <tr>
-                <td><%= proposals[i].authorFullname %></td>
-                <td><%= proposals[i].author.studentNumber%></td>
+                <td><%= students[i].userRef.fname %> <%= students[i].userRef.lname %></td>
+                <td><%= students[i].studentNumber%></td>
                 <td>
-                  <paper-toggle-button style="display: inline-flex" class="proposalFreezeToggle" value="<%=proposals[i].author.id%>" <%=proposals[i].freeze?'checked':''%>></paper-toggle-button>
+                  <paper-radio-group class="stateRadioButton" selected="<%= students[i].state %>">
+                    <paper-radio-button value="<%= students[i].studentNumber %>" name="preproposal">Preproposal</paper-radio-button>
+                    <paper-radio-button value="<%= students[i].studentNumber %>" name="proposal">Proposal</paper-radio-button>
+                    <paper-radio-button value="<%= students[i].studentNumber %>" name="thesis">Thesis</paper-radio-button>
+                    <paper-radio-button value="<%= students[i].studentNumber %>" name="graduate">Graduate</paper-radio-button>
+                  </paper-radio-group>
+                  <input type="hidden" name="state" value="{{state}}">
                 </td>
               </tr>
               <% } %>
             </table>
-          </div>
-        </section>
-        <section id="thesisFreezing">
-          <div class="window">
-            <br>
-            <table cellpadding="10" align="center">
-              <tr>
-                <th>Name</th>
-                <th>Student Number</th>
-                <th>Freeze</th>
-              </tr>
-              <% for (var i=0,len=theses.length;i<len;i++) { %>
-              <tr>
-                <td><%= theses[i].authorFullname %></td>
-                <td><%= theses[i].author.studentNumber%></td>
-                <td>
-                  <paper-toggle-button style="display: inline-flex" class="thesisFreezeToggle" value="<%=theses[i].author.id%>" <%=theses[i].freeze?'checked':''%>></paper-toggle-button>
-                </td>
-              </tr>
-              <% } %>
-            </table>
-          </div>
-        </section>
-        <section id="reportAssignee">
-            <div class="window">
-              <br>
-              <table cellpadding="10" align="center">
-                <tr>
-                  <th>Name</th>
-                  <th>Student Number</th>
-                  <th>Weekly Reporting</th>
-                </tr>
-                <% for (var i=0,len=students.length;i<len;i++) { %>
-                <tr>
-                  <td><%= students[i].userRef.fname %> <%= students[i].userRef.lname %></td>
-                  <td><%= students[i].studentNumber%></td>
-                  <td>
-                    <paper-toggle-button style="display: inline-flex" class="weeklyReporterToggle" value="<%=students[i].id%>" <%=students[i].weeklyReporter?'checked':''%>></paper-toggle-button>
-                  </td>
-                </tr>
-                <% } %>
-              </table>
           </div>
         </section>
       </iron-pages>
@@ -316,6 +274,7 @@
     var proposalToggles = document.querySelectorAll('.proposalFreezeToggle');
     var thesisToggles = document.querySelectorAll('.thesisFreezeToggle');
     var weeklyReporterToggles = document.querySelectorAll('.weeklyReporterToggle');
+    var stateRadioButtons = document.querySelectorAll('.stateRadioButton')
     for (var i=0,len=proposalToggles.length;i<len;i++) {
       proposalToggles[i].addEventListener('change',function () {
       	$.post('/admin/proposalFreeze',{
@@ -347,6 +306,18 @@
           value: this.checked
         }).done(function () {
           window.location='/admin?tab=6';
+        }).fail(function (err) {
+          console.log(err);
+        })
+      })
+    }
+    for (var i=0,len=stateRadioButtons.length;i<len;i++) {
+      stateRadioButtons[i].addEventListener('selected-changed',function () {
+        $.post('/admin/changeState',{
+          sid: this.selectedItem.value,
+          state: this.selected
+        }).done(function () {
+          window.location='/admin?tab=4';
         }).fail(function (err) {
           console.log(err);
         })

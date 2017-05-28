@@ -164,6 +164,14 @@ module.exports = {
     }).catch(function (error) {
       return res.negotiate(error);
     })
+  },
+  changeState: function (req, res) {
+    StudentService.changeState(req.body.sid, req.body.state).then(function () {
+      res.send('success');
+      return;
+    }).catch(function (error) {
+      res.negotiate(error);
+    })
   }
 };
 
